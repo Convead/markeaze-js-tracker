@@ -1,0 +1,291 @@
+<html>
+  <head>
+      <title>Markeaze js tracker</title>
+      <!-- Markeaze -->
+      <script>
+      (function(w,d,c,h){w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments)};var s = d.createElement('script');s.type = 'text/javascript';s.async = true;s.charset = 'utf-8';s.src = h;var x = d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);})(window,document,'mkz','mkz.js');
+
+        mkz('debug', true);
+
+        mkz(function() {
+          this.eventSubscribe('track.before', function(data) {
+            var el = document.getElementById('log');
+            var html = (new Date()) + '<br />' + '<pre class="fade">' + JSON.stringify(data).replace(/([^\\]",|\{|\})/ig, '$1\n')+'</pre>';
+            el.insertAdjacentHTML('afterbegin', html);
+          });
+        });
+
+        mkz('endpoint', 'tracker.markeaze.com');
+        mkz('appKey', '0900737d3dad0d5e');
+      </script>
+      <!-- /Markeaze -->
+  </head>
+  <body>
+    <h1>Markeaze js tracker</h1>
+    
+    <div class="columns">
+      <div class="coll">
+
+        <h2>Options</h2>
+
+        <p>
+          Format: mkz(<b>[function]</b>, <b>[mixData]</b>);
+        </p>
+
+        <ul>
+          
+          <li>
+            Set tracker endpoint<br />
+            <pre>mkz('endpoint', 'tracker.markeaze.com');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Set app key<br />
+            <pre>mkz('appKey', 'yyyyyyyyyyyyyyyyyyyyyyy');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Debug mode<br />
+            <pre>mkz('debug', true);</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Callback on ready<br />
+            <pre>
+mkz(function() {
+  console.log('On ready');
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Set visitor info<br />
+            <pre>
+mkz('setVisitorInfo', {
+  first_name: 'Kong',
+  last_name: 'Qiu'
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+
+        </ul>
+
+      </div>
+      <div class="coll">
+
+        <h2>Events</h2>
+
+        <p>
+          Format: mkz("track" + <b>[eventName]</b>, <b>[properties]</b>, <b>[data]</b>, <b>[context]</b>, <b>[truePerformedAt]</b>);
+        </p>
+        
+        <ul>
+          <li>
+            Page view<br />
+            <pre>mkz('trackPageView');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Update visitor info<br />
+            <pre>
+mkz('trackUpdateVisitor', {
+  first_name: 'Vladimir',
+  last_name: 'Savelyev'
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Transaction (Purchase)<br />
+            <pre>
+mkz('trackTransaction', {
+  "order_id": "123",
+  "total": "100",
+  "currency_iso": "rub",
+  "items": [
+    {
+      "sku": "bb1",
+      "name": "Sandwich",
+      "category_id": "1",
+      "category_name": "Food",
+      "price": "50",
+      "qnt": "2"
+    }
+  ]
+},
+{},
+{
+  my_payload: 'some data'
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Login<br />
+            <pre>mkz('trackLogin');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Signup<br />
+            <pre>mkz('trackSignup');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Subscribe<br />
+            <pre>mkz('trackSubscribe');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Unsubscribe<br />
+            <pre>mkz('trackUnsubscribe');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Email sent<br />
+            <pre>mkz('trackEmailSent', null, {label: 'my_compain'});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Email opened<br />
+            <pre>mkz('trackEmailOpened', null, {label: 'my_compain'});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Email clicked<br />
+            <pre>mkz('trackEmailClicked', null, {label: 'my_compain'});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Form submit<br />
+            <pre>mkz('trackFormSubmit', null, {label: 'my_form'});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Phone call<br />
+            <pre>mkz('trackPhoneCall', null, null, null, '2018-04-05T12:36:00.301Z');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Meeting<br />
+            <pre>mkz('trackMeeting');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Custom<br />
+            <pre>mkz('trackCustom', 'my_event');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+
+        </ul>
+
+      </div>
+      <div class="coll">
+
+        <h2>Events log</h2>
+
+        <div id="log"></div>
+
+      </div>
+    </div>
+
+    <style type="text/css">
+body {
+  padding: 20px;
+  margin: 0;
+  font-size: 14px;
+  font-family: Arial;
+}
+h2 {
+  margin-top: 25px 0 15px 0;
+}
+button {
+  padding: 5 20px;
+  cursor: pointer;
+  background-color: #eee;
+  border-color: #aaa;
+  color: #333;
+  border-radius: 3px;
+  margin: 5px 0;
+  outline-style: none;
+  transition: all linear 0.2s;
+}
+button:hover {
+  background-color: #1cc2ff;
+  border-color: #10a1d7;
+  color: #fff;
+}
+button:active {
+  background-color: #10a1d7;
+  border-color: #10a1d7;
+  color: #fff;
+}
+ul {
+  margin: 15px 0;
+  padding: 0;
+}
+li {
+  margin: 0;
+  padding: 15px 0;
+  list-style: none;
+  border-bottom: 1px solid #bbb;
+  position: relative;
+}
+li:last-child {
+  border-style: none;
+}
+pre {
+  color: #777;
+  font-size: 12px;
+  border: 1px solid #aaa;
+  background-color: #fafafa;
+  display: block;
+  padding: 7px;
+  overflow: scroll;
+}
+fieldset {
+  background-color: #f0f0f0;
+  border-style: none;
+  padding: 10px 15px;
+}
+a {
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.columns {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  min-height: 100%;
+  margin: 0 -10px;
+}
+.coll {
+  width: 33.33%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-right: 1px solid #bbb;
+}
+.coll:last-child {
+  border-style: none;
+}
+.fade {
+  animation-name: anumaciyoAppear;
+  animation-duration: 200ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+@keyframes anumaciyoAppear {                
+  0% {
+    opacity: 0;
+    background-color: #1cc2ff;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+    </style>
+    <script type="text/javascript">
+var bindScript = function(el) {
+  var code = el.parentNode.querySelector('pre').innerHTML;
+  if (code) eval( code );
+};
+    </script>
+  </body>
+</html>

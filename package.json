@@ -1,0 +1,22 @@
+{
+  "name": "markeaze-js-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "markeaze-js-tracker",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development --open"
+  },
+  "author": "markeaze",
+  "license": "ISC",
+  "dependencies": {
+    "webpack": "^4.20.2"
+  },
+  "devDependencies": {
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.4"
+  }
+}

@@ -49,15 +49,16 @@ module.exports = {
       }
     },
     trackPageView () {
-      let properties = arguments[1] || {}
-      properties.url = window.location.href
-      properties.referrer = document.referrer,
-      properties.page_title = document.title
-      this.track(arguments[0], properties, {}, arguments[2], arguments[3])
+      const properties = arguments[1] || {}
+      properties.page = properties.page || {}
+      properties.page.url = window.location.href
+      properties.page.title = document.title
+      properties.page.referrer = document.referrer
+      this.track(arguments[0], properties)
     },
-    trackUpdateVisitor () {
+    trackVisitorUpdate () {
       this.plugins.setVisitorInfo(null, arguments[1])
-      this.track(arguments[0], {}, {}, arguments[2], arguments[3])
+      this.track(arguments[0], {})
     },
     trackCustom () {
       if (typeof arguments[1] === 'string') {
@@ -96,12 +97,12 @@ module.exports = {
       }
       // custom event
       else if (arguments[0].indexOf('track') == 0) {
-        this.track(obj, arguments[1], arguments[2], arguments[3], arguments[4])
+        this.track(obj, arguments[1], arguments[2])
       }
     }
   },
-  track (eventName, properies, data, context, truePerformedAt, callback) {
-    tracker.send(eventName, properies, data, context, truePerformedAt, callback)
+  track (eventName, properies, callback) {
+    tracker.send(eventName, properies, callback)
   },
   changeUrl () {
     this.send('trackPageView')

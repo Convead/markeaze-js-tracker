@@ -15,6 +15,10 @@ npm start
 npm run build
 ```
 
+## Wiki
+
+https://github.com/Convead/markeaze-wiki/wiki/Events
+
 ## Example html code for the site
 
 ```

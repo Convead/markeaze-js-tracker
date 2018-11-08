@@ -22,6 +22,8 @@
   </head>
   <body>
     <h1>Markeaze js tracker</h1>
+
+    <a href="https://github.com/Convead/markeaze-wiki/wiki/Events" target="_blank">Wiki</a>
     
     <div class="columns">
       <div class="coll">
@@ -75,7 +77,7 @@ mkz('setVisitorInfo', {
         <h2>Events</h2>
 
         <p>
-          Format: mkz("track" + <b>[eventName]</b>, <b>[properties]</b>, <b>[data]</b>, <b>[context]</b>, <b>[truePerformedAt]</b>);
+          Format: mkz('track' + <b>[eventName]</b>, <b>[properties]</b>, <b>[callbackFunction]</b>);
         </p>
         
         <ul>
@@ -85,91 +87,117 @@ mkz('setVisitorInfo', {
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>
-            Update visitor info<br />
+            Category view<br />
+            <pre>mkz('trackPageView', {
+  category: {
+    id: 1
+  }
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Offer view<br />
+            <pre>mkz('trackPageView', {
+  offer: {
+    id: 'bb1',
+    price: 100.0,
+    name: 'Product',
+    picture_url: 'http://site.com'
+  }
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Cart update<br />
             <pre>
-mkz('trackUpdateVisitor', {
+mkz('trackCartUpdate', {
+  items: [
+    {
+      offer_id: 'bb1',
+      qnt: 2.0,
+      price: 100.0
+    }
+  ]
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Cart add item<br />
+            <pre>
+mkz('trackCartAddItem', {
+  item: {
+    offer_id: 'bb1',
+    qnt: 2.0,
+    price: 100.0
+  }
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Cart remove item<br />
+            <pre>
+mkz('trackCartRemoveItem', {
+  item: {
+    offer_id: 'bb1',
+    qnt: 1.0
+  }
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Order create<br />
+            <pre>
+mkz('trackOrderCreate', {
+  order_id: '123',
+  total: 200.0,
+  items: [
+    {
+      offer_id: 'bb1',
+      qnt: 2.0,
+      price: 100.0
+    }
+  ]
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Visitor update<br />
+            <pre>
+mkz('trackVisitorUpdate', {
   first_name: 'Vladimir',
   last_name: 'Savelyev'
 });</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>
-            Transaction (Purchase)<br />
-            <pre>
-mkz('trackTransaction', {
-  "order_id": "123",
-  "total": "100",
-  "currency_iso": "rub",
-  "items": [
-    {
-      "sku": "bb1",
-      "name": "Sandwich",
-      "category_id": "1",
-      "category_name": "Food",
-      "price": "50",
-      "qnt": "2"
-    }
-  ]
-},
-{},
-{
-  my_payload: 'some data'
+            Web form show<br />
+            <pre>mkz('trackWebFormShow', {
+  web_form_id: 1
 });</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>
-            Login<br />
-            <pre>mkz('trackLogin');</pre>
+            Web form click<br />
+            <pre>mkz('trackWebFormClick', {
+  web_form_id: 1,
+  action_type: 'open_link',
+  link_url: 'http://site.com'
+});</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>
-            Signup<br />
-            <pre>mkz('trackSignup');</pre>
+            Web form submit<br />
+            <pre>mkz('trackWebFormSubmit', {
+  web_form_id: 1,
+  web_form_data: '{"email":"mail@example.net"}'
+});</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>
-            Subscribe<br />
-            <pre>mkz('trackSubscribe');</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Unsubscribe<br />
-            <pre>mkz('trackUnsubscribe');</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Email sent<br />
-            <pre>mkz('trackEmailSent', null, {label: 'my_compain'});</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Email opened<br />
-            <pre>mkz('trackEmailOpened', null, {label: 'my_compain'});</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Email clicked<br />
-            <pre>mkz('trackEmailClicked', null, {label: 'my_compain'});</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Form submit<br />
-            <pre>mkz('trackFormSubmit', null, {label: 'my_form'});</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Phone call<br />
-            <pre>mkz('trackPhoneCall', null, null, null, '2018-04-05T12:36:00.301Z');</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Meeting<br />
-            <pre>mkz('trackMeeting');</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-          <li>
-            Custom<br />
-            <pre>mkz('trackCustom', 'my_event');</pre>
+            Web form close<br />
+            <pre>mkz('trackWebFormClose', {
+  web_form_id: 1
+});</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
 

@@ -6,6 +6,7 @@ let log = require('./libs/log')
 let parseUrlParams = require('./libs/parseUrlParams')
 let tracker = require('./tracker')
 let config = require('./config')
+let css = require('./css')
 
 module.exports = {
   eventSubscribe (name, fn) {
@@ -15,6 +16,9 @@ module.exports = {
   ready (name) {
     // abort if object is undefined
     if (!window[name]) return false
+
+    css.embed()
+
     let queue = window[name].q || []
     let self = this
     window[name] = function() {

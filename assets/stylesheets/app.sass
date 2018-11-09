@@ -1,0 +1,676 @@
+@import 'reset'
+
+[mkz]
+
+  .mkz-widget
+    text-align: left
+    -webkit-font-smoothing: antialiased
+    text-rendering: optimizeLegibility
+    max-width: none
+    display: block
+    margin: 0
+    padding: 0
+    width: 100%
+    height: auto
+    font-family: Arial, sans-serif
+    font-size: 15px
+    color: #333
+    border: 0
+    border-style: solid
+    box-sizing: border-box
+    background-position: center center
+    background-repeat: no-repeat
+
+    &:hover
+      text-decoration: none
+
+  .mkz-widget__workarea_reset_yes
+    +widgets_reset()
+
+  .mkz-widget__checkbox
+    dislay: table
+
+  .mkz-widget__checkbox-input
+    width: 10px
+    padding-right: 5px
+    display: table-cell
+    vertical-align: top
+    position: relative
+
+    input
+      opacity: 1
+      visibility: visible
+      display: block
+      position: relative
+
+  .mkz-widget__checkbox-text
+    display: table-cell
+    vertical-align: top
+
+    p
+      margin-top: 0
+
+  button, a, input
+    text-transform: initial
+    outline: none
+    float: none
+
+  button
+    cursor: pointer
+    box-sizing: border-box
+
+  input[type=text], input[type=number], input[type=email], input[type=date], input[type=password], select, textarea
+    box-sizing: border-box
+    padding-left: 12px
+    color: #333
+    background-color: #fff
+    background-image: none
+    margin: 0
+
+    &::-webkit-input-placeholder
+      color: #999
+
+    &::-moz-placeholder
+      color: #777
+
+    &:-moz-placeholder
+      color: #999
+
+    &:-ms-input-placeholder
+      color: #999
+
+  input[type="checkbox"]
+    -webkit-appearance: checkbox
+
+  a
+    text-decoration: underline
+    color: #15A0E8
+    cursor: pointer
+
+  .mkz-widget__container
+    position: relative
+
+  // To put floated image with link higher then non-floated elements.
+  // So that it will be clickable.
+  .mkz-widget__container_type_image, .mkz-widget__container_type_img
+    z-index: 1
+
+    .mkz-widget__component
+      font-size: 0
+
+  .mkz-widget__containers
+    padding: 14px
+
+  .mkz-widget__containers_padding_0
+    padding: 0 !important
+
+  .mkz-widget__component
+    position: relative
+    font-size: 16px
+
+  .mkz-widget__component-btn
+    color: #fff
+    background: #1abc9c
+    border: none
+    border-radius: 5px !important
+    cursor: pointer
+
+    &:hover
+      background: #39d5b6
+
+  .mkz-widget__component-field
+    label
+      display: inline-block
+      float: none
+      width: auto
+      min-width: 0
+      padding: 0
+      height: auto
+
+    input[type=text], input[type=number]
+      padding: 0 6px
+      height: 28px
+      line-height: 28px
+      box-sizing: border-box
+      font-size: 16px
+      color: #333
+      background-color: #fff
+      border: none
+      box-shadow: 0
+      border-radius: 5px !important
+
+  .mkz-widget__component-text, .mkz-widget__component-html
+    p
+      margin: 0
+
+  .mkz-widget__label
+    display: inline-block
+
+  .convead_invalid
+    border: 1px solid #e03546 !important
+
+    &[type="checkbox"]
+      outline: 1px solid #e03546 !important
+
+  .mkz-widget__sending_notice
+    display: none
+    font-size: 14px
+
+  .mkz-widget__workarea.mkz-widget__workarea__top-bar, .mkz-widget__workarea.mkz-widget__workarea__bottom-bar, .mkz-widget__workarea.mkz-widget__workarea__top_bar, .mkz-widget__workarea.mkz-widget__workarea__bottom_bar
+    padding-left: 57px
+    padding-right: 60px
+    color: #fff
+    background: #34495e
+
+    .mkz-widget__containers
+      padding: 6px 0
+      text-align: center
+
+    .mkz-widget__container
+      display: inline-block
+      vertical-align: top
+
+    .mkz-widget__component
+      margin: 0 7px
+
+    .mkz-widget__component-btn
+      line-height: 28px
+      height: 28px
+      padding: 0 14px
+      background: #00c49f
+
+    .mkz-widget__component-text, .mkz-widget__component-html
+      margin-top: 6px
+      min-width: 100px
+
+    .mkz-widget__component-field
+      label
+        vertical-align: top
+        margin: 6px 6px 0 0
+
+      input[type=text], input[type=number]
+        width: 150px
+
+      &.mkz-widget__component-field__boolean
+        label
+          margin-right: 0
+          margin-left: 6px
+        input
+          margin-top: 6px
+
+    .mkz-widget__label
+      margin-right: 7px
+
+
+  .mkz-widget__workarea
+    &.mkz-widget__workarea__pop-up, &.mkz-widget__workarea__pop_up, &.mkz-widget__workarea__embedded, &.mkz-widget__workarea__notice
+      width: 100% !important
+
+    &.mkz-widget__workarea__pop-up, &.mkz-widget__workarea__pop_up, &.mkz-widget__workarea__embedded
+      background-color: #f0f8ff
+
+      .mkz-widget__containers
+        padding: 19px 33px 16px 33px
+
+      .mkz-widget__component
+        margin: 7px 0
+
+      .mkz-widget__component-btn
+        height: 40px
+        line-height: 40px
+        padding: 0 23px
+
+      .mkz-widget__component-html
+        h1
+          font-size: 30px
+          line-height: 1.2em
+
+        h2
+          font-size: 24px
+          line-height: 1.2em
+          color: #696969
+
+        h1, h2
+          margin: 10px 0
+
+      .mkz-widget__component-field
+        label
+          margin-bottom: 5px
+
+        input[type=text], input[type=number]
+          width: 100%
+          border: 1px solid #E5E5E5
+
+        &.mkz-widget__component-field__boolean
+          label
+            margin-left: 6px
+
+      .mkz-widget__label
+        display: block
+        margin-bottom: 5px
+
+
+  .mkz-widget__workarea.mkz-widget__workarea__notice
+    .mkz-widget__label
+      display: block
+      margin-bottom: 5px
+
+
+  .mkz-widget__bar-shift
+    position: relative
+    height: 0
+    overflow: hidden
+    outline-style: none
+    background-color: transparent
+    background-image: none
+    border-style: none
+
+  .mkz-widget__bar
+    position: fixed
+    z-index: 1000000
+    left: 0
+    top: -100%
+    width: 100%
+    transform: translateZ(0)
+
+    &.mkz-widget__bar_type_bottom_bar
+      top: auto
+      bottom: -100%
+
+      .mkz-widget__bar-logo
+        bottom: auto
+        top: -18px
+
+      .mkz-widget__bar-hide:after
+        content: '\f078'
+
+      .mkz-widget__bar-hide, .mkz-widget__bar-show
+        border-radius: 5px 5px 0 0
+
+      .mkz-widget__bar-show
+        bottom: auto
+        top: -29px
+        box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.2)
+
+        &:after
+          content: '\f077'
+
+  .mkz-widget__bar-hide
+    position: absolute
+    top: 50%
+    right: 15px
+    margin-top: -15px
+    width: 31px
+    height: 30px
+    font-size: 16px
+    line-height: 26px
+    cursor: pointer
+    overflow: hidden
+    text-align: center
+    color: #9a9a9a
+
+    &:after
+      content: '\f077'
+      display: inline-block
+      vertical-align: middle
+      font-family: 'mkz_icons'
+
+  .mkz-widget__resolution_640
+    .mkz-widget__bar-hide
+      top: auto
+      bottom: -29px
+      margin: 0
+      background: #34495e
+      border-radius: 0 0 5px 5px
+      box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2)
+
+    .mkz-widget__bar-logo
+      right: 62px
+
+    .mkz-widget__bar_type_bottom_bar
+      .mkz-widget__bar-hide
+        top: -29px
+        bottom: 0
+        box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.2)
+
+  .mkz-widget__bar-show
+    position: absolute
+    bottom: -29px
+    right: 15px
+    width: 31px
+    height: 30px
+    font-size: 16px
+    line-height: 26px
+    border-radius: 0 0 5px 5px
+    cursor: pointer
+    background: #34495e
+    overflow: hidden
+    text-align: center
+    color: #9a9a9a
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2)
+
+    &:after
+      content: '\f078'
+      display: inline-block
+      vertical-align: middle
+      font-family: 'mkz_icons'
+
+  .mkz-widget__bar-logo
+    position: absolute
+    right: 12px
+    bottom: -18px
+    font-family: Arial
+    font-size: 13px
+    line-height: 1
+    text-decoration: none
+    color: #fff
+    text-shadow: 0 1px 2px #888
+
+    &:hover
+      text-decoration: none
+      color: #fff
+
+  .mkz-widget__type_pop-up
+    overflow: auto
+    position: fixed
+    z-index: 1000000
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+
+  .mkz-widget__type_top-bar, .mkz-widget__type_bottom-bar
+    .mkz-widget__workarea
+      font-size: 0
+
+  .mkz-widget__popup-box
+    position: relative
+    left: auto
+    top: auto
+    width: auto
+
+  .mkz-widget__content
+    position: relative
+
+  .mkz-widget__type_notice
+    overflow: visible
+    position: fixed
+    left: 0
+    top: 0
+    z-index: 900000
+    width: auto
+    height: auto
+    margin: 3%
+
+    &.mkz-widget__placement_top_left
+      top: 0
+      left: 0
+
+    &.mkz-widget__placement_top_right
+      top: 0
+      left: auto
+      right: 0
+
+    &.mkz-widget__placement_bottom_left
+      top: auto
+      bottom: 0
+      left: 0
+
+    &.mkz-widget__placement_bottom_right
+      top: auto
+      bottom: 0
+      left: auto
+      right: 0
+
+
+  // activated style for display on a mobile screen
+  .mkz-widget__response_yes
+    width: 100% !important
+
+    .mkz-widget__popup-content, .mkz-widget__content
+      width: 100% !important
+
+    &.mkz-widget__type_notice
+      left: auto !important
+      right: auto !important
+      margin-left: 0 !important
+      margin-right: 0 !important
+
+    &.mkz-widget__type_embedded
+      margin-left: 0 !important
+      margin-right: 0 !important
+
+  .mkz-widget__popup-backdrop
+    background: #333
+    opacity: 0.7
+    position: fixed
+    left: 0
+    top: 0
+    right: 0
+    bottom: 0
+
+  .mkz-widget__popup-box
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+
+  .mkz-widget__box
+    position: relative
+
+  .mkz-widget__popup-content
+    position: relative
+    display: table
+    margin: 20px auto
+
+  .mkz-widget__popup-close
+    position: absolute
+    top: 5px
+    right: 5px
+    width: 20px
+    height: 20px
+    font-size: 12px
+    line-height: 18px
+    cursor: pointer
+    z-index: 100
+    text-align: center
+    color: #9a9a9a
+
+    &:after
+      content: '\e00d'
+      display: inline-block
+      vertical-align: middle
+      font-family: 'mkz_icons'
+
+  .mkz-widget__notice-close
+    position: absolute
+    top: 5px
+    right: 5px
+    width: 20px
+    height: 20px
+    font-size: 12px
+    line-height: 18px
+    cursor: pointer
+    z-index: 100
+    text-align: center
+    color: #9a9a9a
+
+    &:after
+      content: '\e00d'
+      display: inline-block
+      vertical-align: middle
+      font-family: 'mkz_icons'
+
+  .mkz-widget__popup-logo
+    position: absolute
+    right: 0
+    bottom: -16px
+    font-family: Arial
+    font-size: 12px
+    line-height: 1
+    text-decoration: none
+    color: #fff
+    text-shadow: 0 1px 2px #555
+
+    &:hover
+      text-decoration: none
+      color: #fff
+
+  .mkz-widget__component-offer
+
+    &:after
+      content: ''
+      display: table
+      clear: both
+
+    .mkz-widget__component-offer-image
+      border: 1px solid #ebeeee
+      display: block
+      float: left
+      margin-right: 22px
+      width: 197px
+      background-color: #fff
+
+      img
+        width: 100%
+
+    .mkz-widget__component-offer-content
+      overflow: hidden
+
+    .mkz-widget__component-offer-title
+      a
+        text-decoration: none
+      color: #2469bd
+      font-size: 18px
+      line-height: 1.2em
+
+    .mkz-widget__component-offer-text
+      font-size: 12px
+      line-height: 1.4em
+      margin: 10px 0 5px 0
+
+    .mkz-widget__component-offer-info
+      text-align: right
+
+    .mkz-widget__component-offer-price
+      display: inline-block
+      font-size: 22px
+      font-style: italic
+      line-height: 1.2em
+      vertical-align: middle
+      margin: 5px 0
+
+    .mkz-widget__component-offer-link
+      background-color: #46a81f
+      border: 1px solid #5c7d6e
+      border-radius: 3px
+      color: #fff
+      display: inline-block
+      font-size: 14px
+      height: 28px
+      line-height: 28px
+      padding: 0 19px
+      text-decoration: none
+      vertical-align: middle
+      margin: 5px 0 5px 23px
+
+  /* OFFERS */
+
+  .mkz-widget__containers
+
+    .mkz-widget__offers
+      font-size: 0
+      text-align: center
+
+    .mkz-widget__offers-item
+      display: inline-block
+      vertical-align: top
+      width: 33%
+      min-width: 140px
+      margin: 5px 0
+
+    .mkz-widget__offers-content
+      padding: 5px
+
+    .mkz-widget__offers-preview
+      line-height: 120px
+      width: 120px
+      margin: 10px auto
+      background-color: #fff
+      text-align: center
+
+    .mkz-widget__offers-preview-img
+      display: inline-block
+      vertical-align: middle
+      max-width: 100%
+      max-height: 100%
+
+    .mkz-widget__offers-name
+      font-size: 14px
+      line-height: 120%
+      margin: 10px
+
+    .mkz-widget__offers-price
+      font-size: 18px
+      font-weight: bold
+      margin: 10px
+
+    .mkz-widget__offers-btn
+      text-decoration: none
+      outline: 0
+      line-height: 41px
+      display: inline-block
+      padding: 0 27px
+      text-shadow: none
+      box-sizing: border-box
+
+  /* TYPOGRAPHY */
+
+  .mkz-widget__containers
+
+    &:after
+      content: ''
+      display: table
+      clear: both
+
+    h1, h2, h3, h4, h5, h6
+      line-height: 1.1
+      margin-bottom: 15px
+      margin: 20px 0 10px
+      line-height: 1.2
+      font-weight: 200
+      text-transform: inherit
+      color: inherit
+      text-align: inherit
+
+    h1
+      font-size: 22px
+
+    h1:first-child
+      margin-top: 0
+
+    h2
+      font-size: 20px
+
+    h3
+      font-size: 18px
+
+    p, ul, ol
+      margin-bottom: 10px
+
+    ul li, ol li
+      margin-left: 5px
+
+    i, em
+      font-style: italic
+
+    b, strong
+      font-weight: bold
+
+    ol
+      list-style-type: decimal
+      list-style-position: inside
+
+    ul
+      list-style-type: disc
+      list-style-position: inside

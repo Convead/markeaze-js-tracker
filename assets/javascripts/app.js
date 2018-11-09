@@ -7,6 +7,7 @@ let parseUrlParams = require('./libs/parseUrlParams')
 let tracker = require('./tracker')
 let config = require('./config')
 let css = require('./css')
+let widgetViewer = require('./widgets/widgetViewer.coffee')
 
 module.exports = {
   eventSubscribe (name, fn) {
@@ -18,6 +19,7 @@ module.exports = {
     if (!window[name]) return false
 
     css.embed()
+    eEmit.subscribe('track.after', widgetViewer.track)
 
     let queue = window[name].q || []
     let self = this
@@ -71,6 +73,9 @@ module.exports = {
     },
     debug () {
       config.debugMode = arguments[1]
+    },
+    demoResponse () {
+      config.demoResponse = arguments[1]
     },
     setVisitorInfo () {
       let info = arguments[1]

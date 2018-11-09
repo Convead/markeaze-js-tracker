@@ -25,6 +25,15 @@ module.exports = {
     {
       test: /\.txt$/,
       use: 'raw-loader'
+    },
+    {
+      test: /\.coffee$/,
+      use: [
+        {
+          loader: 'coffee-loader',
+          options: { literate: false }
+        }
+      ]
     }],
   }
 };

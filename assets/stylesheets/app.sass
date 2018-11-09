@@ -24,6 +24,9 @@
     &:hover
       text-decoration: none
 
+  .mkz-widget__workarea
+    margin: 0
+
   .mkz-widget__workarea_reset_yes
     +widgets_reset()
 
@@ -146,21 +149,22 @@
   .mkz-widget__label
     display: inline-block
 
-  .convead_invalid
+  .mkz-invalid
     border: 1px solid #e03546 !important
 
     &[type="checkbox"]
       outline: 1px solid #e03546 !important
 
-  .mkz-widget__sending_notice
+  .mkz-widget__sending-notice
     display: none
     font-size: 14px
 
-  .mkz-widget__workarea.mkz-widget__workarea__top-bar, .mkz-widget__workarea.mkz-widget__workarea__bottom-bar, .mkz-widget__workarea.mkz-widget__workarea__top_bar, .mkz-widget__workarea.mkz-widget__workarea__bottom_bar
-    padding-left: 57px
-    padding-right: 60px
-    color: #fff
-    background: #34495e
+  .mkz-widget_type_top-bar, .mkz-widget_type_bottom-bar
+    .mkz-widget__workarea
+      padding-left: 57px
+      padding-right: 60px
+      color: #fff
+      background: #34495e
 
     .mkz-widget__containers
       padding: 6px 0
@@ -191,7 +195,7 @@
       input[type=text], input[type=number]
         width: 150px
 
-      &.mkz-widget__component-field__boolean
+      &.mkz-widget__component-field-boolean
         label
           margin-right: 0
           margin-left: 6px
@@ -202,58 +206,13 @@
       margin-right: 7px
 
 
-  .mkz-widget__workarea
-    &.mkz-widget__workarea__pop-up, &.mkz-widget__workarea__pop_up, &.mkz-widget__workarea__embedded, &.mkz-widget__workarea__notice
-      width: 100% !important
-
-    &.mkz-widget__workarea__pop-up, &.mkz-widget__workarea__pop_up, &.mkz-widget__workarea__embedded
-      background-color: #f0f8ff
-
-      .mkz-widget__containers
-        padding: 19px 33px 16px 33px
-
-      .mkz-widget__component
-        margin: 7px 0
-
-      .mkz-widget__component-btn
-        height: 40px
-        line-height: 40px
-        padding: 0 23px
-
-      .mkz-widget__component-html
-        h1
-          font-size: 30px
-          line-height: 1.2em
-
-        h2
-          font-size: 24px
-          line-height: 1.2em
-          color: #696969
-
-        h1, h2
-          margin: 10px 0
-
-      .mkz-widget__component-field
-        label
-          margin-bottom: 5px
-
-        input[type=text], input[type=number]
-          width: 100%
-          border: 1px solid #E5E5E5
-
-        &.mkz-widget__component-field__boolean
-          label
-            margin-left: 6px
-
-      .mkz-widget__label
-        display: block
-        margin-bottom: 5px
+  .mkz-widget__workarea__pop-up, &.mkz-widget__workarea__embedded, &.mkz-widget_workarea_notice
+    width: 100% !important
 
 
-  .mkz-widget__workarea.mkz-widget__workarea__notice
-    .mkz-widget__label
-      display: block
-      margin-bottom: 5px
+  .mkz-widget_workarea_notice .mkz-widget__label
+    display: block
+    margin-bottom: 5px
 
 
   .mkz-widget__bar-shift
@@ -370,7 +329,7 @@
       text-decoration: none
       color: #fff
 
-  .mkz-widget__type_pop-up
+  .mkz-widget_type_pop-up
     overflow: auto
     position: fixed
     z-index: 1000000
@@ -379,7 +338,52 @@
     width: 100%
     height: 100%
 
-  .mkz-widget__type_top-bar, .mkz-widget__type_bottom-bar
+  .mkz-widget_type_pop-up, mkz-widget_type_embedded
+    .mkz-widget__workarea
+      background-color: #f0f8ff
+
+      .mkz-widget__containers
+        padding: 19px 33px 16px 33px
+
+      .mkz-widget__component
+        margin: 7px 0
+
+      .mkz-widget__component-btn
+        height: 40px
+        line-height: 40px
+        padding: 0 23px
+
+      .mkz-widget__component-html
+        h1
+          font-size: 30px
+          line-height: 1.2em
+
+        h2
+          font-size: 24px
+          line-height: 1.2em
+          color: #696969
+
+        h1, h2
+          margin: 10px 0
+
+      .mkz-widget__component-field
+        label
+          margin-bottom: 5px
+
+        input[type=text], input[type=number]
+          width: 100%
+          border: 1px solid #E5E5E5
+
+        &.mkz-widget__component-field__boolean
+          label
+            margin-left: 6px
+
+      .mkz-widget__label
+        display: block
+        margin-bottom: 5px
+
+
+  .mkz-widget_type_top-bar, .mkz-widget_type_bottom-bar
     .mkz-widget__workarea
       font-size: 0
 
@@ -392,7 +396,7 @@
   .mkz-widget__content
     position: relative
 
-  .mkz-widget__type_notice
+  .mkz-widget_type_notice
     overflow: visible
     position: fixed
     left: 0
@@ -402,21 +406,21 @@
     height: auto
     margin: 3%
 
-    &.mkz-widget__placement_top_left
+    &.mkz-widget_placement_top-left
       top: 0
       left: 0
 
-    &.mkz-widget__placement_top_right
+    &.mkz-widget_placement_top-right
       top: 0
       left: auto
       right: 0
 
-    &.mkz-widget__placement_bottom_left
+    &.mkz-widget_placement_bottom-left
       top: auto
       bottom: 0
       left: 0
 
-    &.mkz-widget__placement_bottom_right
+    &.mkz-widget_placement_bottom-right
       top: auto
       bottom: 0
       left: auto
@@ -430,13 +434,13 @@
     .mkz-widget__popup-content, .mkz-widget__content
       width: 100% !important
 
-    &.mkz-widget__type_notice
+    &.mkz-widget_type_notice
       left: auto !important
       right: auto !important
       margin-left: 0 !important
       margin-right: 0 !important
 
-    &.mkz-widget__type_embedded
+    &.mkz-widget_type_embedded
       margin-left: 0 !important
       margin-right: 0 !important
 

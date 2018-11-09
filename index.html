@@ -68,6 +68,15 @@ mkz('setVisitorInfo', {
 });</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
+          <li>
+            Subscribe to mkz-js callbacks<br />
+            Avaliable callbacks: <i>url.change</i>, <i>track.before</i>, <i>track.after</i><br />
+            <pre>
+mkz('subscribe', 'url.change', function(url) {
+  console.log('Change url', url)
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
 
         </ul>
 

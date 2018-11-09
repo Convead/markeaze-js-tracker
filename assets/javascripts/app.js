@@ -45,7 +45,7 @@ module.exports = {
           this.send.apply(this, fields)
         }
         this.pendingTasks = []
-        // track page view
+        // track change url
         this.changeUrl()
         domEvent.add(window, 'pushState', () => { this.changeUrl() })
         domEvent.add(window, 'replaceState', () => { this.changeUrl() })
@@ -75,6 +75,9 @@ module.exports = {
     setVisitorInfo () {
       let info = arguments[1]
       for (let key in info) config.visitor[key] = info[key]
+    },
+    subscribe () {
+      eEmit.subscribe(arguments[1], arguments[2])
     }
   },
   pendingSend () {
@@ -109,6 +112,6 @@ module.exports = {
     tracker.send(eventName, properies, callback)
   },
   changeUrl () {
-    this.send('trackPageView')
+    eEmit.emit('url.change', window.location.href)
   }
 }

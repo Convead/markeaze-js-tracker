@@ -20,19 +20,18 @@ module.exports = class WidgetRenderersNotice
       @content_el.style[css_style] = @workarea_el.style[css_style] if @workarea_el.style[css_style]
     
     document.body.appendChild(@el)
-    @box_el.style.visibility = 'hidden'
-    helpers.load_images @el, =>
-      @box_el.style.visibility = 'visible'
-      @box_el.style.opacity = 0
 
-      helpers.animate_prop
-        el:  @box_el
-        prop: 'opacity'
-        start: 0
-        end: 1
-        duration: 300
-        dimension: ''
-        delta: 'easeInQuad'
+    @box_el.style.visibility = 'visible'
+    @box_el.style.opacity = 0
+
+    helpers.animate_prop
+      el:  @box_el
+      prop: 'opacity'
+      start: 0
+      end: 1
+      duration: 300
+      dimension: ''
+      delta: 'easeInQuad'
 
     @widget_tracker_view.widgetViewer.start_hide_timer @options, (=> @close())
 

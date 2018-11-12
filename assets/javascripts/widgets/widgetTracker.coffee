@@ -20,7 +20,7 @@ module.exports = class WidgetTracker
     @options.renderTimeout = false;
     delay = (parseInt(@options.timeout) || 0)
 
-    if @options.type == 'pop_up' && @options.visitor_loss_detect
+    if @options.type == 'pop-up' && @options.visitor_loss_detect
       @options.renderLossDetection = new VisitorLossDetection(delay: delay, detect: @render_without_overlap)
     else
       if delay == 0 || @options.type == 'embedded'
@@ -36,17 +36,17 @@ module.exports = class WidgetTracker
       @renderer_view = switch @options.type
         when 'embedded'
           @options.render = new WidgetRenderersEmbedded(@, @options)
-        when 'top_bar'
+        when 'top-bar'
           @options.render = new WidgetRenderersBar(@, @options)
-        when 'bottom_bar'
+        when 'bottom-bar'
           @options.render = new WidgetRenderersBar(@, @options)
-        when 'pop_up'
+        when 'pop-up'
           @options.render = new WidgetRenderersPopup(@, @options)
         when 'notice'
           @options.render = new WidgetRenderersNotice(@, @options)
       @el = @renderer_view.el
       return unless @el
-      console.log '>>>', @el
+
       workarea_el = @renderer_view.workarea_el
       @el.setAttribute('data-id', @options.id)
       workarea_el.setAttribute('data-id', @options.id)

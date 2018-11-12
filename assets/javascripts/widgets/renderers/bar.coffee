@@ -12,7 +12,7 @@ module.exports = class WidgetRenderersBar
     tmp_el.innerHTML = @template()
     @el = tmp_el.firstChild
     @box_el = tmp_el.querySelector('.mkz-widget__bar')
-    @shift = tmp_el.querySelector(".mkz-widget__bar-shift-#{@options.type}")
+    @shift = tmp_el.querySelector(".mkz-widget__bar-shift")
     @content_el = @el.querySelector('.mkz-widget__bar-content')
     @hide_el = @el.querySelector('.mkz-widget__bar-hide')
     @show_el = @el.querySelector('.mkz-widget__bar-show')
@@ -26,25 +26,24 @@ module.exports = class WidgetRenderersBar
     if window.innerWidth < 1200 || window.location.search.indexOf('screen_width=640') != -1
       helpers.add_class @el, 'mkz-widget__resolution_640'
 
-    if (@options.type == 'top_bar')
-      document.body.insertBefore(tmp_el, document.body.firstChild)
+    if (@options.type == 'top-bar')
+      document.body.insertBefore(@el, document.body.firstChild)
     else
-      document.body.appendChild(tmp_el)
+      document.body.appendChild(@el)
 
     @workarea_el = @el.querySelector('.mkz-widget__workarea')
 
-    helpers.load_images @el, =>
-      @show_el_height = if @show_el then @show_el.scrollHeight else 0
+    @show_el_height = if @show_el then @show_el.scrollHeight else 0
 
-      if @widget_tracker_view.options.preview_mode? || cookies.get("convead_topbar_#{@options.id}_state") != 'hide'
-        @widget_tracker_view.view()
-        @animate('show')
-        @animate_show_el('hide', fast: true)
-        @logo.style.display = 'block' unless @options.whitelabel
-      else
-        @animate('hide', fast: true)
-        @animate_show_el('show')
-        @logo.style.display = 'none' unless @options.whitelabel
+    if @widget_tracker_view.options.preview_mode? || cookies.get("convead_topbar_#{@options.id}_state") != 'hide'
+      @widget_tracker_view.view()
+      @animate('show')
+      @animate_show_el('hide', fast: true)
+      @logo.style.display = 'block' unless @options.whitelabel
+    else
+      @animate('hide', fast: true)
+      @animate_show_el('show')
+      @logo.style.display = 'none' unless @options.whitelabel
 
     @widget_tracker_view.widgetViewer.start_hide_timer @options, (=> @hide())
 
@@ -53,9 +52,9 @@ module.exports = class WidgetRenderersBar
   template: ->
     action_style_color = if @options.settings.action_color then 'color:' + @options.settings.action_color else false
     close_html = if @options.properties.allow_close == false then '' else "<div class='mkz-widget__bar-hide' title='Close' style='#{action_style_color}'></div><div class='mkz-widget__bar-show' title='Open' style='#{action_style_color}'></div>"
-    "<div mkz class='mkz-widget mkz-widget_type_bar'>
-      <div class='mkz-widget__bar-shift mkz-widget__bar-shift-#{@options.type}'>&nbsp;</div>
-      <div class='mkz-widget__bar mkz-widget__bar_type_#{@options.type}'>
+    "<div mkz class='mkz-widget mkz-widget_type_#{@options.type}'>
+      <div class='mkz-widget__bar-shift'>&nbsp;</div>
+      <div class='mkz-widget__bar'>
         #{@whitelabel()}
         <div class='mkz-widget__bar-content'>#{contentRenderer.replace( @options.html )}</div>
         #{close_html}
@@ -174,4 +173,4 @@ module.exports = class WidgetRenderersBar
       helpers.landing_page_link('widget', {class: 'mkz-widget__bar-logo'})
 
   _is_topbar: ->
-    @options.type == 'top_bar'
+    @options.type == 'top-bar'

@@ -18,6 +18,7 @@ module.exports = {
     // abort if object is undefined
     if (!window[name]) return false
 
+    // widgets
     css.embed()
     eEmit.subscribe('track.after', widgetViewer.track)
 

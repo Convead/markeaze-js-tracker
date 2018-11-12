@@ -123,7 +123,7 @@ self = {
       @_log 'Exclude the widget with push if browser do not support', widget.id
       return false
     
-    if widget.type == 'pop_up'
+    if widget.type == 'pop-up'
 
       # Check the overlap of this widget
       for r_widget_id, r_widget of @widgets
@@ -186,13 +186,13 @@ self = {
       valid_properties = (@widget_filter(widget, properties) || (!properties.display_type && !properties.slug && !properties.id))
       if widget.render && valid_properties
         switch widget.type
-          when 'top_bar'
+          when 'top-bar'
             widget.render.hide_with_event()
-          when 'bottom_bar'
+          when 'bottom-bar'
             widget.render.hide_with_event()
           when 'embedded'
             widget.render.close_with_event()
-          when 'pop_up'
+          when 'pop-up'
             widget.render.close_with_event()
           when 'notice'
             widget.render.close_with_event()
@@ -281,7 +281,7 @@ self = {
     window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body && document.body.scrollTop || 0
 
   _has_widget_rendered: (type) ->
-    return false if type != 'top_bar' && type != 'bottom_bar'
+    return false if type != 'top-bar' && type != 'bottom-bar'
     for id of @widgets
       widget = @widgets[id]
       if typeof widget.render != 'undefined' && widget.type == type

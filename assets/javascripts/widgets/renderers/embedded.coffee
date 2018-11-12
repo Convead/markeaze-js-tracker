@@ -5,7 +5,7 @@ SimpleValidation = require('../../libs/simpleValidation.coffee')
 
 module.exports = class WidgetRenderersEmbedded
   constructor: (@widget_tracker_view, @options) ->
-    @el = document.getElementById("convead_widget_#{@options.id}")
+    @el = document.getElementById("mzk_widget_#{@options.id}")
     if !@el
       if @widget_tracker_view.options.preview_mode?
         helpers.touch_container (el) =>

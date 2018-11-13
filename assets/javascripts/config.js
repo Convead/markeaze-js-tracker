@@ -6,6 +6,6 @@ module.exports = {
   appKey: undefined,
   visitor: {},
   uid: undefined,
-  cookieUid: '_mkz',
+  cookieUid: '_mkz_dvc_uid',
   endpoint: 'tracker.markeaze.com'
 }

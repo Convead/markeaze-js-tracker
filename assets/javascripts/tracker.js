@@ -30,20 +30,15 @@ module.exports = {
         widgets: [{
           device: null,
           id: 41708,
-          slug: null,
-          type: "notice",
+          type: 'notice',
           close_timeout: 0,
-          html: '<form class="mkz-widget__workarea">Text</form>',
+          html: '<form class="mkz-widget__workarea" style="background-color: #eee; width: 300px; min-height: 100px; border: 1px solid #333;">Text</form>',
           scroll_top_percent: 0,
           settings: {
-            width: "200px",
-            placement: "top-left",
-            action_color: "#9a9a9a",
-            'color': "#333",
-            'background-color': "#eee",
-            sending_notice_enable: "true",
-            sending_notice_html: "Success",
-            width: "740px"
+            placement: 'top-left',
+            action_color: '#9a9a9a',
+            sending_notice_enable: 'true',
+            sending_notice_html: 'Success'
           },
           timeout: 0,
           visitor_loss_detect: false,

@@ -1,5 +1,5 @@
 config = require('../config')
-SimpleLiquid = require('../libs/simple_liquid.coffee')
+SimpleLiquid = require('../libs/simpleLiquid.coffee')
 
 module.exports = {
 

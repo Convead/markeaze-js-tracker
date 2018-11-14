@@ -4,6 +4,7 @@ let uuid = require('./libs/uuid')
 let domEvent = require('./libs/domEvent')
 let log = require('./libs/log')
 let parseUrlParams = require('./libs/parseUrlParams')
+let baseDomain = require('./libs/baseDomain.coffee')
 let tracker = require('./tracker')
 let config = require('./config')
 let css = require('./css')
@@ -41,8 +42,9 @@ module.exports = {
       if (arguments[1]) {
         config.appKey = arguments[1]
         // set uid cookie
+        const domain = (new baseDomain())
         config.uid = config.uid || cookies.get(config.cookieUid) || uuid.get(16)
-        cookies.set(config.cookieUid, config.uid, { expires: 31536000 })
+        cookies.set(config.cookieUid, config.uid, { expires: 31536000, domain: domain.get() })
         // call pending task
         for (let fields of this.pendingTasks) {
           this.send.apply(this, fields)

@@ -1,4 +1,4 @@
-class ConveadClient.BaseDomain
+module.exports = class BaseDomain
 
   constructor: (currentDomain) ->
     @currentDomain = currentDomain || document.domain

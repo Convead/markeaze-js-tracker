@@ -14,6 +14,8 @@ module.exports = class WidgetTracker
 
     @widgetViewer = widgetViewer
 
+    @submit_value = ''
+
     @options.html ||= ''
     @options.render = false
     @options.properties ||= {}
@@ -137,8 +139,6 @@ module.exports = class WidgetTracker
     mkz('trackWebFormClose', {web_form_id: @options.id})
 
     @widgetViewer.render_overlapped()
-
-@submit_value = ''
 
 WidgetTracker.handleWidgetButton = (event, action_str, submit_value = '') ->
   @submit_value = submit_value

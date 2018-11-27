@@ -74,8 +74,8 @@ mkz('visitorInfoSet', {
             Avaliable callbacks: <i>url.change</i>, <i>track.before</i>, <i>track.after</i><br />
             <pre>
 mkz('subscribe', 'url.change', function(url) {
-  mkz('trackPageView')
-  console.log('Change url', url)
+  mkz('trackPageView');
+  console.log('Change url', url);
 });</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>

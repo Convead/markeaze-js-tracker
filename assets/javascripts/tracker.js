@@ -13,7 +13,7 @@ module.exports = {
     data.type = toSnakeCase.convert( eventName.replace(/^track/gi, '') )
     data.tracker_ver = config.version
     data.tracker_name = config.trackerName
-    data.performed_at = Math.floor(Date.now())
+    data.performed_at = Math.floor(Date.now() / 1000)
 
     // visitor
     data.visitor = config.visitor ? config.visitor : {}

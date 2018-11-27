@@ -66,7 +66,7 @@ module.exports = {
       this.track(arguments[0], properties)
     },
     trackVisitorUpdate () {
-      this.plugins.setVisitorInfo(null, arguments[1])
+      this.plugins.visitorInfoSet(null, arguments[1])
       this.track(arguments[0], {})
     },
     trackCustom () {
@@ -80,7 +80,7 @@ module.exports = {
     demoResponse () {
       config.demoResponse = arguments[1]
     },
-    setVisitorInfo () {
+    visitorInfoSet () {
       let info = arguments[1]
       for (let key in info) config.visitor[key] = info[key]
     },

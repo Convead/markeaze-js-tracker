@@ -1,4 +1,3 @@
-let request = require('./libs/request')
 let eEmit = require('./libs/eEmit')
 let toSnakeCase = require('./libs/toSnakeCase')
 let log = require('./libs/log')
@@ -26,7 +25,7 @@ module.exports = {
     eEmit.emit('track.before', data)
 
     if (config.demoResponse) {
-      const res = {
+      const response = {
         widgets: [{
           device: null,
           id: 41708,
@@ -47,23 +46,25 @@ module.exports = {
         }]
       }
 
-      eEmit.emit('track.after', {post: data, response: res})
-      if (callback) callback(data, res)
+      eEmit.emit('track.after', {post: data, response: response})
+      if (callback) callback(data, response)
 
     } else {
 
-      request({
-        url: '//' + config.endpoint + '/event',
-        type: 'json',
-        method: 'post',
-        data: data,
-        crossOrigin: true,
-        async: true,
-        success (res) {
-          eEmit.emit('track.after', {post: data, response: res})
-          if (callback) callback(data, res)
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST', 'http://eqsol.ru/mkz/js/test.php', true)
+      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xhr.onreadystatechange = () => { 
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          const response = JSON.parse(xhr.responseText)
+          eEmit.emit('track.after', {post: response, response: data})
+          if (callback) callback(data, response)
         }
-      })
+      }
+      xhr.send(JSON.stringify(data))
+      xhr.onerror = (e) => {
+        log.push('xhr', e)
+      }
 
     }
   }

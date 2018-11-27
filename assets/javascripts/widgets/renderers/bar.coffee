@@ -52,12 +52,14 @@ module.exports = class WidgetRenderersBar
   template: ->
     action_style_color = if @options.settings.action_color then 'color:' + @options.settings.action_color else false
     close_html = if @options.properties.allow_close == false then '' else "<div class='mkz-widget__bar-hide' title='Close' style='#{action_style_color}'></div><div class='mkz-widget__bar-show' title='Open' style='#{action_style_color}'></div>"
-    "<div mkz class='mkz-widget mkz-widget_type_#{@options.type}'>
-      <div class='mkz-widget__bar-shift'>&nbsp;</div>
-      <div class='mkz-widget__bar'>
-        #{@whitelabel()}
-        <div class='mkz-widget__bar-content'>#{contentRenderer.replace( @options.html )}</div>
-        #{close_html}
+    "<div mkz>
+      <div class='mkz-widget mkz-widget_type_#{@options.type}'>
+        <div class='mkz-widget__bar-shift'>&nbsp;</div>
+        <div class='mkz-widget__bar'>
+          #{@whitelabel()}
+          <div class='mkz-widget__bar-content'>#{contentRenderer.replace( @options.html )}</div>
+          #{close_html}
+        </div>
       </div>
     </div>"
 

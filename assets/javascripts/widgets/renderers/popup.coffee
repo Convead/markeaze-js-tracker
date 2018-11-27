@@ -48,13 +48,15 @@ module.exports = class WidgetRenderersPopup
   template: ->
     action_style_color = if @options.settings.action_color then 'color:' + @options.settings.action_color else false
     close_html = if @options.properties.allow_close == false then '' else "<div class='mkz-widget__popup-close' title='Close' style='#{action_style_color}'></div>"
-    "<div mkz class='mkz-widget mkz-widget_type_pop-up'>
-      <div class='mkz-widget__popup-backdrop'></div>
-      <div class='mkz-widget__popup-box'>
-        <div class='mkz-widget__popup-content'>
-          #{contentRenderer.replace( @options.html )}
-          #{close_html}
-          #{@whitelabel()}
+    "<div mkz>
+      <div class='mkz-widget mkz-widget_type_pop-up'>
+        <div class='mkz-widget__popup-backdrop'></div>
+        <div class='mkz-widget__popup-box'>
+          <div class='mkz-widget__popup-content'>
+            #{contentRenderer.replace( @options.html )}
+            #{close_html}
+            #{@whitelabel()}
+          </div>
         </div>
       </div>
     </div>"

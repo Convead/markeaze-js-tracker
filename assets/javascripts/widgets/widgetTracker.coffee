@@ -46,6 +46,7 @@ module.exports = class WidgetTracker
           @options.render = new WidgetRenderersPopup(@, @options)
         when 'notice'
           @options.render = new WidgetRenderersNotice(@, @options)
+      return unless @renderer_view
       @el = @renderer_view.el
       return unless @el
 

@@ -13,14 +13,14 @@ module.exports = {
     data.type = toSnakeCase.convert( eventName.replace(/^track/gi, '') )
     data.tracker_ver = config.version
     data.tracker_name = config.trackerName
-    data.performed_at = (new Date()).toISOString()
+    data.performed_at = Date.now()
 
     // visitor
     data.visitor = config.visitor ? config.visitor : {}
     data.visitor.device_uid = config.uid
 
     // event properties
-    if (properties) data.properties = JSON.stringify(properties)
+    if (properties) data.properties = properties
 
     log.push('track', data)
     eEmit.emit('track.before', data)

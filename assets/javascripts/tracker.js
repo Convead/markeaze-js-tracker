@@ -52,7 +52,7 @@ module.exports = {
     } else {
 
       const xhr = new XMLHttpRequest()
-      xhr.open('POST', 'http://eqsol.ru/mkz/js/test.php', true)
+      xhr.open('POST', '//' + config.endpoint + '/event', true)
       xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
       xhr.onreadystatechange = () => { 
         if (xhr.readyState == 4 && xhr.status == 200) {

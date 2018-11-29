@@ -44,7 +44,7 @@ module.exports = class WidgetRenderersNotice
       <div class='mkz-widget mkz-widget_type_notice mkz-widget_placement_#{@options.settings.placement}'>
         <div class='mkz-widget__box'>
           <div class='mkz-widget__content'>
-            #{contentRenderer.replace( @options.html )}
+            #{contentRenderer.replace( @options.body_html )}
             #{close_html}
             #{@whitelabel()}
           </div>
@@ -55,7 +55,7 @@ module.exports = class WidgetRenderersNotice
   bind_events: ->
     if @options.properties.allow_close != false
       domEvent.add @close_el, 'click', (=>
-          cookies.set('convead_widget_closed_'+@options.id, @options.id, { expires: 86400 }) unless @widget_tracker_view.options.preview_mode?
+          cookies.set('mkz_widget_closed_'+@options.id, @options.id, { expires: 86400 }) unless @widget_tracker_view.options.preview_mode?
           @close({callback: => @widget_tracker_view.close() })
         )
 

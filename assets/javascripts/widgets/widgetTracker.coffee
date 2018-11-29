@@ -16,16 +16,16 @@ module.exports = class WidgetTracker
 
     @submit_value = ''
 
-    @options.html ||= ''
+    @options.body_html ||= ''
     @options.render = false
     @options.properties ||= {}
     @options.renderTimeout = false;
-    delay = (parseInt(@options.timeout) || 0)
+    delay = (parseInt(@options.after_page_timeout) || 0)
 
-    if @options.type == 'pop-up' && @options.visitor_loss_detect
+    if @options.display_type == 'pop-up' && @options.on_exit
       @options.renderLossDetection = new VisitorLossDetection(delay: delay, detect: @render_without_overlap)
     else
-      if delay == 0 || @options.type == 'embedded'
+      if delay == 0 || @options.display_type == 'embedded'
         @render_without_overlap()
       else
         @options.renderTimeout = setTimeout(@render_without_overlap, delay * 1000)
@@ -35,7 +35,7 @@ module.exports = class WidgetTracker
 
   render: =>
     if !@options.render
-      @renderer_view = switch @options.type
+      @renderer_view = switch @options.display_type
         when 'embedded'
           @options.render = new WidgetRenderersEmbedded(@, @options)
         when 'top-bar'
@@ -55,7 +55,7 @@ module.exports = class WidgetTracker
       workarea_el.setAttribute('data-id', @options.id)
 
       helpers.load_child_scripts_from_object @el
-      @view() if @options.type != 'top-bar' && @options.type != 'bottom-bar'
+      @view() if @options.display_type != 'top-bar' && @options.display_type != 'bottom-bar'
       @options.properties.on_complete(@el) if typeof @options.properties.on_complete == 'function'
       @bind_events(workarea_el)
 
@@ -122,7 +122,7 @@ module.exports = class WidgetTracker
     }
     if @submit_value || properties.submit_value
       properties.submit_value = @submit_value || properties.submit_value
-    cookies.set('convead_widget_submitted_'+@options.id, @options.id, { expires: 31536000 })
+    cookies.set('mkz_widget_submitted_'+@options.id, @options.id, { expires: 31536000 })
 
     mkz('setVisitorInfo', data)
     mkz('trackWebFormSubmit', properties)
@@ -135,7 +135,7 @@ module.exports = class WidgetTracker
     mkz('trackWebFormShow', {web_form_id: @options.id})
 
   close: =>
-    cookies.set('convead_widget_closed_'+@options.id, @options.id, { expires: 86400 }) unless @options.preview_mode?
+    cookies.set('mkz_widget_closed_'+@options.id, @options.id, { expires: 86400 }) unless @options.preview_mode?
 
     mkz('trackWebFormClose', {web_form_id: @options.id})
 
@@ -152,8 +152,7 @@ WidgetTracker.handleWidgetButton = (event, action_str, submit_value = '') ->
       # availability of email in js button
       form_data = new formToObject(workarea_el)
       if form_data.properties
-        for k, val of form_data.properties
-          window.ConveadSettings.visitor_info[k] = val if val
+        mkz('visitorInfoSet', form_data.properties)
 
       if validator.valid()
         eval(action_str)

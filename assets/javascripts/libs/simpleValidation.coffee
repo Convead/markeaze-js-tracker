@@ -2,9 +2,9 @@ module.exports = class SimpleValidation
   constructor: (form, options = {}) ->
     @form = form
     @invalid_class_name = 'mkz-invalid'
-    @required_class_name = options.required_class_name || 'convead_required'
+    @required_class_name = options.required_class_name || 'mkz_required'
     @invalid_parent_class_name = false
-    @invalid_parent_class_name = options.required_parent_class_name || 'convead_required'
+    @invalid_parent_class_name = options.required_parent_class_name || 'mkz_required'
 
   valid: ->
     controls = @form.querySelectorAll('input, select, textarea')

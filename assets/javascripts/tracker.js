@@ -25,24 +25,25 @@ module.exports = {
     eEmit.emit('track.before', data)
 
     if (config.demoResponse) {
+
       const response = {
-        widgets: [{
-          device: null,
-          id: 41708,
-          type: 'notice',
-          close_timeout: 0,
-          html: '<form class="mkz-widget__workarea" style="background-color: #eee; width: 300px; min-height: 100px; border: 1px solid #333;">Text</form>',
-          scroll_top_percent: 0,
-          settings: {
-            placement: 'top-left',
-            action_color: '#9a9a9a',
-            sending_notice_enable: 'true',
-            sending_notice_html: 'Success'
-          },
-          timeout: 0,
-          visitor_loss_detect: false,
-          whitelabel: false,
-          display_type: 'auto'
+        status: 'OK',
+        web_forms: [
+          {
+            id: 1,
+            display_type: 'notice',
+            body_html: '<form class="mkz-widget__workarea" style="background-color: #eee; width: 300px; min-height: 100px; border: 1px solid #333; padding: 10px;">Example</form>',
+            on_exit: false,
+            after_page_timeout: 0,
+            after_page_scroll: 0,
+            close_timeout: 0,
+            max_showing_count: 0,
+            settings: {
+              position: 'top-left',
+              action_color: '#9a9a9a',
+              sending_notice_enable: 'true',
+              sending_notice_html: 'Success'
+            }
         }]
       }
 

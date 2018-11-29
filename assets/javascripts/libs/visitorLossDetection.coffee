@@ -1,3 +1,5 @@
+domEvent = require('./domEvent')
+
 module.exports = class VisitorLossDetection
   status: 'initial'
   event: ''
@@ -13,7 +15,7 @@ module.exports = class VisitorLossDetection
     self = @
 
     $el = document.body
-    ConveadDOMEvent.add $el, 'mouseover', (e) ->
+    domEvent.add $el, 'mouseover', (e) ->
       toElement = e.relatedTarget || e.fromElement
       while toElement && toElement isnt this
         toElement = toElement.parentNode
@@ -29,7 +31,7 @@ module.exports = class VisitorLossDetection
 
       self.start_timer()
 
-    ConveadDOMEvent.add $el, 'mouseout', (e) ->
+    domEvent.add $el, 'mouseout', (e) ->
       e = e || window.event
       if typeof e.pageY == 'number'
         self.cursor_offset_top = e.pageY - document.body.scrollTop - document.documentElement.scrollTop

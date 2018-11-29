@@ -17,7 +17,7 @@ module.exports = class WidgetRenderersEmbedded
       @insert()
 
   insert: ->
-    @el.innerHTML = "<div mkz><div class='mkz-widget mkz-widget_type_embedded'>" + contentRenderer.replace( @options.html ) + '</div></div>'
+    @el.innerHTML = "<div mkz><div class='mkz-widget mkz-widget_type_embedded'>" + contentRenderer.replace( @options.body_html ) + '</div></div>'
     @widget = @el.querySelector('.mkz-widget')
     @sending_notice_el = @el.querySelector('.mkz-widget__sending-notice')
     @sending_body_el = @el.querySelector('.mkz-widget__body')

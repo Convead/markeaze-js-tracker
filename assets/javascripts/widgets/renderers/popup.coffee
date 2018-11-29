@@ -53,7 +53,7 @@ module.exports = class WidgetRenderersPopup
         <div class='mkz-widget__popup-backdrop'></div>
         <div class='mkz-widget__popup-box'>
           <div class='mkz-widget__popup-content'>
-            #{contentRenderer.replace( @options.html )}
+            #{contentRenderer.replace( @options.body_html )}
             #{close_html}
             #{@whitelabel()}
           </div>

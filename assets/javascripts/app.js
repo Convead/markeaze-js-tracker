@@ -21,7 +21,7 @@ module.exports = {
 
     // widgets
     css.embed()
-    eEmit.subscribe('track.after', widgetViewer.track)
+    widgetViewer.bind()
 
     let queue = window[name].q || []
     let self = this

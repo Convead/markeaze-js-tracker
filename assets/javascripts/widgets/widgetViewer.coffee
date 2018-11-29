@@ -1,5 +1,7 @@
 log = require('../libs/log')
+eEmit = require('../libs/eEmit')
 cookies = require('../libs/cookies')
+domEvent = require('../libs/domEvent')
 contentRenderer = require('../widgets/contentRenderer.coffee')
 WidgetTracker = require('../widgets/WidgetTracker.coffee')
 ImagesPreloader = require('../libs/imagesPreloader.coffee')
@@ -27,6 +29,11 @@ self = {
     active: false
     passive: false
   }
+
+  bind: ->
+    domEvent.add window, 'scroll', (event) -> self.scroll_condition()
+
+    eEmit.subscribe 'track.after', self.track
 
   track: (data) ->
     if data.post.type == 'page_view'

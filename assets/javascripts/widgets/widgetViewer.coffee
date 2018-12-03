@@ -1,6 +1,5 @@
 log = require('../libs/log')
 eEmit = require('../libs/eEmit')
-cookies = require('../libs/cookies')
 domEvent = require('../libs/domEvent')
 contentRenderer = require('../widgets/contentRenderer.coffee')
 WidgetTracker = require('../widgets/WidgetTracker.coffee')
@@ -69,10 +68,6 @@ self = {
   add: (widget) ->
     @load widget.body_html, => 
       widget.on_exit = false if @is_mobile()
-
-      if (cookies.get('mkz_widget_submitted_'+widget.id) || cookies.get('mkz_widget_closed_'+widget.id))
-        @_log 'Has blocked cookie', widget
-        return false
 
       if typeof @widgets[widget.id] != 'undefined'
         @_log 'Abort double init one widget', widget

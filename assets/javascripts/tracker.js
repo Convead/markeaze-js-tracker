@@ -58,7 +58,7 @@ module.exports = {
       xhr.onreadystatechange = () => { 
         if (xhr.readyState == 4 && xhr.status == 200) {
           const response = JSON.parse(xhr.responseText)
-          eEmit.emit('track.after', {post: response, response: data})
+          eEmit.emit('track.after', {post: data, response: response})
           if (callback) callback(data, response)
         }
       }

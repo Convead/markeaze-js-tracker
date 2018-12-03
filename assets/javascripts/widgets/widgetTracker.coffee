@@ -1,6 +1,5 @@
 VisitorLossDetection = require('../libs/visitorLossDetection.coffee')
 helpers = require('./helpers.coffee')
-cookies = require('../libs/cookies')
 domEvent = require('../libs/domEvent')
 SimpleValidation = require('../libs/simpleValidation.coffee')
 WidgetRenderersEmbedded = require('./renderers/embedded.coffee')
@@ -122,7 +121,6 @@ module.exports = class WidgetTracker
     }
     if @submit_value || properties.submit_value
       properties.submit_value = @submit_value || properties.submit_value
-    cookies.set('mkz_widget_submitted_'+@options.id, @options.id, { expires: 31536000 })
 
     mkz('setVisitorInfo', data)
     mkz('trackWebFormSubmit', properties)
@@ -135,8 +133,6 @@ module.exports = class WidgetTracker
     mkz('trackWebFormShow', {web_form_id: @options.id})
 
   close: =>
-    cookies.set('mkz_widget_closed_'+@options.id, @options.id, { expires: 86400 }) unless @options.preview_mode?
-
     mkz('trackWebFormClose', {web_form_id: @options.id})
 
     @widgetViewer.render_overlapped()
@@ -152,7 +148,7 @@ WidgetTracker.handleWidgetButton = (event, action_str, submit_value = '') ->
       # availability of email in js button
       form_data = new formToObject(workarea_el)
       if form_data.properties
-        mkz('visitorInfoSet', form_data.properties)
+        mkz('setVisitorInfo', form_data.properties)
 
       if validator.valid()
         eval(action_str)

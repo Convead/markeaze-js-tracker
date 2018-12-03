@@ -60,13 +60,13 @@ module.exports = {
     trackPageView () {
       const properties = arguments[1] || {}
       properties.page = properties.page || {}
-      properties.page.url = window.location.href
-      properties.page.title = document.title
-      properties.page.referrer = document.referrer
+      properties.page.url = properties.page.url || window.location.href
+      properties.page.title = properties.page.title || document.title
+      properties.page.referrer = properties.page.referrer || document.referrer
       this.track(arguments[0], properties)
     },
     trackVisitorUpdate () {
-      this.plugins.visitorInfoSet(null, arguments[1])
+      this.plugins.setVisitorInfo(null, arguments[1])
       this.track(arguments[0], {})
     },
     trackCustom () {
@@ -80,7 +80,7 @@ module.exports = {
     demoResponse () {
       config.demoResponse = arguments[1]
     },
-    visitorInfoSet () {
+    setVisitorInfo () {
       let info = arguments[1]
       for (let key in info) config.visitor[key] = info[key]
     },

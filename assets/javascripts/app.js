@@ -9,6 +9,8 @@ let tracker = require('./tracker')
 let config = require('./config')
 let css = require('./css')
 let widgetViewer = require('./widgets/widgetViewer.coffee')
+const Pinger = require('./libs/pinger.coffee')
+const robotDetection = require('./libs/robot_detection.coffee')
 
 module.exports = {
   eventSubscribe (name, fn) {
@@ -18,6 +20,11 @@ module.exports = {
   ready (name) {
     // abort if object is undefined
     if (!window[name]) return false
+
+    // abort if bot detected
+    if (robotDetection.is_bot()) return false
+
+    new Pinger()
 
     // widgets
     css.embed()

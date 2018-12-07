@@ -1,7 +1,9 @@
-let eEmit = require('./libs/eEmit')
-let toSnakeCase = require('./libs/toSnakeCase')
-let log = require('./libs/log')
-let config = require('./config')
+const eEmit = require('./libs/eEmit')
+const toSnakeCase = require('./libs/toSnakeCase')
+const log = require('./libs/log')
+const Request = require('./libs/request')
+const robotDetection = require('./libs/robot_detection.coffee')
+const config = require('./config')
 
 module.exports = {
   send (eventName, properties, callback) {
@@ -52,20 +54,17 @@ module.exports = {
 
     } else {
 
-      const xhr = new XMLHttpRequest()
-      xhr.open('POST', '//' + config.endpoint + '/event', true)
-      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-      xhr.onreadystatechange = () => { 
-        if (xhr.readyState == 4 && xhr.status == 200) {
-          const response = JSON.parse(xhr.responseText)
+      (new Request).send(
+        '//' + config.endpoint + '/event',
+        (response) => {
+          if (response == 'Bot detected!') robotDetection.detect()
           eEmit.emit('track.after', {post: data, response: response})
           if (callback) callback(data, response)
+        },
+        (e) => {
+          log.push('xhr', e)
         }
-      }
-      xhr.send(JSON.stringify(data))
-      xhr.onerror = (e) => {
-        log.push('xhr', e)
-      }
+      )
 
     }
   }

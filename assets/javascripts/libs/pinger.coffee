@@ -37,11 +37,13 @@ module.exports = class Pinger
 
     @blured()
 
-    data =
-      app_key: config.appKey
-      device_uid: config.uid
-
-    response = (response) =>
-      robotDetection.detect() if response == 'Bot detected!'
-
-    (new Request).send('//' + config.endpoint + '/ping', data, response)
+    (new Request).send(
+      '//' + config.endpoint + '/ping'
+      {
+        app_key: config.appKey
+        device_uid: config.uid
+      }
+      =>
+      (xhr) =>
+        robotDetection.detect() if xhr.status == 403 || xhr.status == 0
+    )

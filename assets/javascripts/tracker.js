@@ -8,6 +8,8 @@ const config = require('./config')
 module.exports = {
   send (eventName, properties, callback) {
 
+    if (robotDetection.is_bot()) return false
+
     // basic data
     const data = {}
     data.app_key = config.appKey
@@ -56,13 +58,14 @@ module.exports = {
 
       (new Request).send(
         '//' + config.endpoint + '/event',
+        data,
         (response) => {
-          if (response == 'Bot detected!') robotDetection.detect()
           eEmit.emit('track.after', {post: data, response: response})
           if (callback) callback(data, response)
         },
-        (e) => {
-          log.push('xhr', e)
+        (xhr) => {
+          if (xhr.status == 403 || xhr.status == 0) robotDetection.detect()
+          log.push('track fail', xhr)
         }
       )
 

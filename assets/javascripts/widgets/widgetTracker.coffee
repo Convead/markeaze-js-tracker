@@ -1,7 +1,7 @@
 VisitorLossDetection = require('../libs/visitorLossDetection.coffee')
 helpers = require('./helpers.coffee')
 domEvent = require('../libs/domEvent')
-SimpleValidation = require('../libs/simpleValidation.coffee')
+formToObject = require('../libs/formToObject')
 WidgetRenderersEmbedded = require('./renderers/embedded.coffee')
 WidgetRenderersBar = require('./renderers/bar.coffee')
 WidgetRenderersPopup = require('./renderers/popup.coffee')
@@ -12,8 +12,6 @@ module.exports = class WidgetTracker
     return unless @options.id
 
     @widgetViewer = widgetViewer
-
-    @submit_value = ''
 
     @options.body_html ||= ''
     @options.render = false
@@ -83,11 +81,11 @@ module.exports = class WidgetTracker
             this.selectionStart = selectionPosition
             this.selectionEnd = selectionPosition
 
-    all_links = @el.querySelectorAll('.cnv-widget_component a')
+    all_links = @el.querySelectorAll('.mkz-widget__component a')
     
     # Exclude prohibited links
     links = []
-    exclude_links = @el.querySelectorAll('.cnv-widget_component .cnv-widget_checkbox_type_agree a')
+    exclude_links = @el.querySelectorAll('.mkz-widget__component .mkz-widget__checkbox_type_agree a')
     for link in all_links
       if typeof link == 'object'
         for exclude_link in exclude_links
@@ -106,7 +104,7 @@ module.exports = class WidgetTracker
           else
             window.location.href = href
 
-    button_el = @el.querySelectorAll('.cnv-widget_sending_notice button')
+    button_el = @el.querySelectorAll('.mkz-widget__sending-notice button')
     if button_el.length
       for button in button_el
         domEvent.add button, 'click', (e) =>
@@ -119,13 +117,9 @@ module.exports = class WidgetTracker
       web_form_id: @options.id
       web_form_data: data
     }
-    if @submit_value || properties.submit_value
-      properties.submit_value = @submit_value || properties.submit_value
 
-    mkz('setVisitorInfo', data)
-    mkz('trackWebFormSubmit', properties)
-
-    @submit_value = ''
+    window.mkz('setVisitorInfo', data)
+    window.mkz('trackWebFormSubmit', properties)
 
     @widgetViewer.render_overlapped()
 
@@ -136,37 +130,3 @@ module.exports = class WidgetTracker
     mkz('trackWebFormClose', {web_form_id: @options.id})
 
     @widgetViewer.render_overlapped()
-
-WidgetTracker.handleWidgetButton = (event, action_str, submit_value = '') ->
-  @submit_value = submit_value
-  # delay 0 ms waiting for the removal of the widget from array widgetViewer.widgets
-  setTimeout ->
-      workarea_el = helpers.selector_closest(event.target, '.cnv-widget_workarea') || document.querySelector('.cnv-widget_workarea')
-      
-      validator = new SimpleValidation(workarea_el)
-
-      # availability of email in js button
-      form_data = new formToObject(workarea_el)
-      if form_data.properties
-        mkz('setVisitorInfo', form_data.properties)
-
-      if validator.valid()
-        eval(action_str)
-      else
-        event.preventDefault()
-    , 0
-
-WidgetTracker.handleWidgetClose = (event) ->
-  return unless event
-
-  if event.target
-    event.preventDefault()
-    event.stopPropagation()
-    self = event.target
-  else
-    self = event
-    
-  workarea_el = helpers.selector_closest(self, '.cnv-widget_workarea')
-  if workarea_el
-    id = parseInt(workarea_el.getAttribute('data-id'))
-    @WidgetViewer.hide({ id: id })

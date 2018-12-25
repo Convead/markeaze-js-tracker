@@ -13,28 +13,29 @@ const Pinger = require('./libs/pinger.coffee')
 const robotDetection = require('./libs/robot_detection.coffee')
 
 module.exports = {
-  eventSubscribe (name, fn) {
-    eEmit.subscribe(name, fn)
+  eventSubscribe (key, fn) {
+    eEmit.subscribe(key, fn)
   },
   pendingTasks: [],
-  ready (name) {
+  ready (nameVariable) {
     // abort if object is undefined
-    if (!window[name]) return false
+    if (!window[nameVariable]) return false
 
     // abort if bot detected
     if (robotDetection.is_bot()) return false
 
     new Pinger()
 
-    // widgets
-    css.embed()
-    widgetViewer.bind()
-
-    let queue = window[name].q || []
+    let queue = window[nameVariable].q || []
     let self = this
-    window[name] = function() {
-      self.pendingSend.apply(self, arguments)
+    window[nameVariable] = function() {
+      return self.pendingSend.apply(self, arguments)
     }
+
+    // widgets
+    css.embed(nameVariable)
+    widgetViewer.bind(nameVariable)
+
     for (let fields of queue) {
       this.pendingSend.apply(this, fields)
     }
@@ -91,6 +92,9 @@ module.exports = {
       let info = arguments[1]
       for (let key in info) config.visitor[key] = info[key]
     },
+    getVisitorInfo () {
+      return config.visitor
+    },
     subscribe () {
       eEmit.subscribe(arguments[1], arguments[2])
     }
@@ -99,32 +103,32 @@ module.exports = {
     log.push('action', arguments)
     // request to plugin
     if (!config.appKey && arguments[0] != 'appKey' && arguments[0] != 'debug' && typeof arguments[0] != 'function') {
-      this.pendingTasks.push(arguments)
+      return this.pendingTasks.push(arguments)
     }
     // apply task
     else {
-      this.send.apply(this, arguments)
+      return this.send.apply(this, arguments)
     }
   },
   send () {
     let obj = arguments[0]
     // function run when the client is ready
     if (typeof obj == 'function') {
-      obj.apply(this)
+      return obj.apply(this)
     }
     else {
       // request to plugin
       if (this.plugins[ obj ]) {
-        this.plugins[ obj ].apply(this, arguments)
+        return this.plugins[ obj ].apply(this, arguments)
       }
       // custom event
       else if (arguments[0].indexOf('track') == 0) {
-        this.track(obj, arguments[1], arguments[2])
+        return this.track(obj, arguments[1], arguments[2])
       }
     }
   },
   track (eventName, properies, callback) {
-    tracker.send(eventName, properies, callback)
+    return tracker.send(eventName, properies, callback)
   },
   changeUrl () {
     eEmit.emit('url.change', window.location.href)

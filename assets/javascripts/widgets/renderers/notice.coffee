@@ -72,8 +72,8 @@ module.exports = class WidgetRenderersNotice
 
     domEvent.add workarea_el, 'submit', (=>
         if @options.settings.sending_notice_enable == 'true'
-          @sending_notice_el.style.display = 'block'
-          @sending_body_el.style.display = 'none'
+          @sending_notice_el.style.display = 'block' if @sending_notice_el
+          @sending_body_el.style.display = 'none' if @sending_body_el
         else
           @close()
       )

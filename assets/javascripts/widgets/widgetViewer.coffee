@@ -4,6 +4,8 @@ domEvent = require('../libs/domEvent')
 contentRenderer = require('../widgets/contentRenderer.coffee')
 WidgetTracker = require('../widgets/WidgetTracker.coffee')
 ImagesPreloader = require('../libs/imagesPreloader.coffee')
+SimpleValidation = require('../libs/simpleValidation.coffee')
+helpers = require('./helpers.coffee')
 
 self = {
 
@@ -29,10 +31,34 @@ self = {
     passive: false
   }
 
-  bind: ->
+  bind: (nameVariable) ->
     domEvent.add window, 'scroll', (event) -> self.scroll_condition()
 
     eEmit.subscribe 'track.after', self.track
+
+    window[nameVariable].prototype.widgetSubmitHandler = (event, action_str, submit_value = '') ->
+      # TODO: set submit value to request
+
+      setTimeout ->
+          workarea_el = helpers.selector_closest(event.target, '.mkz-widget__workarea') || document.querySelector('.mkz-widget__workarea')
+          validator = new SimpleValidation(workarea_el)
+          if validator.valid()
+            eval(action_str)
+        , 0
+
+    window[nameVariable].prototype.widgetCloseHandler = (event) ->
+      return unless event
+
+      if event.target
+        event.preventDefault()
+        event.stopPropagation()
+        self = event.target
+      else
+        self = event
+
+      workarea_el = helpers.selector_closest(self, '.mkz-widget__workarea')
+      if workarea_el
+        @hide({ id: parseInt(workarea_el.getAttribute('data-id')) })
 
   track: (data) ->
     if data.post.type == 'page_view'
@@ -66,6 +92,7 @@ self = {
     }
 
   add: (widget) ->
+    widget.settings = widget.settings || {}
     @load widget.body_html, => 
       widget.on_exit = false if @is_mobile()
 

@@ -70,7 +70,7 @@ module.exports = {
       properties.page = properties.page || {}
       properties.page.url = properties.page.url || window.location.href
       properties.page.title = properties.page.title || document.title
-      properties.page.referrer = properties.page.referrer || document.referrer
+      if (properties.page.referrer) properties.page.referrer = document.referrer
       this.track(arguments[0], properties)
     },
     trackVisitorUpdate () {

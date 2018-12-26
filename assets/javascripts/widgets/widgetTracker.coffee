@@ -97,8 +97,8 @@ module.exports = class WidgetTracker
       for link in links
         domEvent.add link, 'click', (e) =>
           e.preventDefault()
-          @submit({}) unless helpers.selector_closest(link, '[data-nosubmit=true]') || link.getAttribute('data-nosubmit')
-          href = e.currentTarget.getAttribute("href")
+          href = e.currentTarget.getAttribute('href')
+          @link(href) unless helpers.selector_closest(link, '[data-nosubmit=true]') || link.getAttribute('data-nosubmit')
           if e.currentTarget.target && e.currentTarget.target.toLowerCase() == '_blank'
             window.open(href,'_blank')
           else
@@ -113,20 +113,42 @@ module.exports = class WidgetTracker
           e.preventDefault()
 
   submit: (data) =>
-    properties = {
+    # sending is performed earlier than installing VisitorInfo to ensure that this data does not fall into the event
+    window.mkz('trackWebFormSubmit', {
       web_form_id: @options.id
       web_form_data: data
-    }
-
+      page: @properiesPage()
+    })
     window.mkz('setVisitorInfo', data)
-    window.mkz('trackWebFormSubmit', properties)
 
     @widgetViewer.render_overlapped()
 
   view: ->
-    mkz('trackWebFormShow', {web_form_id: @options.id})
+    mkz('trackWebFormShow', {
+      web_form_id: @options.id
+      page: @properiesPage()
+    })
+
+  click: (link) ->
+    mkz('trackWebFormClick', {
+      web_form_id: @options.id
+      action_type: 'open_link',
+      link_url: link,
+      page: @properiesPage()
+    })
 
   close: =>
-    mkz('trackWebFormClose', {web_form_id: @options.id})
+    mkz('trackWebFormClose', {
+      web_form_id: @options.id
+      page: @properiesPage()
+    })
 
     @widgetViewer.render_overlapped()
+
+  properiesPage: () =>
+    page = {
+      url: window.location.href
+      title: document.title
+    }
+    page.referrer = document.referrer if document.referrer
+    page

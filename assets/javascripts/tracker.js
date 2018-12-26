@@ -36,7 +36,7 @@ module.exports = {
           {
             id: 1,
             display_type: 'pop_up',
-            body_html: '<form class="mkz-widget__workarea" style="background-color: #eee; padding: 20px;"><div class="mkz-widget_containers mkz-widget_body"><div class="mkz-widget_container mkz-widget_container_type_field"><div class="mkz-widget_component"><div style="text-align: center;margin-top: 10px;margin-bottom: 10px;"><input class="mkz_required" id="properties_email" name="properties[email]" placeholder="Email" type="email"></div></div></div><div class="mkz-widget_container mkz-widget_container_type_button"><div class="mkz-widget_component"><div style="text-align: center;margin-top: 10px;margin-bottom: 10px;"><button onclick="mkz.prototype.widgetSubmitHandler(event, &quot;&quot;, &quot;&quot;); ">Отправить</button></div></div></div></div></form>',
+            body_html: '<form class="mkz-widget__workarea" style="background-color: #eee; padding: 20px;"><div class="mkz-widget_containers mkz-widget_body"><div class="mkz-widget_container mkz-widget_container_type_field"><div class="mkz-widget_component"><div style="text-align: center;margin: 10px 0;"><input class="mkz_required" id="properties_email" name="properties[email]" placeholder="Email" type="email"></div></div></div><div class="mkz-widget_container mkz-widget_container_type_button"><div class="mkz-widget_component"><div style="text-align: center;margin: 10px 0;"><button onclick="mkz.prototype.widgetSubmitHandler(event, &quot;&quot;, &quot;&quot;); ">Отправить</button></div></div></div></div></form>',
             on_exit: false,
             after_page_timeout: 0,
             after_page_scroll: 0,

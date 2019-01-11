@@ -1,5 +1,5 @@
 module.exports = {
-  version: '0.0.3',
+  version: '0.0.4',
   trackerName: 'markeaze-js',
   debugMode: false,
   demoResponse: false,

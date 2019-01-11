@@ -6,7 +6,7 @@ const robotDetection = require('./libs/robot_detection.coffee')
 const config = require('./config')
 
 module.exports = {
-  send (eventName, properties, callback) {
+  send (eventName, properties, callback, visitor = null) {
 
     if (robotDetection.is_bot()) return false
 
@@ -19,7 +19,7 @@ module.exports = {
     data.performed_at = Math.floor(Date.now() / 1000)
 
     // visitor
-    data.visitor = Object.assign({}, config.visitor ? config.visitor : {})
+    data.visitor = visitor || Object.assign({}, config.visitor ? config.visitor : {})
     data.visitor.device_uid = config.uid
 
     // event properties

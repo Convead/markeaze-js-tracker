@@ -118,8 +118,7 @@ module.exports = class WidgetTracker
       web_form_id: @options.id
       web_form_data: data
       page: @properiesPage()
-    })
-    window.mkz('setVisitorInfo', data)
+    }, null, data)
 
     @widgetViewer.render_overlapped()
 

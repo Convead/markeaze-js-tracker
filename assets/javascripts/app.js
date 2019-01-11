@@ -71,15 +71,15 @@ module.exports = {
       properties.page.url = properties.page.url || window.location.href
       properties.page.title = properties.page.title || document.title
       if (properties.page.referrer) properties.page.referrer = document.referrer
-      this.track(arguments[0], properties)
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
     trackVisitorUpdate () {
       this.plugins.setVisitorInfo(null, arguments[1])
-      this.track(arguments[0], {})
+      return this.track(arguments[0], {})
     },
     trackCustom () {
       if (typeof arguments[1] === 'string') {
-        this.track(arguments[1], {}, {}, arguments[2], arguments[3])
+        return this.track(arguments[1], {}, arguments[2], arguments[3])
       }
     },
     debug () {
@@ -91,6 +91,7 @@ module.exports = {
     setVisitorInfo () {
       let info = arguments[1]
       for (let key in info) config.visitor[key] = info[key]
+      return config.visitor
     },
     getVisitorInfo () {
       return config.visitor
@@ -123,12 +124,12 @@ module.exports = {
       }
       // custom event
       else if (arguments[0].indexOf('track') == 0) {
-        return this.track(obj, arguments[1], arguments[2])
+        return this.track(obj, arguments[1], arguments[2], arguments[3])
       }
     }
   },
-  track (eventName, properies, callback) {
-    return tracker.send(eventName, properies, callback)
+  track (eventName, properies, callback, visitor) {
+    return tracker.send(eventName, properies, callback, visitor)
   },
   changeUrl () {
     eEmit.emit('url.change', window.location.href)

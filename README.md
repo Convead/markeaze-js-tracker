@@ -6,6 +6,7 @@ With this tracker you can collect user event data (page views, e-commerce transa
 
 ```
 # install dependencies
+npm install -g webpack-dev-server
 npm install
 
 # run web-server with auto-reload to apply changes

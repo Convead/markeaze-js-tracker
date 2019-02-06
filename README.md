@@ -1,26 +1,8 @@
-# Markeaze js-tracker
+# Markeaze JS-tracker
 
 With this tracker you can collect user event data (page views, e-commerce transactions etc) from the client-side tier of your websites and web apps.
 
-## Setup
-
-```
-# install dependencies
-npm install -g webpack-dev-server
-npm install
-
-# run web-server with auto-reload to apply changes
-npm start
-
-# compile assets in to /dist/mkz.js
-npm run build
-```
-
-## Wiki
-
-https://github.com/Convead/markeaze-wiki/wiki/Events
-
-## Example html code for the site
+## Basic usage example
 
 ```
 <!-- Markeaze -->

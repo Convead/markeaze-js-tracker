@@ -71,6 +71,40 @@ module.exports = {
       properties.page.url = properties.page.url || window.location.href
       properties.page.title = properties.page.title || document.title
       if (properties.page.referrer) properties.page.referrer = document.referrer
+      if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
+      if (properties.category) properties.category = this.categoryNormalizer(properties.category)
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackCartUpdate () {
+      const properties = arguments[1]
+      if (!properties.items) this.requiredFieldThrow('items')
+      properties.items = properties.items.map((item) => {
+        return this.itemNormalizer(item)
+      })
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackCartUpdate () {
+      const properties = arguments[1]
+      if (!properties.items) this.requiredFieldThrow('items')
+      properties.items = properties.items.map((item) => {
+        return this.itemNormalizer(item)
+      })
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackCartAddItem () {
+      const properties = arguments[1]
+      if (!properties.item) this.requiredFieldThrow('item')
+      properties.item = this.itemNormalizer(properties.item)
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackCartRemoveItem () {
+      const properties = arguments[1]
+      if (!properties.item) this.requiredFieldThrow('item')
+      properties.item = this.itemNormalizer(properties.item)
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackOrderCreate () {
+      const properties = this.orderNormalizer(arguments[1])
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
     trackVisitorUpdate () {
@@ -99,6 +133,36 @@ module.exports = {
     subscribe () {
       eEmit.subscribe(arguments[1], arguments[2])
     }
+  },
+  offerNormalizer (offer) {
+    if (offer.id) offer.id = String(offer.id)
+    else this.requiredFieldThrow('offer.id')
+    if (offer.price) offer.price = parseFloat(offer.price)
+    else this.requiredFieldThrow('offer.price')
+    return offer
+  },
+  itemNormalizer (item) {
+    if (item.offer_id) item.offer_id = String(item.offer_id)
+    else this.requiredFieldThrow('item.offer_id')
+    if (item.qnt) item.qnt = parseFloat(item.qnt)
+    else this.requiredFieldThrow('item.qnt')
+    if (item.price) item.price = parseFloat(item.price)
+    return item
+  },
+  categoryNormalizer (category) {
+    if (category.id) category.id = String(category.id)
+    else this.requiredFieldThrow('category.id')
+    return category
+  },
+  orderNormalizer (order) {
+    if (order.order_uid) order.order_uid = String(order.order_uid)
+    else this.requiredFieldThrow('order.order_uid')
+    if (order.total) order.total = parseFloat(order.total)
+    else this.requiredFieldThrow('order.total')
+    return order
+  },
+  requiredFieldThrow (field) {
+    throw new Error(`"${field}" property is required`)
   },
   pendingSend () {
     log.push('action', arguments)

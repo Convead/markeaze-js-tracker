@@ -142,8 +142,8 @@ module.exports = {
     return offer
   },
   itemNormalizer (item) {
-    if (item.offer_id) item.offer_id = String(item.offer_id)
-    else this.requiredFieldThrow('item.offer_id')
+    if (item.offer_uid) item.offer_uid = String(item.offer_uid)
+    else this.requiredFieldThrow('item.offer_uid')
     if (item.qnt) item.qnt = parseFloat(item.qnt)
     else this.requiredFieldThrow('item.qnt')
     if (item.price) item.price = parseFloat(item.price)

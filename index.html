@@ -124,7 +124,7 @@ mkz('subscribe', 'url.change', function(url) {
 mkz('trackCartUpdate', {
   items: [
     {
-      offer_id: 'bb1',
+      offer_uid: 'bb1',
       qnt: 2.0,
       price: 100.0
     }
@@ -137,7 +137,7 @@ mkz('trackCartUpdate', {
             <pre>
 mkz('trackCartAddItem', {
   item: {
-    offer_id: 'bb1',
+    offer_uid: 'bb1',
     qnt: 2.0,
     price: 100.0
   }
@@ -149,7 +149,7 @@ mkz('trackCartAddItem', {
             <pre>
 mkz('trackCartRemoveItem', {
   item: {
-    offer_id: 'bb1',
+    offer_uid: 'bb1',
     qnt: 1.0
   }
 });</pre>
@@ -163,7 +163,7 @@ mkz('trackOrderCreate', {
   total: 200.0,
   items: [
     {
-      offer_id: 'bb1',
+      offer_uid: 'bb1',
       qnt: 2.0,
       price: 100.0
     }

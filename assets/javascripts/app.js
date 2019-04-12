@@ -150,8 +150,9 @@ module.exports = {
     return item
   },
   categoryNormalizer (category) {
-    if (category.id) category.id = String(category.id)
-    else this.requiredFieldThrow('category.id')
+    if (category.uid) category.uid = String(category.uid)
+    else this.requiredFieldThrow('category.uid')
+    if (category.name) category.name = String(category.name)
     return category
   },
   orderNormalizer (order) {

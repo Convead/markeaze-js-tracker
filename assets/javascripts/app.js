@@ -1,14 +1,13 @@
-let eEmit = require('./libs/eEmit')
-let cookies = require('./libs/cookies')
-let uuid = require('./libs/uuid')
-let domEvent = require('./libs/domEvent')
-let log = require('./libs/log')
-let parseUrlParams = require('./libs/parseUrlParams')
-let baseDomain = require('./libs/baseDomain.coffee')
-let tracker = require('./tracker')
+const eEmit = require('./libs/eEmit')
+const cookies = require('./libs/cookies')
+const uuid = require('./libs/uuid')
+const domEvent = require('./libs/domEvent')
+const log = require('./libs/log')
+const parseUrlParams = require('./libs/parseUrlParams')
+const baseDomain = require('./libs/baseDomain.coffee')
+const tracker = require('./tracker')
 let config = require('./config')
-let css = require('./css')
-let widgetViewer = require('./widgets/widgetViewer.coffee')
+const webFormsViewer = require('./webForms/viewer')
 const Pinger = require('./libs/pinger.coffee')
 const robotDetection = require('./libs/robot_detection.coffee')
 
@@ -26,17 +25,15 @@ module.exports = {
 
     new Pinger()
 
-    let queue = window[nameVariable].q || []
-    let self = this
+    const queue = window[nameVariable].q || []
+    const self = this
     window[nameVariable] = function() {
       return self.pendingSend.apply(self, arguments)
     }
 
-    // widgets
-    css.embed(nameVariable)
-    widgetViewer.bind(nameVariable)
+    webFormsViewer.init()
 
-    for (let fields of queue) {
+    for (const fields of queue) {
       this.pendingSend.apply(this, fields)
     }
   },
@@ -135,8 +132,8 @@ module.exports = {
     }
   },
   offerNormalizer (offer) {
-    if (offer.id) offer.id = String(offer.id)
-    else this.requiredFieldThrow('offer.id')
+    if (offer.uid) offer.uid = String(offer.uid)
+    else this.requiredFieldThrow('offer.uid')
     if (offer.price) offer.price = parseFloat(offer.price)
     else this.requiredFieldThrow('offer.price')
     return offer

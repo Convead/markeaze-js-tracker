@@ -5,7 +5,7 @@ module.exports = {
     this.events[eventName].push(fn)
   },
   emit (eventName, data) {
-    let event = this.events[eventName]
+    const event = this.events[eventName]
     if (event) {
       event.forEach((fn) => {
         fn.call(null, data)

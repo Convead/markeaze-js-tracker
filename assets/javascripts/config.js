@@ -1,5 +1,5 @@
 module.exports = {
-  version: '0.0.6',
+  version: '0.1.0',
   trackerName: 'markeaze-js',
   debugMode: false,
   demoResponse: false,
@@ -7,5 +7,7 @@ module.exports = {
   visitor: {},
   uid: undefined,
   cookieUid: '_mkz_dvc_uid',
-  endpoint: 'tracker.markeaze.com'
+  endpoint: 'tracker.markeaze.com',
+  airbrakeProject: 'markeaze', // TODO: Set value
+  airbrakeApiKey: '' // TODO: Set value
 }

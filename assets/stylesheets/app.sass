@@ -6,34 +6,211 @@
 
 [mkz]
 
-  .mkz-widget
+  .mkz
     text-align: left
     -webkit-font-smoothing: antialiased
     text-rendering: optimizeLegibility
-    max-width: none
-    display: block
-    margin: 0
-    padding: 0
-    width: 100%
-    height: auto
-    font-family: Arial, sans-serif
     font-size: 15px
     color: #333
-    border: 0
-    border-style: solid
+
+  .mkz, .mkz__input, .mkz__textarea, .mkz__select, .mkz__btn
+    font-family: Geneva, Arial, Helvetica, sans-serif
+
+  .mkz__input
+    outline-style: none
+    display: block
     box-sizing: border-box
-    background-position: center center
-    background-repeat: no-repeat
+    width: 100%
+    padding: 0 10px
+    font-size: 16px
+    line-height: 2em
+    border: 1px solid #ddd
+    border-radius: 3px
+    color: #333
+    background-color: #fff
 
-    &:hover
-      text-decoration: none
-
-  .mkz-widget__workarea
-    margin: 0
-    padding: 0
+  .mkz__btn
+    outline-style: none
+    display: inline-block
     box-sizing: border-box
+    cursor: pointer
+    padding: 0 25px
+    text-align: center
+    font-size: 16px
+    line-height: 2em
+    border-style: none
+    background-color: #ed5d5a
+    color: #ffffff
 
-  .mkz-widget__workarea_reset_yes
+  .mkz-wf
+    position: fixed
+    z-index: 10000
+    display: flex
+
+  .mkz-wf_state_hidden
+    display: none
+
+  .mkz-wf__body
+    flex: 1 0
+    width: 100%
+    height: 100%
+    position: relative
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2)
+    background-color: #fff
+
+  .mkz-wf__overlay
+    display: none
+    content: ''
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
+    top: 0
+    background-color: rgba(0, 0, 0, 0.2)
+
+
+  .mkz-wf_type_aside
+    position: static
+
+    &.mkz-wf_state_animated .mkz-wf__body
+      animation: slideRight 0.8s ease
+
+    .mkz-wf__body
+      position: fixed
+      left: 0
+      bottom: 0
+      top: 0
+      z-index: 10040
+
+    .mkz-wf__scroll
+      max-width: 100%
+      height: 100vh
+
+    .mkz-wf__content
+      display: flex
+      align-items: center
+      min-height: 100%
+
+    .mkz-wf__workarea
+      flex: 1 0
+
+
+  .mkz-wf_type_fly-out
+    right: 10%
+    max-width: 80%
+    bottom: 0
+    z-index: 10030
+
+    &.mkz-wf_state_animated .mkz-wf__body
+      animation: slideUp 0.8s ease
+
+    .mkz-wf__scroll
+      max-width: 100%
+      max-height: 100vh
+
+
+  .mkz-wf_type_footer
+    right: 0
+    left: 0
+    bottom: 0
+    z-index: 10020
+
+    &.mkz-wf_state_animated .mkz-wf__body
+      animation: slideUp 0.8s ease
+
+    .mkz-wf__scroll
+      max-width: 100%
+      max-height: 100vh
+
+
+  .mkz-wf_type_full-screen
+    position: static
+
+    .mkz-wf__body-wrap
+      position: fixed
+      right: 0
+      left: 0
+      bottom: 0
+      top: 0
+      z-index: 10060
+
+    &.mkz-wf_state_animated .mkz-wf__body
+      animation: fadeIn 0.8s ease
+
+    .mkz-wf__scroll
+      width: 100%
+      height: 100%
+
+    .mkz-wf__content
+      display: flex
+      min-height: 100%
+
+    .mkz-wf__workarea
+      flex: 1 0
+
+
+  .mkz-wf_type_nav-bar-mobile
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: 10015
+
+    &.mkz-wf_state_animated .mkz-wf__body
+      animation: slideUp 0.8s ease
+
+    .mkz-wf__scroll
+      max-width: 100%
+      max-height: 100vh
+
+
+  .mkz-wf_type_notice
+    right: 10%
+    bottom: 10%
+    z-index: 10015
+    max-width: 90%
+
+    &.mkz-wf_state_animated .mkz-wf__body
+      animation: fadeIn 0.8s ease
+
+    .mkz-wf__scroll
+      max-width: 80vw
+      max-height: 80vh
+
+
+  .mkz-wf_type_pop-up
+    left: 0
+    top: 0
+    right: 0
+    bottom: 0
+    z-index: 10050
+    justify-content: center
+    align-items: center
+
+    .mkz-wf__overlay
+      display: block
+
+    .mkz-wf__body
+      flex: 0 0
+      width: auto
+      height: auto
+
+    &.mkz-wf_state_animated
+
+      .mkz-wf__body
+        animation: slideUp 0.8s ease
+
+      .mkz-wf__overlay
+        animation: fadeIn 0.4s ease
+
+    .mkz-wf__body
+      margin: 0 auto
+
+    .mkz-wf__scroll
+      max-width: 100vw
+      max-height: 100vh
+
+
+  .mkz-wf__wysiwyg
     +widgets_reset()
 
     &:after
@@ -83,497 +260,135 @@
       list-style-type: disc
       list-style-position: inside
 
-  .mkz-widget__checkbox
-    dislay: table
+  .mkz-wf__scroll
+    overflow: auto
 
-  .mkz-widget__checkbox-input
-    width: 10px
-    padding-right: 5px
-    display: table-cell
-    vertical-align: top
-    position: relative
-
-    input
-      opacity: 1
-      visibility: visible
-      display: block
-      position: relative
-
-  .mkz-widget__checkbox-text
-    display: table-cell
-    vertical-align: top
-
-    p
-      margin-top: 0
-
-  button, a, input
-    text-transform: initial
-    outline: none
-    float: none
-
-  button
-    cursor: pointer
+  .mkz-wf__workarea
     box-sizing: border-box
-    line-height: 37px
-    padding: 0 12px
-
-  input[type=text], input[type=number], input[type=email], input[type=date], input[type=password], select, textarea
-    box-sizing: border-box
-    padding-left: 12px
-    color: #333
-    background-color: #fff
-    background-image: none
     margin: 0
-    font-size: 16px
 
-    &::-webkit-input-placeholder
-      color: #999
-
-    &::-moz-placeholder
-      color: #777
-
-    &:-moz-placeholder
-      color: #999
-
-    &:-ms-input-placeholder
-      color: #999
-
-  input[type=text], input[type=number], input[type=email], input[type=date], input[type=password]
-    height: 37px
-    line-height: 37px
-    box-sizing: border-box
-    color: #333
-    background-color: #fff
-    border: none
-    box-shadow: 0
-    border-radius: 5px
-
-  input[type="checkbox"]
-    -webkit-appearance: checkbox
-
-  a
-    text-decoration: underline
-    color: #15A0E8
+  .mkz-wf__close
+    position: absolute
+    top: 5px
+    right: 5px
+    width: 20px
+    height: 20px
+    font-size: 12px
+    line-height: 18px
     cursor: pointer
+    z-index: 100
+    text-align: center
+    color: #9a9a9a
 
-  .mkz-widget__container
-    position: relative
-
-  // To put floated image with link higher then non-floated elements.
-  // So that it will be clickable.
-  .mkz-widget__container_type_image, .mkz-widget__container_type_img
-    z-index: 1
-
-    .mkz-widget__component
-      font-size: 0
-
-  .mkz-widget__containers
-    padding: 14px
-
-  .mkz-widget__containers_padding_0
-    padding: 0 !important
-
-  .mkz-widget__component
-    position: relative
-    font-size: 16px
-
-  .mkz-widget__component-btn
-    color: #fff
-    background: #1abc9c
-    border: none
-    border-radius: 5px !important
-    cursor: pointer
-
-    &:hover
-      background: #39d5b6
-
-  .mkz-widget__component-field
-    label
+    &:after
+      content: '\e00d'
       display: inline-block
-      float: none
-      width: auto
-      min-width: 0
-      padding: 0
-      height: auto
+      vertical-align: middle
+      font-family: 'mkz_icons'
 
-  .mkz-widget__component-text, .mkz-widget__component-html
-    p
-      margin: 0
+  .mkz-ribbon
+    position: fixed
+    z-index: 10000
+    display: flex
+    flex-wrap: wrap
+    flex-direction: row-reverse
 
-  .mkz-widget__label
-    display: inline-block
+  .mkz-ribbon_type_aside
+    right: 0
+    top: 10%
+    transform: rotate(180deg)
+    writing-mode: tb-rl
 
-  .mkz-invalid
-    border: 1px solid #e03546 !important
-
-    &[type="checkbox"]
-      outline: 1px solid #e03546 !important
-
-  .mkz-widget__sending-notice
-    display: none
-    font-size: 14px
-
-  .mkz-widget_type_top-bar, &.mkz-widget_type_bottom-bar
-    .mkz-widget__workarea
-      padding-left: 57px
-      padding-right: 60px
-      color: #fff
-      background: #34495e
-
-    .mkz-widget__containers
-      padding: 6px 0
+    .mkz-ribbon__item
+      margin: 5px 5px 5px 0
+      padding: 10px
+      min-height: 100px
+      overflow: hidden
+      text-overflow: ellipsis
       text-align: center
 
-    .mkz-widget__container
-      display: inline-block
-      vertical-align: top
+    .mkz-ribbon__item_state_hidden
+      display: none
 
-    .mkz-widget__component
-      margin: 0 7px
+    .mkz-ribbon__label
+      font-size: 14px
+      white-space: nowrap
 
-    .mkz-widget__component-btn
-      line-height: 28px
-      height: 28px
-      padding: 0 14px
-      background: #00c49f
+  .mkz-ribbon_type_round
+    bottom: 30px
+    right: 30px
 
-    .mkz-widget__component-text, .mkz-widget__component-html
-      margin-top: 6px
-      min-width: 100px
+    .mkz-ribbon__item
+      width: 70px
+      height: 70px
+      border-radius: 50%
+      margin-left: -10px
 
-    .mkz-widget__component-field
-      label
-        vertical-align: top
-        margin: 6px 6px 0 0
+      &:hover
+        transform: scale(1.05)
 
-      input[type=text], input[type=number]
-        width: 150px
+        .mkz-ribbon__label
+          opacity: 1
 
-      &.mkz-widget__component-field-boolean
-        label
-          margin-right: 0
-          margin-left: 6px
-        input
-          margin-top: 6px
+    .mkz-ribbon__item_state_hidden
+      display: none
 
-    .mkz-widget__label
-      margin-right: 7px
+    .mkz-ribbon__label
+      position: absolute
+      left: 50%
+      bottom: 100%
+      margin-bottom: 10px
+      background-color: #000
+      color: #fff
+      font-size: 11px
+      box-sizing: border-box
+      transform: translate(-50%, 0)
+      padding: 5px 10px
+      border-radius: 3px
+      white-space: nowrap
+      opacity: 0
+      transition: all linear 0.2s
 
-
-  .mkz-widget_type_pop-up, &.mkz-widget_type_embedded, &.mkz-widget_type_notice
-    .mkz-widget__workarea
-      width: 100% !important
-
-
-  .mkz-widget_type_notice
-    .mkz-widget__label
+    .mkz-ribbon__picture
       display: block
-      margin-bottom: 5px
+      width: 100%
+      height: 100%
+      border-radius: 50%
 
-
-  .mkz-widget__bar-shift
+  .mkz-ribbon__item
+    cursor: pointer
+    background-color: #ddd
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2)
+    z-index: 10000
+    transition: all ease-in-out 0.2s
     position: relative
-    height: 0
-    overflow: hidden
-    outline-style: none
-    background-color: transparent
-    background-image: none
-    border-style: none
-
-  .mkz-widget__bar
-    position: fixed
-    z-index: 1000000
-    left: 0
-    top: -100%
-    width: 100%
-    transform: translateZ(0)
-
-  .mkz-widget_type_bottom-bar
-
-    .mkz-widget__bar
-      top: auto
-      bottom: -100%
-
-      .mkz-widget__bar-logo
-        bottom: auto
-        top: -18px
-
-      .mkz-widget__bar-hide:after
-        content: '\f078'
-
-      .mkz-widget__bar-hide, .mkz-widget__bar-show
-        border-radius: 5px 5px 0 0
-
-      .mkz-widget__bar-show
-        bottom: auto
-        top: -29px
-        box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.2)
-
-        &:after
-          content: '\f077'
-
-  .mkz-widget__bar-hide
-    position: absolute
-    top: 50%
-    right: 15px
-    margin-top: -15px
-    width: 31px
-    height: 30px
-    font-size: 16px
-    line-height: 26px
-    cursor: pointer
-    overflow: hidden
-    text-align: center
-    color: #9a9a9a
-
-    &:after
-      content: '\f077'
-      display: inline-block
-      vertical-align: middle
-      font-family: 'mkz_icons'
-
-  .mkz-widget_resolution_640
-    .mkz-widget__bar-hide
-      top: auto
-      bottom: -29px
-      margin: 0
-      background: #34495e
-      border-radius: 0 0 5px 5px
-      box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2)
-
-    .mkz-widget__bar-logo
-      right: 62px
-
-    &.mkz-widget_type_bottom-bar
-      .mkz-widget__bar-hide
-        top: -29px
-        bottom: 0
-        box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.2)
-
-  .mkz-widget__bar-show
-    position: absolute
-    bottom: -29px
-    right: 15px
-    width: 31px
-    height: 30px
-    font-size: 16px
-    line-height: 26px
-    border-radius: 0 0 5px 5px
-    cursor: pointer
-    background: #34495e
-    overflow: hidden
-    text-align: center
-    color: #9a9a9a
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2)
-
-    &:after
-      content: '\f078'
-      display: inline-block
-      vertical-align: middle
-      font-family: 'mkz_icons'
-
-  .mkz-widget__bar-logo
-    position: absolute
-    right: 12px
-    bottom: -18px
-    font-family: Arial
-    font-size: 13px
-    line-height: 1
-    text-decoration: none
-    color: #fff
-    text-shadow: 0 1px 2px #888
 
     &:hover
-      text-decoration: none
-      color: #fff
+      background-color: #eee
+      z-index: 10001
 
-  .mkz-widget_type_pop-up
-    overflow: auto
-    position: fixed
-    z-index: 1000000
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
+  .mkz-wf__invalid
+    border: 1px solid red
+    color: red
 
-  .mkz-widget_type_pop-up, &.mkz-widget_type_embedded
-    .mkz-widget__workarea
-      background-color: #f0f8ff
+@keyframes slideUp
+  0%
+    opacity: 0
+    transform: translateY(20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
 
-    .mkz-widget__containers
-      padding: 19px 33px 16px 33px
+@keyframes slideRight
+  0%
+    opacity: 0
+    transform: translateX(-20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
 
-    .mkz-widget__component
-      margin: 7px 0
-
-    .mkz-widget__component-btn
-      height: 40px
-      line-height: 40px
-      padding: 0 23px
-
-    .mkz-widget__component-html
-      h1
-        font-size: 30px
-        line-height: 1.2em
-
-      h2
-        font-size: 24px
-        line-height: 1.2em
-        color: #696969
-
-      h1, h2
-        margin: 10px 0
-
-    .mkz-widget__component-field
-      label
-        margin-bottom: 5px
-
-      input[type=text], input[type=number]
-        width: 100%
-        border: 1px solid #E5E5E5
-
-      &.mkz-widget__component-field__boolean
-        label
-          margin-left: 6px
-
-    .mkz-widget__label
-      display: block
-      margin-bottom: 5px
-
-
-  .mkz-widget_type_top-bar, &.mkz-widget_type_bottom-bar
-    .mkz-widget__workarea
-      font-size: 0
-
-  .mkz-widget__popup-box
-    position: relative
-    left: auto
-    top: auto
-    width: auto
-
-  .mkz-widget__content
-    position: relative
-
-  .mkz-widget_type_notice
-    overflow: visible
-    position: fixed
-    left: 0
-    top: 0
-    z-index: 900000
-    width: auto
-    height: auto
-    margin: 3%
-
-    &.mkz-widget_placement_top-left
-      top: 0
-      left: 0
-
-    &.mkz-widget_placement_top-right
-      top: 0
-      left: auto
-      right: 0
-
-    &.mkz-widget_placement_bottom-left
-      top: auto
-      bottom: 0
-      left: 0
-
-    &.mkz-widget_placement_bottom-right
-      top: auto
-      bottom: 0
-      left: auto
-      right: 0
-
-
-  // activated style for display on a mobile screen
-  .mkz-widget_response_yes
-    width: 100% !important
-
-    .mkz-widget__popup-content, .mkz-widget__content
-      width: 100% !important
-
-    &.mkz-widget_type_notice
-      left: auto !important
-      right: auto !important
-      margin-left: 0 !important
-      margin-right: 0 !important
-
-    &.mkz-widget_type_embedded
-      margin-left: 0 !important
-      margin-right: 0 !important
-
-  .mkz-widget__popup-backdrop
-    background: #333
-    opacity: 0.7
-    position: fixed
-    left: 0
-    top: 0
-    right: 0
-    bottom: 0
-
-  .mkz-widget__popup-box
-    position: absolute
-    left: 0
-    top: 0
-    width: 100%
-
-  .mkz-widget__box
-    position: relative
-
-  .mkz-widget__popup-content
-    position: relative
-    display: table
-    margin: 20px auto
-
-  .mkz-widget__popup-close
-    position: absolute
-    top: 5px
-    right: 5px
-    width: 20px
-    height: 20px
-    font-size: 12px
-    line-height: 18px
-    cursor: pointer
-    z-index: 100
-    text-align: center
-    color: #9a9a9a
-
-    &:after
-      content: '\e00d'
-      display: inline-block
-      vertical-align: middle
-      font-family: 'mkz_icons'
-
-  .mkz-widget__notice-close
-    position: absolute
-    top: 5px
-    right: 5px
-    width: 20px
-    height: 20px
-    font-size: 12px
-    line-height: 18px
-    cursor: pointer
-    z-index: 100
-    text-align: center
-    color: #9a9a9a
-
-    &:after
-      content: '\e00d'
-      display: inline-block
-      vertical-align: middle
-      font-family: 'mkz_icons'
-
-  .mkz-widget__popup-logo
-    position: absolute
-    right: 0
-    bottom: -16px
-    font-family: Arial
-    font-size: 12px
-    line-height: 1
-    text-decoration: none
-    color: #fff
-    text-shadow: 0 1px 2px #555
-
-    &:hover
-      text-decoration: none
-      color: #fff
+@keyframes fadeIn
+  0%
+    opacity: 0
+  100%
+    opacity: 1

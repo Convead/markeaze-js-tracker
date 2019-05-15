@@ -1,6 +1,7 @@
 <html>
   <head>
       <title>Markeaze js tracker</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <!-- Markeaze -->
       <script>
       (function(w,d,c,h){w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments)};var s = d.createElement('script');s.type = 'text/javascript';s.async = true;s.charset = 'utf-8';s.src = h;var x = d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);})(window,document,'mkz','mkz.js');
@@ -16,7 +17,6 @@
         });
 
         mkz('endpoint', 'tracker-stage.markeaze.com');
-        // mkz('demoResponse', true);
         mkz('appKey', '6375e5154314c7b6');
       </script>
       <!-- /Markeaze -->
@@ -101,7 +101,7 @@ mkz('subscribe', 'url.change', function(url) {
             Category view<br />
             <pre>mkz('trackPageView', {
   category: {
-    id: 1
+    uid: 1
   }
 });</pre>
             <button onclick="bindScript(this);">Send</button>
@@ -110,7 +110,7 @@ mkz('subscribe', 'url.change', function(url) {
             Offer view<br />
             <pre>mkz('trackPageView', {
   offer: {
-    id: 'bb1',
+    uid: 'bb1',
     price: 100.0,
     name: 'Product',
     main_image_url: 'http://site.com'

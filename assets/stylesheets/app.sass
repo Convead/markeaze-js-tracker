@@ -13,7 +13,7 @@
     font-size: 15px
     color: #333
 
-  .mkz, .mkz__input, .mkz__textarea, .mkz__select, .mkz__btn
+  .mkz *
     font-family: Geneva, Arial, Helvetica, sans-serif
 
   .mkz__input
@@ -41,6 +41,7 @@
     border-style: none
     background-color: #ed5d5a
     color: #ffffff
+    text-decoration: none
 
   .mkz-wf
     position: fixed
@@ -95,7 +96,7 @@
       flex: 1 0
 
 
-  .mkz-wf_type_fly-out
+  .mkz-wf_type_fly_out
     right: 10%
     max-width: 80%
     bottom: 0
@@ -123,7 +124,7 @@
       max-height: 100vh
 
 
-  .mkz-wf_type_full-screen
+  .mkz-wf_type_full_screen
     position: static
 
     .mkz-wf__body-wrap
@@ -149,7 +150,7 @@
       flex: 1 0
 
 
-  .mkz-wf_type_nav-bar-mobile
+  .mkz-wf_type_nav_bar_mobile
     left: 0
     right: 0
     bottom: 0
@@ -177,7 +178,7 @@
       max-height: 80vh
 
 
-  .mkz-wf_type_pop-up
+  .mkz-wf_type_pop_up
     left: 0
     top: 0
     right: 0
@@ -221,7 +222,7 @@
     h1, h2, h3, h4, h5, h6
       line-height: 1.1
       margin-bottom: 15px
-      margin: 20px 0 10px
+      margin: 0 0 10px
       line-height: 1.2
       font-weight: 200
       text-transform: inherit
@@ -242,6 +243,9 @@
 
     p, ul, ol
       margin-bottom: 10px
+
+      &:last-child
+        margin-bottom: 0
 
     ul li, ol li
       margin-left: 5px

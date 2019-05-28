@@ -8,6 +8,6 @@ module.exports = {
   uid: undefined,
   cookieUid: '_mkz_dvc_uid',
   endpoint: 'tracker.markeaze.com',
-  airbrakeProject: 'markeaze', // TODO: Set value
-  airbrakeApiKey: '' // TODO: Set value
+  airbrakeProject: '118940',
+  airbrakeApiKey: 'd7bcbbcc7a0166a934b9e0e451f5c0cc'
 }

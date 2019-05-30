@@ -74,7 +74,7 @@ export default class WebForm {
     this.fire('after_destroy')
   }
   changeTemplate (template) {
-    this.options.template = template
+    this.options.body_html = template
     this.render()
   }
   changeState (state) {
@@ -88,7 +88,7 @@ export default class WebForm {
       wrap_styles: helpers.objectToStyles(this.options.settings.wrap_styles),
       content_styles: helpers.objectToStyles(this.options.settings.content_styles)
     })
-    const html = await liquid.parseAndRender(this.options.template, data)
+    const html = await liquid.parseAndRender(this.options.body_html, data)
     if (this.el) this.el.parentNode.removeChild(this.el)
     this.el = helpers.appendHTML(this.elContainer, html)
     this.elOverlay = this.el.querySelector('.mkz-js-overlay')

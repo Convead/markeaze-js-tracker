@@ -63,11 +63,7 @@ module.exports = {
       }
     },
     trackPageView () {
-      const properties = arguments[1] || {}
-      properties.page = properties.page || {}
-      properties.page.url = properties.page.url || window.location.href
-      properties.page.title = properties.page.title || document.title
-      if (properties.page.referrer) properties.page.referrer = document.referrer
+      const properties = this.pageData(arguments[1])
       if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
       if (properties.category) properties.category = this.categoryNormalizer(properties.category)
       return this.track(arguments[0], properties, arguments[2], arguments[3])
@@ -113,6 +109,22 @@ module.exports = {
         return this.track(arguments[1], {}, arguments[2], arguments[3])
       }
     },
+    trackWebFormShow () {
+      const properties = this.pageData(arguments[1])
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackWebFormClick () {
+      const properties = this.pageData(arguments[1])
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackWebFormSubmit () {
+      const properties = this.pageData(arguments[1])
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
+    trackWebFormClose () {
+      const properties = this.pageData(arguments[1])
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
     debug () {
       config.debugMode = arguments[1]
     },
@@ -130,6 +142,14 @@ module.exports = {
     subscribe () {
       eEmit.subscribe(arguments[1], arguments[2])
     }
+  },
+  pageData (properties) {
+    properties = properties || {}
+    properties.page = properties.page || {}
+    properties.page.url = properties.page.url || window.location.href
+    properties.page.title = properties.page.title || document.title
+    if (properties.page.referrer) properties.page.referrer = document.referrer
+    return properties
   },
   offerNormalizer (offer) {
     if (offer.uid) offer.uid = String(offer.uid)

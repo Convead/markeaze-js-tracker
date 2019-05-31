@@ -47,7 +47,7 @@ export default class WebForm {
     this.fire('before_submit')
     if (!this.valid()) return false
     this.canBeHidden = false
-    this.sendEvent('WebFormSubmit', Object.assign(payload, {web_form_id: this.id}), visitor)
+    this.sendEvent('WebFormSubmit', Object.assign(payload, {web_form_id: this.id, web_form_data: visitor}))
     this.fire('after_submit')
   }
   close () {

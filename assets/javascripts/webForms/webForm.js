@@ -10,7 +10,7 @@ export default class WebForm {
   constructor (options, elContainer) {
     this.options = options
     this.id = options.id
-    this.currentState = options.currentState || 'default'
+    this.currentState = options.currentState || (options.states && options.states[0]) || 'default'
     this.type = options.display_type
     this.canBeHidden = options.can_be_hidden
     this.ribbon_label = options.ribbon_label

@@ -16,8 +16,14 @@
           });
         });
 
-        mkz('endpoint', 'tracker-stage.markeaze.com');
-        mkz('appKey', '6375e5154314c7b6');
+mkz('endpoint', 'localhost:8080');
+mkz('appKey', '5d560d40f429fe37');
+mkz('trackPageView', {
+  page: {
+    url: 'http://example.net/',
+    title: 'Test page'
+  }
+});
       </script>
       <!-- /Markeaze -->
   </head>

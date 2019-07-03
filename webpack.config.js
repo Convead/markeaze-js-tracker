@@ -55,5 +55,13 @@ module.exports = {
   optimization: {
     minimize: false,
     sideEffects: false
+  },
+  devServer: {
+    setup(app) {
+      app.post('*', (req, res) => {
+        // res.redirect(req.originalUrl)
+        res.redirect('event.json')
+      })
+    }
   }
 }

@@ -35,6 +35,8 @@ module.exports = class Pinger
 
     return if robotDetection.is_bot()
 
+    return if config.trackEnabled != true
+
     @blured()
 
     (new Request).send(

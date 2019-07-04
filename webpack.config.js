@@ -1,4 +1,5 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin  = require('html-webpack-plugin')
 
 module.exports = {
   entry: './app.js',
@@ -12,6 +13,11 @@ module.exports = {
           comments: false
         }
       }
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'demo_data.html',
+      template: './demo_data.html',
+      inject: false
     })
   ],
   module: {
@@ -58,9 +64,11 @@ module.exports = {
   },
   devServer: {
     setup(app) {
+      app.post('/event', (req, res) => {
+        res.redirect('demo_data.html')
+      })
       app.post('*', (req, res) => {
-        // res.redirect(req.originalUrl)
-        res.redirect('event.json')
+        res.redirect(req.originalUrl)
       })
     }
   }

@@ -29,19 +29,20 @@ module.exports = {
     eEmit.emit('track.before', data);
     log.push('track', data);
 
-
-    (new Request).send(
-      `//${config.endpoint}/event`,
-      data,
-      (response) => {
-        eEmit.emit('track.after', {post: data, response: response})
-        if (callback) callback(data, response)
-      },
-      (xhr) => {
-        if (xhr.status == 403 || xhr.status == 0) robotDetection.detect()
-        log.push('track fail', xhr)
-      }
-    )
+    if (config.trackEnabled) {
+      (new Request).send(
+        `//${config.endpoint}/event`,
+        data,
+        (response) => {
+          eEmit.emit('track.after', {post: data, response: response})
+          if (callback) callback(data, response)
+        },
+        (xhr) => {
+          if (xhr.status == 403 || xhr.status == 0) robotDetection.detect()
+          log.push('track fail', xhr)
+        }
+      )
+    }
 
   }
 }

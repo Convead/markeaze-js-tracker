@@ -62,6 +62,13 @@ module.exports = {
         domEvent.add(window, 'hashchange', () => { this.changeUrl() })
       }
     },
+    webFormPreviewPath () {
+      console.log(arguments)
+      if (arguments[1]) config.webFormPreviewPath = arguments[1]
+    },
+    webFormPreview () {
+      if (arguments[1]) webFormsViewer.preview(arguments[1])
+    },
     trackPageView () {
       const properties = this.pageData(arguments[1])
       if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
@@ -184,8 +191,11 @@ module.exports = {
   },
   pendingSend () {
     log.push('action', arguments)
+    const allowFirst = [
+      'appKey', 'debug', 'webFormPreviewPath', 'webFormPreview'
+    ]
     // request to plugin
-    if (!config.appKey && arguments[0] != 'appKey' && arguments[0] != 'debug' && typeof arguments[0] != 'function') {
+    if (!config.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {
       return this.pendingTasks.push(arguments)
     }
     // apply task

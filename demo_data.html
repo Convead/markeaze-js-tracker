@@ -1,0 +1,80 @@
+<%
+String.prototype.sanitaze = function () {
+  return this.replace(/\\/g, '\\\\').replace(/\n/g, '').replace(/"/g, '\\"')
+}
+String.prototype.wrapper = function () {
+  const prefix = `
+<div class="mkz-wf mkz-wf_slug_{{ slug }}{% if is_hidden %} mkz-wf_state_hidden{% endif %} mkz-wf_close-animation_{{close_animation_type}} mkz-wf_show-animation_{{show_animation_type}}{% if show_animation %} mkz-wf_animation_show{% endif %}{% if close_animation %} mkz-wf_animation_hide{% endif %}">
+  <div class="mkz-wf__overlay mkz-js-overlay"></div>
+  <div class="mkz-wf__align">
+    <div class="mkz-wf__body-wrap">
+      <div class="mkz-wf__body">
+        {% if allow_close %}
+          <div class="mkz-wf__close mkz-js-close"{% if close_color %} style="color: {{ close_color }}"{% endif %}></div>
+        {% endif %}
+        {% if allow_brand %}
+          <a href="https://markeaze.ru" class="mkz-wf__brand" target="_blank">
+            <img src="assets/images/logo_small.svg" class="mkz-wf__brand-img mkz-wf__brand-img_type_small" alt="" />
+            <img src="assets/images/logo.svg" class="mkz-wf__brand-img mkz-wf__brand-img_type_big" alt="" />
+          </a>
+        {% endif %}
+        <div class="mkz-wf__content">
+          <div class="mkz-wf__workarea mkz-js-workarea">
+`
+  const postfix = `
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`
+  return (prefix + this + postfix).sanitaze()
+}
+
+const commonWrapper = `<div mkz class=\"mkz mkz-js-main\">\n<style type=\"text/css\">${require('raw-loader!sass-loader!./assets/stylesheets/app.sass').sanitaze()}{{ css }}</style>\n  <div class=\"mkz-js-ribbons\"></div>\n  <div class=\"mkz-js-wfs\"></div>\n</div>`
+const ribbonsWrapper = `{% for ribbon_type in ribbon_types %}\n  <div class=\"mkz-ribbon mkz-ribbon_type_{{ ribbon_type }}\">\n\n    {% for options in web_forms %}\n      {% if options.ribbon_type == ribbon_type %}\n        <div class=\"mkz-js-ribbon-{{ options.id }} mkz-ribbon__item{% if options.is_hidden != true %} mkz-ribbon__item_state_hidden{% endif %}\">\n          <div class=\"mkz-ribbon__label\">\n            {{ options.ribbon_label }}\n          </div>\n          {% if options.ribbon_picture %}\n            <img class=\"mkz-ribbon__picture\" src=\"{{ options.ribbon_picture }}\" alt=\"\" />\n          {% endif %}\n        </div>\n      {% endif %}\n    {% endfor %}\n\n  </div>\n{% endfor %}`
+%>
+{
+  "assets": {
+    "version": "${new Date()}",
+    "web_forms_common_wrapper":  "${commonWrapper.sanitaze()}",
+    "web_forms_ribbons_wrapper": "${ribbonsWrapper.sanitaze()}"
+  },
+  "accountAssets": {
+    "version": "${new Date()}",
+    "css": ""
+  },
+  "status": "OK",
+  "web_forms": [
+    {
+      "id": 5,
+      "slug": "delivery_to_your_city",
+      "can_be_hidden": false,
+      "states": ["default"],
+      "ribbon_label": null,
+      "ribbon_type": "aside",
+      "callbacks": {},
+      "body_html": "<%= `
+<div class="mkz-wf__inner" style="background-image: url(assets/images/delavery_to_your_city.svg)">
+  <div class="mkz-wf__inner-content">
+    <div class="mkz-wf__title">Мы доставляем в ваш город</div>
+    <div class="mkz-wf__text">Подробную информацию читайте у нас в статьях или обратитесь к менеджеру</div>
+    <div class="mkz__btn" role="submit">Продолжить</div>
+  </div>
+</div>
+    `.wrapper() %>",
+      "on_exit": false,
+      "show_timeout": "0",
+      "close_timeout": "0",
+      "settings": {
+        "show_animate_type": "slide",
+        "hide_animate_type": "slide",
+        "wrap_styles": {
+        },
+        "content_styles": {
+        }
+      }
+    }
+  ]
+}

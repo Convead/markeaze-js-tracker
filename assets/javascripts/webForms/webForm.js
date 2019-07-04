@@ -5,15 +5,16 @@ const SimpleValidation = require('../libs/simpleValidation.coffee')
 const FormToObject = require('../libs/formToObject')
 const helpers = require('../helpers')
 const eEmit = require('../libs/eEmit')
+const Slider = require('./slider').default
 
 export default class WebForm {
   constructor (options, elContainer) {
     this.options = options
     this.id = options.id
     this.currentState = options.currentState || (options.states && options.states[0]) || 'default'
-    this.type = options.display_type
     this.canBeHidden = options.can_be_hidden
     this.ribbon_label = options.ribbon_label
+    this.animationDelay = 800
 
     this.elContainer = elContainer
 
@@ -29,8 +30,11 @@ export default class WebForm {
       }
     }
 
+    this.slider = new Slider()
+
     // Sets the class name for the appearance animation. Locks animation when status changes.
-    this.options.is_animated = true
+    this.options.show_animation = true
+    this.options.close_animation = false
     this.render()
   }
   show () {
@@ -50,12 +54,12 @@ export default class WebForm {
     this.sendEvent('WebFormSubmit', Object.assign(payload, {web_form_id: this.id, web_form_data: visitor}))
     this.fire('after_submit')
   }
-  close () {
+  close (disableCloseEvent = false) {
     this.fire('before_close')
     if (this.canBeHidden && this.currentState === 'default') this.hide()
     else {
-      if (this.currentState === 'default') this.sendEvent('WebFormClose', {web_form_id: this.id})
-      this.destroy()
+      if (this.currentState === 'default' && !disableCloseEvent) this.sendEvent('WebFormClose', {web_form_id: this.id})
+      this.destroy(true)
     }
     this.fire('after_close')
   }
@@ -65,28 +69,60 @@ export default class WebForm {
       this.options.is_hidden = true
       this.render()
     }
-    else this.destroy()
+    else this.destroy(true)
     this.fire('after_hide')
   }
-  destroy () {
-    this.fire('before_destroy')
-    this.el.parentNode.removeChild(this.el)
-    this.fire('after_destroy')
+  destroy (animation) {
+    if (animation === true) {
+      this.options.show_animation = false
+      this.options.close_animation = true
+      this.render()
+      setTimeout(() => {
+        this.fire('before_destroy')
+        this.el.parentNode.removeChild(this.el)
+        this.fire('after_destroy')
+      }, this.animationDelay)
+    } else {
+      this.fire('before_destroy')
+      this.el.parentNode.removeChild(this.el)
+      this.fire('after_destroy')
+    }
   }
   changeTemplate (template) {
     this.options.body_html = template
     this.render()
   }
   changeState (state) {
-    this.options.is_animated = false
+    this.options.show_animation = false
     this.currentState = state
     this.render()
+  }
+  copyToClipboard (text) {
+    if (!navigator.clipboard) {
+      const textArea = document.createElement("textarea")
+      textArea.value = text
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+
+      try {
+        document.execCommand('copy')
+      } catch (err) {
+        console.error(err)
+      }
+
+      document.body.removeChild(textArea)
+      return
+    }
+    navigator.clipboard.writeText(text).then(function() {}, function(err) {
+      console.error( err)
+    })
   }
   async render () {
     const data = Object.assign(this.options, {
       state: this.currentState,
-      wrap_styles: helpers.objectToStyles(this.options.settings.wrap_styles),
-      content_styles: helpers.objectToStyles(this.options.settings.content_styles)
+      allow_close: parseInt(this.options.close_timeout) === 0,
+      allow_brand: true
     })
     const html = await liquid.parseAndRender(this.options.body_html, data)
     if (this.el) this.el.parentNode.removeChild(this.el)
@@ -97,21 +133,28 @@ export default class WebForm {
 
     if (!this.options.is_hidden && this.currentState === 'default') this.show()
 
-    domEvent.add(this.elOverlay, 'click', () => { this.close() })
-    domEvent.add(this.elClose, 'click', () => { this.close() })
+    if (this.elOverlay) domEvent.add(this.elOverlay, 'click', () => { this.close() })
+    if (this.elClose) domEvent.add(this.elClose, 'click', () => { this.close() })
 
     const actionEls = this.elWorkarea.querySelectorAll('[role]')
     for (const actionEl of actionEls) {
-      const callbackName = actionEl.getAttribute('role')
+      const callbackNames = actionEl.getAttribute('role').split(' ')
       domEvent.add(actionEl, 'click', () => {
-        if (callbackName === 'submit') {
-          this.submit(this.formData())
-        } else {
-          if (typeof this[callbackName] === 'function') this[callbackName]()
-          else this.fire(callbackName)
+        for (const callbackName of callbackNames) switch(callbackName) {
+          case 'submit':
+            this.submit(this.formData())
+            break
+          case 'copyToClipboard':
+            this.copyToClipboard(actionEl.dataset.text)
+            break
+          default:
+            if (typeof this[callbackName] === 'function') this[callbackName]()
+            else this.fire(callbackName)
         }
       })
     }
+
+    this.slider.setContainer(this.el)
   }
   sendEvent (eventName, payload, visitor) {
     mkz(`track${eventName}`, payload, undefined, visitor)

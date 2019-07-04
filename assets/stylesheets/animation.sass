@@ -1,0 +1,77 @@
+[mkz]
+
+  .mkz-wf_animation_show
+
+    &.mkz-wf_show-animation_fade .mkz-wf__body
+      animation: fadeIn 0.8s ease
+
+    &.mkz-wf_show-animation_slide_up .mkz-wf__body
+      animation: slideUp 0.8s ease
+
+    &.mkz-wf_show-animation_slide_left .mkz-wf__body
+      animation: slideLeftIn 0.8s ease
+
+    .mkz-wf__overlay
+      animation: fadeIn 0.4s ease
+
+
+  .mkz-wf_animation_hide
+
+    &.mkz-wf_close-animation_fade .mkz-wf__body
+      animation: fadeOut 0.8s ease
+
+    &.mkz-wf_close-animation_slide_down .mkz-wf__body
+      animation: slideDown 0.8s ease
+
+    &.mkz-wf_close-animation_slide_right .mkz-wf__body
+      animation: slideRightOut 0.8s ease
+
+    .mkz-wf__overlay
+      animation: fadeOut 0.8s ease
+
+
+@keyframes fadeIn
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+@keyframes fadeOut
+  0%
+    opacity: 1
+  100%
+    opacity: 0
+
+
+@keyframes slideUp
+  0%
+    opacity: 0
+    transform: translateY(40px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes slideDown
+  0%
+    opacity: 1
+    transform: translateY(0)
+  100%
+    opacity: 0
+    transform: translateY(40px)
+
+
+@keyframes slideLeftIn
+  0%
+    opacity: 0
+    transform: translateX(-40px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes slideRightOut
+  0%
+    opacity: 1
+    transform: translateX(0)
+  100%
+    opacity: 0
+    transform: translateY(-40px)

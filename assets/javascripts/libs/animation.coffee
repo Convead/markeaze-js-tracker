@@ -2,18 +2,16 @@ module.exports = class Animation
   constructor: (options) ->
     start = new Date; delta = options.delta || 'linear'; delay = options.delay || 10
 
-    timer = setInterval =>
+    @timer = setInterval =>
       progress = (new Date - start) / options.duration;
       progress = 1 if (progress > 1)
 
       options.step @delta_functions[delta](@, progress, options.duration * progress, 0, 1, options.duration)
 
       if progress == 1
-        clearInterval(timer)
+        clearInterval(@timer)
         options.complete && options.complete()
     , delay
-
-    timer
 
   delta_functions:
     linear: (self, p) -> 

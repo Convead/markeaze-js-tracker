@@ -4,6 +4,8 @@ const VisitorLossDetection = require('../libs/visitorLossDetection.coffee')
 const WebForm = require('./webForm').default
 const airbrake = require('../libs/airbrake')
 const Wrapper = require('./wrapper').default
+const Request = require('../libs/request')
+const config = require('../config')
 
 module.exports = {
   webForms: {},
@@ -20,11 +22,10 @@ module.exports = {
       // Support Single Page Application web sites
       this.destroyWebForms()
 
-      this.wrapper.render(data.response.assets)
+      await this.wrapper.render(data.response)
 
       if (data.response.web_forms) for (const options of data.response.web_forms) {
         await this.preloadImages(options.body_html)
-        options.ribbon_type = this.getRibbonType(options.display_type)
         this.add(options)
       }
       // Restoration of wefForms from the session is performed after receiving a list of new wefForms.
@@ -32,13 +33,13 @@ module.exports = {
       this.restoreHiddenList()
       this.archiveHiddenList()
 
-      this.wrapper.renderRibbons(this.webForms)
+      await this.wrapper.renderRibbons(this.webForms)
     })
 
     // The list of webForms should always be up to date
     eEmit.subscribe('WebForm.before_destroy', async (data) => {
       const wefForm = this.webForms[data.id]
-      if (wefForm.lossDetection) wefForm.lossDetection.abort()
+      if (wefForm && wefForm.lossDetection) wefForm.lossDetection.abort()
       delete this.webForms[data.id]
       this.archiveHiddenList()
 
@@ -53,8 +54,6 @@ module.exports = {
         const webForm = this.webForms[id]
         if (
           webForm.id !== webFormCurrent.id && 
-          webForm.display_type !== 'notice' &&
-          webForm.display_type === webFormCurrent.display_type && 
           !webForm.api.isHidden
         ) webForm.api.hide()
       }
@@ -65,10 +64,27 @@ module.exports = {
       this.wrapper.renderRibbons(this.webForms)
     })
   },
+  preview (webFormId) {
+    config.trackEnabled = false
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `//${config.endpoint}/${config.webFormPreviewPath}?web_form_id=${webFormId}`, true)
+    xhr.onload = async () => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText)
+
+        this.destroyWebForms()
+
+        await this.wrapper.render(response)
+
+        for (const options of response.web_forms) this.add(options)
+      }
+    }
+    xhr.send(null)
+  },
   destroyWebForms () {
     for (const id in this.webForms) {
       const webForm = this.webForms[id]
-      if (wefForm.lossDetection) wefForm.lossDetection.abort()
+      if (webForm.lossDetection) webForm.lossDetection.abort()
       webForm.api.destroy()
     }
     this.webForms = {}
@@ -76,34 +92,30 @@ module.exports = {
   add (options) {
     if (this.webForms[options.id]) return false
 
-    // Notice webForms can show up at a time
-    if (options.display_type !== 'notice') {
-
-      if (this.hasType(options)) {
-        if (options.can_be_hidden) options.is_hidden = true
-        else {
-          airbrake.send(
-              'Error! Invalid webForm display script.',
-              'viewer.js',
-              82,
-              'add',
-              {web_form_id: options.id}
-            )
-          return false
-        }
+    if (this.exist(options)) {
+      if (options.can_be_hidden) options.is_hidden = true
+      else {
+        airbrake.send(
+            'Error! Invalid webForm display script.',
+            'viewer.js',
+            82,
+            'add',
+            {web_form_id: options.id}
+          )
+        return false
       }
-
     }
     this.webForms[options.id] = options
 
-    if (options.on_exit) {
-      options.lossDetection = new VisitorLossDetection({
-        detect: () => {
-          this.view(options)
+    this.timeoutCallback(
+        options.show_timeout,
+        () => {
+          if (this.webForms[options.id]) this.viewWithLossDetection(options)
+        },
+        () => {
+          this.viewWithLossDetection(options)
         }
-      })
-    }
-    else this.view(options)
+      )
   },
   archiveHiddenList () {
     const webFormsHidden = {}
@@ -112,6 +124,8 @@ module.exports = {
       if (webForm.can_be_hidden) {
         webForm.is_hidden = true
         webForm.on_exit = false
+        webForm.show_timeout = 0
+        webForm.close_timeout = 0
         delete webForm.api
         delete webForm.lossDetection
 
@@ -126,13 +140,31 @@ module.exports = {
     const webFormsHidden = JSON.parse(str)
     for (const id in webFormsHidden) this.add(webFormsHidden[id])
   },
+  viewWithLossDetection (options) {
+    if (options.on_exit) {
+      options.lossDetection = new VisitorLossDetection({
+        detect: () => {
+          this.view(options)
+        }
+      })
+    }
+    else this.view(options)
+  },
   view (options) {
     this.webForms[options.id].api = new WebForm(options, this.wrapper.elWebForms)
+
+    this.timeoutCallback(
+        options.close_timeout,
+        () => {
+          if (this.webForms[options.id]) this.webForms[options.id].api.close(true)
+        },
+        () => {}
+      )
   },
-  hasType (options) {
+  exist (options) {
     for (const id in this.webForms) {
       const webForm = this.webForms[id]
-      if (webForm.id !== options.id && webForm.display_type === options.display_type) return true
+      if (webForm.id !== options.id) return true
     }
     return false
   },
@@ -141,14 +173,21 @@ module.exports = {
       (new ImagesPreloader()).load(html, resolve)
     })
   },
-  getRibbonType (type) {
-    switch(type) {
-      case 'fly-out':
-        return 'round'
-      case 'footer':
-        return 'round'
-      default:
-        return 'aside'
+  // Example:
+  // timeoutString = "0" / "5..25" / "5" / 5 / 0
+  timeoutCallback (timeoutString, callbackWithTimer, callbackWithoutTimer) {
+    let timeout = parseInt(timeoutString)
+    const delimeter = '..'
+    if (typeof timeoutString === 'string') {
+      if (timeoutString.indexOf(delimeter) > -1) {
+        const interval = timeoutString.split(delimeter)
+        const min = parseInt(interval[0])
+        const max = parseInt(interval[1])
+        timeout = Math.round(Math.random() * (max - min) + min)
+      } else timeout = parseInt(timeoutString)
     }
+
+    if (timeout > 0) setTimeout(callbackWithTimer, timeout * 1000)
+    else callbackWithoutTimer()
   }
 }

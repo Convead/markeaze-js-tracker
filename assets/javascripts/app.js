@@ -63,7 +63,6 @@ module.exports = {
       }
     },
     webFormPreviewPath () {
-      console.log(arguments)
       if (arguments[1]) config.webFormPreviewPath = arguments[1]
     },
     webFormPreview () {

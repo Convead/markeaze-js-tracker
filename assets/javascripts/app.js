@@ -147,6 +147,9 @@ module.exports = {
     },
     subscribe () {
       eEmit.subscribe(arguments[1], arguments[2])
+    },
+    version () {
+      return config.version
     }
   },
   pageData (properties) {

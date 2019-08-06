@@ -67,7 +67,9 @@ module.exports = {
   preview (webFormId) {
     config.trackEnabled = false
     const xhr = new XMLHttpRequest()
-    xhr.open('GET', `//${config.endpoint}/${config.webFormPreviewPath}?web_form_id=${webFormId}`, true)
+    const path = typeof config.webFormPreviewPath === 'function' ? config.webFormPreviewPath.apply(this, [webFormId]) : `${config.webFormPreviewPath}?web_form_id=${webFormId}`
+
+    xhr.open('GET', `//${config.endpoint}/${path}`, true)
     xhr.onload = async () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText)

@@ -62,8 +62,8 @@ module.exports = {
         domEvent.add(window, 'hashchange', () => { this.changeUrl() })
       }
     },
-    webFormPreviewPath () {
-      if (arguments[1]) config.webFormPreviewPath = arguments[1]
+    webFormPreviewUrl () {
+      if (arguments[1]) config.webFormPreview = arguments[1]
     },
     webFormPreview () {
       if (arguments[1]) webFormsViewer.preview(arguments[1])
@@ -194,7 +194,7 @@ module.exports = {
   pendingSend () {
     log.push('action', arguments)
     const allowFirst = [
-      'appKey', 'debug', 'webFormPreviewPath', 'webFormPreview'
+      'appKey', 'debug', 'webFormPreviewUrl', 'webFormPreview'
     ]
     // request to plugin
     if (!config.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {

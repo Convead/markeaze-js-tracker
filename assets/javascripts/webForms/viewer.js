@@ -38,9 +38,9 @@ module.exports = {
 
     // The list of webForms should always be up to date
     eEmit.subscribe('WebForm.before_destroy', async (data) => {
-      const wefForm = this.webForms[data.id]
+      const wefForm = this.webForms[data.uid]
       if (wefForm && wefForm.lossDetection) wefForm.lossDetection.abort()
-      delete this.webForms[data.id]
+      delete this.webForms[data.uid]
       this.archiveHiddenList()
 
       this.wrapper.renderRibbons(this.webForms)
@@ -49,11 +49,11 @@ module.exports = {
     // Blocking the display of two webForms of the same type.
     // The first is hiding.
     eEmit.subscribe('WebForm.after_show', async (data) => {
-      const webFormCurrent = this.webForms[data.id]
-      for (const id in this.webForms) {
-        const webForm = this.webForms[id]
+      const webFormCurrent = this.webForms[data.uid]
+      for (const uid in this.webForms) {
+        const webForm = this.webForms[uid]
         if (
-          webForm.id !== webFormCurrent.id && 
+          webForm.uid !== webFormCurrent.uid && 
           !webForm.api.isHidden
         ) webForm.api.hide()
       }
@@ -69,7 +69,7 @@ module.exports = {
     const xhr = new XMLHttpRequest()
     const url = typeof config.webFormPreview === 'function' ? config.webFormPreview.apply(this, [webFormId]) : config.webFormPreview
 
-    xhr.open('GET', url || `//${config.endpoint}/preview?web_form_id=${webFormId}`, true)
+    xhr.open('GET', url || `//${config.endpoint}/preview?web_form_uid=${webFormId}`, true)
     xhr.onload = async () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText)
@@ -84,15 +84,15 @@ module.exports = {
     xhr.send(null)
   },
   destroyWebForms () {
-    for (const id in this.webForms) {
-      const webForm = this.webForms[id]
+    for (const uid in this.webForms) {
+      const webForm = this.webForms[uid]
       if (webForm.lossDetection) webForm.lossDetection.abort()
       webForm.api.destroy()
     }
     this.webForms = {}
   },
   add (options) {
-    if (this.webForms[options.id]) return false
+    if (this.webForms[options.uid]) return false
 
     if (this.exist(options)) {
       if (options.can_be_hidden) options.is_hidden = true
@@ -102,17 +102,17 @@ module.exports = {
             'viewer.js',
             82,
             'add',
-            {web_form_id: options.id}
+            {web_form_uid: options.uid}
           )
         return false
       }
     }
-    this.webForms[options.id] = options
+    this.webForms[options.uid] = options
 
     this.timeoutCallback(
         options.show_timeout,
         () => {
-          if (this.webForms[options.id]) this.viewWithLossDetection(options)
+          if (this.webForms[options.uid]) this.viewWithLossDetection(options)
         },
         () => {
           this.viewWithLossDetection(options)
@@ -121,8 +121,8 @@ module.exports = {
   },
   archiveHiddenList () {
     const webFormsHidden = {}
-    for (const id in this.webForms) {
-      const webForm = Object.assign({}, this.webForms[id])
+    for (const uid in this.webForms) {
+      const webForm = Object.assign({}, this.webForms[uid])
       if (webForm.can_be_hidden) {
         webForm.is_hidden = true
         webForm.on_exit = false
@@ -131,7 +131,7 @@ module.exports = {
         delete webForm.api
         delete webForm.lossDetection
 
-        webFormsHidden[id] = webForm
+        webFormsHidden[uid] = webForm
       }
     }
     window.sessionStorage.setItem(this.sessionListName, JSON.stringify(webFormsHidden))
@@ -140,7 +140,7 @@ module.exports = {
     const str = window.sessionStorage.getItem(this.sessionListName)
     if (!str) return false
     const webFormsHidden = JSON.parse(str)
-    for (const id in webFormsHidden) this.add(webFormsHidden[id])
+    for (const uid in webFormsHidden) this.add(webFormsHidden[uid])
   },
   viewWithLossDetection (options) {
     if (options.on_exit) {
@@ -153,20 +153,20 @@ module.exports = {
     else this.view(options)
   },
   view (options) {
-    this.webForms[options.id].api = new WebForm(options, this.wrapper.elWebForms)
+    this.webForms[options.uid].api = new WebForm(options, this.wrapper.elWebForms)
 
     this.timeoutCallback(
         options.close_timeout,
         () => {
-          if (this.webForms[options.id]) this.webForms[options.id].api.close(true)
+          if (this.webForms[options.uid]) this.webForms[options.uid].api.close(true)
         },
         () => {}
       )
   },
   exist (options) {
-    for (const id in this.webForms) {
-      const webForm = this.webForms[id]
-      if (webForm.id !== options.id) return true
+    for (const uid in this.webForms) {
+      const webForm = this.webForms[uid]
+      if (webForm.uid !== options.uid) return true
     }
     return false
   },

@@ -10,7 +10,7 @@ const Slider = require('./slider').default
 export default class WebForm {
   constructor (options, elContainer) {
     this.options = options
-    this.id = options.id
+    this.uid = options.uid
     this.currentState = options.currentState || (options.states && options.states[0]) || 'default'
     this.canBeHidden = options.can_be_hidden
     this.ribbon_label = options.ribbon_label
@@ -39,26 +39,26 @@ export default class WebForm {
   }
   show () {
     this.fire('before_show')
-    this.sendEvent('WebFormShow', {web_form_id: this.id})
+    this.sendEvent('WebFormShow', {web_form_uid: this.uid})
     this.fire('after_show')
   }
   click () {
     this.fire('before_click')
-    this.sendEvent('WebFormClick', {web_form_id: this.id})
+    this.sendEvent('WebFormClick', {web_form_uid: this.uid})
     this.fire('after_click')
   }
   submit (payload, visitor) {
     this.fire('before_submit')
     if (!this.valid()) return false
     this.canBeHidden = false
-    this.sendEvent('WebFormSubmit', Object.assign(payload, {web_form_id: this.id, web_form_data: visitor}))
+    this.sendEvent('WebFormSubmit', Object.assign(payload, {web_form_uid: this.uid, web_form_data: visitor}))
     this.fire('after_submit')
   }
   close (disableCloseEvent = false) {
     this.fire('before_close')
     if (this.canBeHidden && this.currentState === 'default') this.hide()
     else {
-      if (this.currentState === 'default' && !disableCloseEvent) this.sendEvent('WebFormClose', {web_form_id: this.id})
+      if (this.currentState === 'default' && !disableCloseEvent) this.sendEvent('WebFormClose', {web_form_uid: this.uid})
       this.destroy(true)
     }
     this.fire('after_close')
@@ -164,7 +164,7 @@ export default class WebForm {
   }
   fire (callbackName, payload) {
     const callback = this.callbacks[callbackName]
-    eEmit.emit(`WebForm.${callbackName}`, {id: this.id})
+    eEmit.emit(`WebForm.${callbackName}`, {uid: this.uid})
     if (callback) callback.apply(this, payload)
   }
   valid () {

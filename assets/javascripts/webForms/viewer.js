@@ -64,12 +64,12 @@ module.exports = {
       this.wrapper.renderRibbons(this.webForms)
     })
   },
-  preview (webFormId) {
+  preview (webFormUid) {
     config.trackEnabled = false
     const xhr = new XMLHttpRequest()
-    const url = typeof config.webFormPreview === 'function' ? config.webFormPreview.apply(this, [webFormId]) : config.webFormPreview
+    const url = typeof config.webFormPreview === 'function' ? config.webFormPreview.apply(this, [webFormUid]) : config.webFormPreview
 
-    xhr.open('GET', url || `//${config.endpoint}/preview?web_form_uid=${webFormId}`, true)
+    xhr.open('GET', url || `//${config.endpoint}/preview?web_form_uid=${webFormUid}`, true)
     xhr.onload = async () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText)

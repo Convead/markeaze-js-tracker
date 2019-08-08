@@ -20,7 +20,7 @@ export default class AssetsLoader {
     if (!assets) return false
 
     if (!this.assets || this.assets.version !== assets.version) {
-      this.assets = assets
+      this.assets = Object.assign((this.assets || {}), assets)
       config[this.configName] = this.assets.version
       window.localStorage.setItem(this.assetsName, JSON.stringify(assets))
       return true

@@ -8,30 +8,29 @@ const config = require('../config')
 
 export default class Wrapper {
   constructor (elContainer) {
-    this.mainAssetsLoader = new AssetsLoader('mkz_main_assets', 'mainAssetsVersion')
-    this.accountAssetsLoader = new AssetsLoader('mkz_account_assets', 'accountAssetsVersion')
+    this.assetsLoader = new AssetsLoader('mkz_assets', 'assetsVersion')
 
     this.elContainer = elContainer || document.body
     this.el = null
   }
   async render (resource) {
     // Update for the first time or if there are changes
-    if (this.mainAssetsLoader.load(resource.assets) || !this.el) {
-      if (!this.mainAssetsLoader.assets) return false
+    if (this.assetsLoader.load(resource.assets) || !this.el) {
+      if (!this.assetsLoader.assets) return false
 
-      this.accountAssetsLoader.load(resource.accountAssets)
+      this.assetsLoader.load(resource.accountAssets)
 
-      const css = this.accountAssetsLoader.assets ? this.accountAssetsLoader.assets.css : ''
-      this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, this.mainAssetsLoader.assets.web_forms_common_wrapper)
+      const css = this.assetsLoader.assets ? this.assetsLoader.assets.web_forms_css : ''
+      this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, this.assetsLoader.assets.web_forms_common_wrapper)
       helpers.appendHTML(this.el, `<style type="text/css">${css}</style>`)
       this.elRibbons = this.el.querySelector('.mkz-js-ribbons')
       this.elWebForms = this.el.querySelector('.mkz-js-wfs')
     }
   }
   async renderRibbons (webForms) {
-    if (!this.mainAssetsLoader.assets) return false
+    if (!this.assetsLoader.assets) return false
 
-    const html = await liquid.parseAndRender(this.mainAssetsLoader.assets.web_forms_ribbons_wrapper, {
+    const html = await liquid.parseAndRender(this.assetsLoader.assets.web_forms_ribbons_wrapper, {
       web_forms: Object.values(webForms),
       ribbon_types: ['aside', 'round']
     })

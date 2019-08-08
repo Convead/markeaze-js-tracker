@@ -1,5 +1,5 @@
 module.exports = {
-  version: '0.2.2',
+  version: '0.2.3',
   trackerName: 'markeaze-js',
   debugMode: false,
   trackEnabled: true,
@@ -7,8 +7,7 @@ module.exports = {
   appKey: undefined,
   visitor: {},
   uid: undefined,
-  mainAssetsVersion: null,
-  accountAssetsVersion: null,
+  assetsVersion: null,
   cookieUid: '_mkz_dvc_uid',
   endpoint: 'tracker.markeaze.com',
   airbrakeProject: '229028',

@@ -48,6 +48,7 @@ export default class WebForm {
     this.fire('after_click')
   }
   submit (payload, visitor) {
+    if (this.options.close_animation) return false
     this.fire('before_submit')
     if (!this.valid()) return false
     this.canBeHidden = false
@@ -55,6 +56,7 @@ export default class WebForm {
     this.fire('after_submit')
   }
   close (disableCloseEvent = false) {
+    if (this.options.close_animation) return false
     this.fire('before_close')
     if (this.canBeHidden && this.currentState === 'default') this.hide()
     else {

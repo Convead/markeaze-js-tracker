@@ -22,11 +22,8 @@ export default class Wrapper {
       this.accountAssetsLoader.load(resource.accountAssets)
 
       const css = this.accountAssetsLoader.assets ? this.accountAssetsLoader.assets.css : ''
-      const html = await liquid.parseAndRender(
-        this.mainAssetsLoader.assets.web_forms_common_wrapper,
-        {css: css}
-      )
-      this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, html)
+      this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, this.mainAssetsLoader.assets.web_forms_common_wrapper)
+      helpers.appendHTML(this.el, `<style type="text/css">${css}</style>`)
       this.elRibbons = this.el.querySelector('.mkz-js-ribbons')
       this.elWebForms = this.el.querySelector('.mkz-js-wfs')
     }
@@ -40,10 +37,10 @@ export default class Wrapper {
     })
     this.elRibbons.innerHTML = html
 
-    for (const id in webForms) {
-      const webForm = webForms[id]
+    for (const uid in webForms) {
+      const webForm = webForms[uid]
       
-      const elRibbon = this.elRibbons.querySelector(`.mkz-js-ribbon-${webForm.id}`)
+      const elRibbon = this.elRibbons.querySelector(`.mkz-js-ribbon-${webForm.uid}`)
 
       if (elRibbon) domEvent.add(elRibbon, 'click', () => {
         if (!webForm.is_hidden) return false

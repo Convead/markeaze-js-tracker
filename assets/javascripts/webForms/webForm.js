@@ -122,9 +122,7 @@ export default class WebForm {
   }
   async render () {
     const data = Object.assign(this.options, {
-      state: this.currentState,
-      allow_close: parseInt(this.options.close_timeout) === 0,
-      allow_brand: true
+      state: this.currentState
     })
     const html = await liquid.parseAndRender(this.options.body_html, data)
     if (this.el) this.el.parentNode.removeChild(this.el)

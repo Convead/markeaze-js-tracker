@@ -72,13 +72,17 @@ module.exports = {
     xhr.open('GET', url || `//${config.endpoint}/preview?web_form_uid=${webFormUid}`, true)
     xhr.onload = async () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText)
+        try {
+          const response = JSON.parse(xhr.responseText)
 
-        this.destroyWebForms()
+          this.destroyWebForms()
 
-        await this.wrapper.render(response)
+          await this.wrapper.render(response)
 
-        for (const options of response.web_forms) this.add(options)
+          for (const options of response.web_forms) this.add(options)
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
     xhr.send(null)
@@ -139,8 +143,13 @@ module.exports = {
   restoreHiddenList () {
     const str = window.sessionStorage.getItem(this.sessionListName)
     if (!str) return false
-    const webFormsHidden = JSON.parse(str)
-    for (const uid in webFormsHidden) this.add(webFormsHidden[uid])
+
+    try {
+      const webFormsHidden = JSON.parse(str)
+      for (const uid in webFormsHidden) this.add(webFormsHidden[uid])
+    } catch (e) {
+      console.log(e)
+    }
   },
   viewWithLossDetection (options) {
     if (options.on_exit) {

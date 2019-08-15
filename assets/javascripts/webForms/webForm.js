@@ -14,7 +14,7 @@ export default class WebForm {
     this.currentState = options.currentState || (options.states && options.states[0]) || 'default'
     this.canBeHidden = options.can_be_hidden
     this.ribbon_label = options.ribbon_label
-    this.animationDelay = 800
+    this.animationDelay = 250
 
     this.elContainer = elContainer
 

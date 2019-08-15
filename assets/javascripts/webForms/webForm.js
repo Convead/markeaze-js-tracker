@@ -101,7 +101,7 @@ export default class WebForm {
   }
   copyToClipboard (text) {
     if (!navigator.clipboard) {
-      const textArea = document.createElement("textarea")
+      const textArea = document.createElement('textarea')
       textArea.value = text
       document.body.appendChild(textArea)
       textArea.focus()
@@ -145,8 +145,16 @@ export default class WebForm {
             this.submit(this.formData())
             break
           case 'copyToClipboard':
+            // Replacing text when press the copy button
+            if (actionEl.dataset.success) {
+              if (!actionEl.dataset.default) actionEl.dataset.default = actionEl.innerHTML
+              actionEl.innerHTML = actionEl.dataset.success
+              setTimeout(() => {
+                if (actionEl) actionEl.innerHTML = actionEl.dataset.default
+              }, 1000)
+            }
             this.copyToClipboard(actionEl.dataset.text)
-            break
+            return false
           default:
             if (typeof this[callbackName] === 'function') this[callbackName]()
             else this.fire(callbackName)

@@ -146,11 +146,12 @@ export default class WebForm {
             break
           case 'copyToClipboard':
             // Replacing text when press the copy button
-            if (actionEl.dataset.success) {
-              if (!actionEl.dataset.default) actionEl.dataset.default = actionEl.innerHTML
-              actionEl.innerHTML = actionEl.dataset.success
+            const elLabel = actionEl.dataset.success ? actionEl : actionEl.querySelector('[data-success]')
+            if (elLabel.dataset.success) {
+              if (!elLabel.dataset.default) elLabel.dataset.default = elLabel.innerHTML
+              elLabel.innerHTML = elLabel.dataset.success
               setTimeout(() => {
-                if (actionEl) actionEl.innerHTML = actionEl.dataset.default
+                if (elLabel) elLabel.innerHTML = elLabel.dataset.default
               }, 1000)
             }
             this.copyToClipboard(actionEl.dataset.text)

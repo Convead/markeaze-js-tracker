@@ -147,7 +147,7 @@ export default class WebForm {
           case 'copyToClipboard':
             // Replacing text when press the copy button
             const elLabel = actionEl.dataset.success ? actionEl : actionEl.querySelector('[data-success]')
-            if (elLabel.dataset.success) {
+            if (elLabel) {
               if (!elLabel.dataset.default) elLabel.dataset.default = elLabel.innerHTML
               elLabel.innerHTML = elLabel.dataset.success
               setTimeout(() => {

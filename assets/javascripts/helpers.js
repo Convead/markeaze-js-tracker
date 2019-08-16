@@ -25,7 +25,7 @@ module.exports = {
   },
   animate (options) {
     if (typeof options.dimension === 'undefined') options.dimension = 'px'
-    if (typeof options.cssFunction != 'undefined') {
+    if (options.cssFunction) {
       options.prefix = '('
       options.postfix = ')'
     } else {

@@ -1,6 +1,6 @@
 <%
 String.prototype.sanitaze = function () {
-  return this.replace(/\\/g, '\\\\').replace(/\n/g, '').replace(/\"/g, '\\"')
+  return this.replace(/\\/g, '\\\\').replace(/\n/g, '').replace(/\"/g, '\\"').replace(/\\\\\\\\/g, '\\\\')
 }
 String.prototype.wrapper = function () {
   const prefix = `

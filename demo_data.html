@@ -4,7 +4,7 @@ String.prototype.sanitaze = function () {
 }
 String.prototype.wrapper = function () {
   const prefix = `
-<div class="mkz-wf mkz-wf_uid_{{ uid }}{% if is_hidden %} mkz-wf_state_hidden{% endif %} mkz-wf_close-animation_{{close_animation_type}} mkz-wf_show-animation_{{show_animation_type}}{% if show_animation %} mkz-wf_animation_show{% endif %}{% if close_animation %} mkz-wf_animation_hide{% endif %}">
+<div class="mkz-wf mkz-wf_uid_{{ uid }} mkz-wf_state_{{ state }}{% if is_hidden %} mkz-wf_type_hidden{% endif %} mkz-wf_close-animation_{{close_animation_type}} mkz-wf_show-animation_{{show_animation_type}}{% if show_animation %} mkz-wf_animation_show{% endif %}{% if close_animation %} mkz-wf_animation_hide{% endif %}">
   <div class="mkz-wf__overlay mkz-js-overlay"></div>
   <div class="mkz-wf__align">
     <div class="mkz-wf__body-wrap">

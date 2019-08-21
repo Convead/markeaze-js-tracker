@@ -24,14 +24,23 @@ module.exports = class SimpleValidation
               @_addInvalidClass(control.parentNode, @invalidParentClassName)
               valid = false
           else
-            r = /^[^ @]+@[^ @]+\.[^ @]+$/i
-            if (is_required && !control.value.trim()) || (control.type == 'email' && control.value != '' && !r.test(control.value))
-              @_addInvalidClass(control, @invalidClassName)
-              @_addInvalidClass(control.parentNode, @invalidParentClassName)
-              valid = false
+            if control.tagName.toLocaleLowerCase() == 'select' && is_required
+              if is_required && !control.value.trim()
+                @_addInvalidClass(control, @invalidClassName)
+                @_addInvalidClass(control.parentNode, @invalidParentClassName)
+                valid = false
+              else
+                @_removeInvalidClass(control, @invalidClassName)
+                @_removeInvalidClass(control, @invalidParentClassName)
             else
-              @_removeInvalidClass(control, @invalidClassName)
-              @_removeInvalidClass(control, @invalidParentClassName)
+              r = /^[^ @]+@[^ @]+\.[^ @]+$/i
+              if (is_required && !control.value.trim()) || (control.type == 'email' && control.value != '' && !r.test(control.value))
+                @_addInvalidClass(control, @invalidClassName)
+                @_addInvalidClass(control.parentNode, @invalidParentClassName)
+                valid = false
+              else
+                @_removeInvalidClass(control, @invalidClassName)
+                @_removeInvalidClass(control, @invalidParentClassName)
 
       valid
     else

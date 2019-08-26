@@ -6,6 +6,7 @@ const airbrake = require('../libs/airbrake')
 const Wrapper = require('./wrapper').default
 const Request = require('../libs/request')
 const config = require('../config')
+const helpers = require('../helpers')
 
 module.exports = {
   webForms: {},
@@ -129,7 +130,8 @@ module.exports = {
       const webForm = Object.assign({}, this.webForms[uid])
       if (webForm.can_be_hidden) {
         webForm.is_hidden = true
-        webForm.on_exit = false
+        webForm.session_loss_desktop = false
+        webForm.session_loss_mobile = 0
         webForm.show_timeout = 0
         webForm.close_timeout = 0
         delete webForm.api
@@ -152,14 +154,27 @@ module.exports = {
     }
   },
   viewWithLossDetection (options) {
-    if (options.on_exit) {
-      options.lossDetection = new VisitorLossDetection({
-        detect: () => {
-          this.view(options)
-        }
-      })
+    const view = () => {
+      if (this.webForms[options.uid]) this.view(options)
     }
-    else this.view(options)
+
+    if (helpers.isMobile()) {
+
+      this.timeoutCallback(
+          options.session_loss_mobile,
+          () => view(),
+          () => view()
+        )
+
+    } else {
+
+      if (options.session_loss_desktop) {
+        options.lossDetection = new VisitorLossDetection({
+          detect: () => view()
+        })
+      } else view()
+
+    }
   },
   view (options) {
     this.webForms[options.uid].api = new WebForm(options, this.wrapper.elWebForms)

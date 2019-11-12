@@ -1,17 +1,29 @@
 const eEmit = require('./libs/eEmit')
 const cookies = require('./libs/cookies')
 const uuid = require('./libs/uuid')
-const domEvent = require('./libs/domEvent')
 const log = require('./libs/log')
 const parseUrlParams = require('./libs/parseUrlParams')
 const baseDomain = require('./libs/baseDomain.coffee')
 const tracker = require('./tracker')
-let config = require('./config')
 const webFormsViewer = require('./webForms/viewer')
 const Pinger = require('./libs/pinger.coffee')
 const robotDetection = require('./libs/robot_detection.coffee')
+const helpers = require('./helpers')
+const airbrake = require('./libs/airbrake')
+const domEvent = require('./libs/domEvent')
+const Request = require('./libs/request')
+const Liquid = require('./libs/liquid.min')
+let store = require('./store')
 
 module.exports = {
+  store: store,
+  libs: {
+    helpers: helpers,
+    airbrake: airbrake,
+    domEvent: domEvent,
+    Request: Request,
+    Liquid: Liquid
+  },
   eventSubscribe (key, fn) {
     eEmit.subscribe(key, fn)
   },
@@ -37,19 +49,20 @@ module.exports = {
       this.pendingSend.apply(this, fields)
     }
   },
-  plugins: {
+  // These are public methods used in api
+  methods: {
     endpoint() {
       if (arguments[1]) {
-        config.endpoint = arguments[1]
+        store.endpoint = arguments[1]
       }
     },
     appKey () {
       if (arguments[1]) {
-        config.appKey = arguments[1]
+        store.appKey = arguments[1]
         // set uid cookie
         const domain = (new baseDomain())
-        config.uid = config.uid || cookies.get(config.cookieUid) || uuid.get(16)
-        cookies.set(config.cookieUid, config.uid, { expires: 31536000, domain: domain.get() })
+        store.uid = store.uid || cookies.get(store.cookieUid) || uuid.get(16)
+        cookies.set(store.cookieUid, store.uid, { expires: 31536000, domain: domain.get() })
         // call pending task
         for (let fields of this.pendingTasks) {
           this.send.apply(this, fields)
@@ -63,7 +76,7 @@ module.exports = {
       }
     },
     webFormPreviewUrl () {
-      if (arguments[1]) config.webFormPreview = arguments[1]
+      if (arguments[1]) store.webFormPreview = arguments[1]
     },
     webFormPreview () {
       if (arguments[1]) webFormsViewer.preview(arguments[1])
@@ -107,7 +120,7 @@ module.exports = {
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
     trackVisitorUpdate () {
-      this.plugins.setVisitorInfo(null, arguments[1])
+      this.methods.setVisitorInfo(null, arguments[1])
       return this.track(arguments[0], {})
     },
     trackCustom () {
@@ -132,24 +145,24 @@ module.exports = {
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
     debug () {
-      config.debugMode = arguments[1]
+      store.debugMode = arguments[1]
     },
     demoResponse () {
-      config.demoResponse = arguments[1]
+      store.demoResponse = arguments[1]
     },
     setVisitorInfo () {
       let info = arguments[1]
-      for (let key in info) config.visitor[key] = info[key]
-      return config.visitor
+      for (let key in info) store.visitor[key] = info[key]
+      return store.visitor
     },
     getVisitorInfo () {
-      return config.visitor
+      return store.visitor
     },
     subscribe () {
       eEmit.subscribe(arguments[1], arguments[2])
     },
     version () {
-      return config.version
+      return store.version
     }
   },
   pageData (properties) {
@@ -197,7 +210,7 @@ module.exports = {
       'appKey', 'debug', 'webFormPreviewUrl', 'webFormPreview'
     ]
     // request to plugin
-    if (!config.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {
+    if (!store.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {
       return this.pendingTasks.push(arguments)
     }
     // apply task
@@ -213,8 +226,8 @@ module.exports = {
     }
     else {
       // request to plugin
-      if (this.plugins[ obj ]) {
-        return this.plugins[ obj ].apply(this, arguments)
+      if (this.methods[ obj ]) {
+        return this.methods[ obj ].apply(this, arguments)
       }
       // custom event
       else if (arguments[0].indexOf('track') == 0) {

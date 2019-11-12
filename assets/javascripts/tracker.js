@@ -3,7 +3,7 @@ const toSnakeCase = require('./libs/toSnakeCase')
 const log = require('./libs/log')
 const Request = require('./libs/request')
 const robotDetection = require('./libs/robot_detection.coffee')
-const config = require('./config')
+const store = require('./store')
 
 module.exports = {
   send (eventName, properties, callback, visitor = null) {
@@ -12,16 +12,16 @@ module.exports = {
 
     // basic data
     const data = {}
-    data.app_key = config.appKey
+    data.app_key = store.appKey
     data.type = toSnakeCase.convert( eventName.replace(/^track/gi, '') )
-    data.tracker_ver = config.version
-    data.tracker_name = config.trackerName
+    data.tracker_ver = store.version
+    data.tracker_name = store.trackerName
     data.performed_at = Math.floor(Date.now() / 1000)
-    if (config.assetsVersion) data.assets_version = config.assetsVersion
+    if (store.assetsVersion) data.assets_version = store.assetsVersion
 
     // visitor
-    data.visitor = visitor || Object.assign({}, config.visitor ? config.visitor : {})
-    data.visitor.device_uid = config.uid
+    data.visitor = visitor || Object.assign({}, store.visitor ? store.visitor : {})
+    data.visitor.device_uid = store.uid
 
     // event properties
     if (properties) data.properties = properties
@@ -29,9 +29,9 @@ module.exports = {
     eEmit.emit('track.before', data);
     log.push('track', data);
 
-    if (config.trackEnabled) {
+    if (store.trackEnabled) {
       (new Request).send(
-        `//${config.endpoint}/event`,
+        `//${store.endpoint}/event`,
         data,
         (response) => {
           eEmit.emit('track.after', {post: data, response: response})

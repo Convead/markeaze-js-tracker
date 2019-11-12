@@ -4,7 +4,7 @@ const domEvent = require('../libs/domEvent')
 const helpers = require('../helpers')
 const eEmit = require('../libs/eEmit')
 const AssetsLoader = require('../webForms/assetsLoader').default
-const config = require('../config')
+const store = require('../store')
 
 export default class Wrapper {
   constructor (elContainer) {

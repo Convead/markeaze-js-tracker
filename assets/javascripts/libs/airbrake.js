@@ -1,4 +1,4 @@
-const config = require('../config')
+const store = require('../store')
 const Request = require('./request')
 
 module.exports = {
@@ -18,13 +18,13 @@ module.exports = {
       context: {
         language: 'JavaScript',
         environment: 'js_client',
-        userId: config.uid,
+        userId: store.uid,
         url: window.location.href
       },
       environment: 'js_client',
       params: params
     }
-    const url = `https://airbrake.io/api/v3/projects/${config.airbrakeProject}/notices?key=${config.airbrakeApiKey}`;
+    const url = `https://airbrake.io/api/v3/projects/${store.airbrakeProject}/notices?key=${store.airbrakeApiKey}`;
     
     (new Request).send(url, data)
   }

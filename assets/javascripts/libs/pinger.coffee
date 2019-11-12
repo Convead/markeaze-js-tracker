@@ -1,7 +1,7 @@
 Request = require('../libs/request')
 robotDetection = require('../libs/robot_detection.coffee')
 visibility = require('../libs/visibility.coffee')
-config = require('../config')
+store = require('../store')
 
 module.exports = class Pinger
   constructor: (period) ->
@@ -35,15 +35,15 @@ module.exports = class Pinger
 
     return if robotDetection.is_bot()
 
-    return if config.trackEnabled != true
+    return if store.trackEnabled != true
 
     @blured()
 
     (new Request).send(
-      '//' + config.endpoint + '/ping'
+      '//' + store.endpoint + '/ping'
       {
-        app_key: config.appKey
-        device_uid: config.uid
+        app_key: store.appKey
+        device_uid: store.uid
       }
       =>
       (xhr) =>

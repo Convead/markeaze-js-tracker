@@ -1,9 +1,9 @@
-const config = require('../config')
+const store = require('../store')
 
 module.exports = {
   push (name, arg) {
     // debug mode
-    if (config.debugMode == true) {
+    if (store.debugMode == true) {
       console.log('%cMarkeaze [' + name + ']', 'color:#42c4e5;font-weight:bold;', arg)
     }
   }

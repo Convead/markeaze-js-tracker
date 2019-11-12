@@ -5,7 +5,7 @@ const WebForm = require('./webForm').default
 const airbrake = require('../libs/airbrake')
 const Wrapper = require('./wrapper').default
 const Request = require('../libs/request')
-const config = require('../config')
+const store = require('../store')
 const helpers = require('../helpers')
 
 module.exports = {
@@ -66,11 +66,11 @@ module.exports = {
     })
   },
   preview (webFormUid) {
-    config.trackEnabled = false
+    store.trackEnabled = false
     const xhr = new XMLHttpRequest()
-    const url = typeof config.webFormPreview === 'function' ? config.webFormPreview.apply(this, [webFormUid]) : config.webFormPreview
+    const url = typeof store.webFormPreview === 'function' ? store.webFormPreview.apply(this, [webFormUid]) : store.webFormPreview
 
-    xhr.open('GET', url || `//${config.endpoint}/preview?web_form_uid=${webFormUid}`, true)
+    xhr.open('GET', url || `//${store.endpoint}/preview?web_form_uid=${webFormUid}`, true)
     xhr.onload = async () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         try {

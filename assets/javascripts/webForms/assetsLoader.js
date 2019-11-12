@@ -1,9 +1,9 @@
-const config = require('../config')
+const store = require('../store')
 
 export default class AssetsLoader {
-  constructor (storageName, configName) {
+  constructor (storageName, storeName) {
     this.assetsName = storageName
-    this.configName = configName
+    this.storeName = storeName
 
     this.assets = null
 
@@ -11,7 +11,7 @@ export default class AssetsLoader {
     if (str != null) {
       try {
         this.assets = JSON.parse(str)
-        config[this.configName] = this.assets.version
+        store[this.storeName] = this.assets.version
       }
       catch {}
     }
@@ -21,7 +21,7 @@ export default class AssetsLoader {
 
     if (!this.assets || this.assets.version !== assets.version) {
       this.assets = Object.assign((this.assets || {}), assets)
-      config[this.configName] = this.assets.version
+      store[this.storeName] = this.assets.version
       window.localStorage.setItem(this.assetsName, JSON.stringify(assets))
       return true
     }

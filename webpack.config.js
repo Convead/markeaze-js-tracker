@@ -63,6 +63,7 @@ module.exports = {
     sideEffects: false
   },
   devServer: {
+    port: 8084,
     setup(app) {
       app.post('/event', (req, res) => {
         res.redirect('demo_data.html')

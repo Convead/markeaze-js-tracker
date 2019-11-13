@@ -11,12 +11,17 @@ module.exports = {
     if (el.classList) el.classList.add(className)
     else el.className += ' ' + className
   },
-  appendHTML (elWrap, html) {
-    const tmp_el = document.createElement('div')
-    tmp_el.innerHTML = html
-    const el = tmp_el.firstChild
-    elWrap.appendChild(el)
+  appendHTML (container, html) {
+    const tmpEl = document.createElement('div')
+    tmpEl.innerHTML = html
+    const el = this.getFirstChild(tmpEl)
+    container.appendChild(el)
     return el
+  },
+  getFirstChild (el) {
+    let firstChild = el.firstChild
+    while(firstChild != null && firstChild.nodeType == 3) firstChild = firstChild.nextSibling
+    return firstChild
   },
   objectToStyles (objects) {
     const styles = []

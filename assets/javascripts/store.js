@@ -9,8 +9,13 @@ module.exports = {
   uid: undefined,
   assetsVersion: null,
   cookieUid: '_mkz_dvc_uid',
-  endpoint: 'tracker.markeaze.com',
+  region: null,
+  trackerEndpoint: null,
+  chatEndpoint: null,
   airbrakeProject: '229028',
   airbrakeApiKey: '3927498a0d17867a76acf5aa97eba72d',
-  webFormPreview: null
+  webFormPreview: null,
+  plugins: {
+    chat: 'https://cdn.jsdelivr.net/gh/markeaze/markeaze-js-chat-client@latest/dist/mkz-chat-client.js'
+  }
 }

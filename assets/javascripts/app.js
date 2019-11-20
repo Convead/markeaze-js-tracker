@@ -18,6 +18,7 @@ let store = require('./store')
 module.exports = {
   store: store,
   libs: {
+    log: log,
     helpers: helpers,
     airbrake: airbrake,
     domEvent: domEvent,
@@ -49,16 +50,15 @@ module.exports = {
       this.pendingSend.apply(this, fields)
     }
   },
-  // These are public methods used in api
+  // these are public methods used in api
   methods: {
-    endpoint() {
-      if (arguments[1]) {
-        store.endpoint = arguments[1]
-      }
-    },
     appKey () {
-      if (arguments[1]) {
-        store.appKey = arguments[1]
+      const value = arguments[1]
+      if (value && value.indexOf('@') > 0 && value.indexOf('@') < value.length - 1) {
+        store.appKey = value
+        store.region = value.split('@').pop()
+        if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
+        if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
         // set uid cookie
         const domain = (new baseDomain())
         store.uid = store.uid || cookies.get(store.cookieUid) || uuid.get(16)
@@ -73,6 +73,8 @@ module.exports = {
         domEvent.add(window, 'pushState', () => { this.changeUrl() })
         domEvent.add(window, 'replaceState', () => { this.changeUrl() })
         domEvent.add(window, 'hashchange', () => { this.changeUrl() })
+        // plugins can only be included during initialization
+        this.includePlugins()
       }
     },
     webFormPreviewUrl () {
@@ -163,6 +165,27 @@ module.exports = {
     },
     version () {
       return store.version
+    },
+    updateStore () {
+      if (typeof arguments[1] !== 'object') return
+      store = Object.assign(store, arguments[1])
+      return store
+    }
+  },
+  includeScript (url) {
+    const d = document
+    const w = window
+    let s = d.createElement('script')
+    s.type = 'text/javascript'
+    s.async = true
+    s.charset = 'utf-8'
+    s.src = url
+    const x = d.getElementsByTagName('script')[0]
+    x.parentNode.insertBefore(s, x)
+  },
+  includePlugins () {
+    for (const k in store.plugins) {
+      this.includeScript(store.plugins[k])
     }
   },
   pageData (properties) {

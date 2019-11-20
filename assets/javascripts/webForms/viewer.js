@@ -70,7 +70,7 @@ module.exports = {
     const xhr = new XMLHttpRequest()
     const url = typeof store.webFormPreview === 'function' ? store.webFormPreview.apply(this, [webFormUid]) : store.webFormPreview
 
-    xhr.open('GET', url || `//${store.endpoint}/preview?web_form_uid=${webFormUid}`, true)
+    xhr.open('GET', url || `//${store.trackerEndpoint}/preview?web_form_uid=${webFormUid}`, true)
     xhr.onload = async () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         try {

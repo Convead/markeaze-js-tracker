@@ -8,7 +8,10 @@ const store = require('./store')
 module.exports = {
   send (eventName, properties, callback, visitor = null) {
 
-    if (robotDetection.is_bot()) return false
+    if (robotDetection.is_bot() || !store.appKey) {
+      log.push('tracker', 'abort')
+      return false
+    }
 
     // basic data
     const data = {}
@@ -27,11 +30,11 @@ module.exports = {
     if (properties) data.properties = properties
 
     eEmit.emit('track.before', data);
-    log.push('track', data);
+    log.push('tracker', data);
 
     if (store.trackEnabled) {
       (new Request).send(
-        `//${store.endpoint}/event`,
+        `//${store.trackerEndpoint}/event`,
         data,
         (response) => {
           eEmit.emit('track.after', {post: data, response: response})
@@ -39,7 +42,7 @@ module.exports = {
         },
         (xhr) => {
           if (xhr.status == 403 || xhr.status == 0) robotDetection.detect()
-          log.push('track fail', xhr)
+          log.push('tracker', 'fail', xhr)
         }
       )
     }

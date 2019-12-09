@@ -170,6 +170,32 @@ module.exports = {
       if (typeof arguments[1] !== 'object') return
       store = Object.assign(store, arguments[1])
       return store
+    },
+    addPlugin () {
+      const name = arguments[1]
+      const plugin = arguments[2]
+      // plugin can be added only one time
+      if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'function') return
+      store.plugins[name].created = true
+      // class in plugins cannot be used because link to store variables is lost
+      store.plugins[name].app = plugin
+      store.plugins[name].version = plugin.version
+      store.plugins[name].app.store = this.store
+      store.plugins[name].app.libs = this.libs
+      store.plugins[name].app.create()
+      return store.plugins[name]
+    },
+    destroyPlugin () {
+      const name = arguments[1]
+      if (!store.plugins[name] || !store.plugins[name].created) return
+      store.plugins[name].created = false
+      store.plugins[name].app.destroy()
+      return store.plugins[name]
+    },
+    versionPlugin () {
+      const name = arguments[1]
+      if (!store.plugins[name] || !store.plugins[name].created) return
+      return store.plugins[name].version
     }
   },
   includeScript (url) {
@@ -185,7 +211,7 @@ module.exports = {
   },
   includePlugins () {
     for (const k in store.plugins) {
-      this.includeScript(store.plugins[k])
+      this.includeScript(store.plugins[k].url)
     }
   },
   pageData (properties) {

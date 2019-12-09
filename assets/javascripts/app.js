@@ -175,7 +175,7 @@ module.exports = {
       const name = arguments[1]
       const plugin = arguments[2]
       // plugin can be added only one time
-      if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'function') return
+      if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'object' || typeof plugin.create !== 'function') return
       store.plugins[name].created = true
       // class in plugins cannot be used because link to store variables is lost
       store.plugins[name].app = plugin
@@ -256,7 +256,7 @@ module.exports = {
   pendingSend () {
     log.push('action', arguments)
     const allowFirst = [
-      'appKey', 'debug', 'webFormPreviewUrl', 'webFormPreview'
+      'appKey', 'debug', 'webFormPreviewUrl', 'webFormPreview', 'updateStore'
     ]
     // request to plugin
     if (!store.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {

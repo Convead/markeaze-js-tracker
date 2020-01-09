@@ -30,10 +30,10 @@ module.exports = {
   },
   pendingTasks: [],
   ready (nameVariable) {
-    // abort if object is undefined
+    // Abort if object is undefined
     if (!window[nameVariable]) return false
 
-    // abort if bot detected
+    // Abort if bot detected
     if (robotDetection.is_bot()) return false
 
     new Pinger()
@@ -43,6 +43,9 @@ module.exports = {
     window[nameVariable] = function() {
       return self.pendingSend.apply(self, arguments)
     }
+  
+    // Plugins can only be included during initialization
+    eEmit.subscribe('assets', () => { self.includePlugins() })
 
     webFormsViewer.init()
 
@@ -50,7 +53,7 @@ module.exports = {
       this.pendingSend.apply(this, fields)
     }
   },
-  // these are public methods used in api
+  // These are public methods used in api
   methods: {
     appKey () {
       const value = arguments[1]
@@ -59,22 +62,20 @@ module.exports = {
         store.region = value.split('@').pop()
         if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
         if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
-        // set uid cookie
+        // Set uid cookie
         const domain = (new baseDomain())
         store.uid = store.uid || cookies.get(store.cookieUid) || uuid.get(16)
         cookies.set(store.cookieUid, store.uid, { expires: 31536000, domain: domain.get() })
-        // call pending task
+        // Call pending task
         for (let fields of this.pendingTasks) {
           this.send.apply(this, fields)
         }
         this.pendingTasks = []
-        // track change url
+        // Track change url
         this.changeUrl()
         domEvent.add(window, 'pushState', () => { this.changeUrl() })
         domEvent.add(window, 'replaceState', () => { this.changeUrl() })
         domEvent.add(window, 'hashchange', () => { this.changeUrl() })
-        // plugins can only be included during initialization
-        this.includePlugins()
       }
     },
     webFormPreviewUrl () {
@@ -149,9 +150,6 @@ module.exports = {
     debug () {
       store.debugMode = arguments[1]
     },
-    demoResponse () {
-      store.demoResponse = arguments[1]
-    },
     setVisitorInfo () {
       let info = arguments[1]
       for (let key in info) store.visitor[key] = info[key]
@@ -171,18 +169,26 @@ module.exports = {
       store = Object.assign(store, arguments[1])
       return store
     },
-    addPlugin () {
+    initPlugin () {
       const name = arguments[1]
       const plugin = arguments[2]
-      // plugin can be added only one time
+      // Plugin can be added only one time
       if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'object' || typeof plugin.create !== 'function') return
+
+      let options = {}
+      if (name === 'chat') {
+        const settings = store.assets.chat_settings
+        const device = helpers.isMobile() ? 'mobile' : 'desktop'
+        options = Object.assign({}, settings.common, settings[device])
+      }
+
       store.plugins[name].created = true
-      // class in plugins cannot be used because link to store variables is lost
+      // Class in plugins cannot be used because link to store variables is lost
       store.plugins[name].app = plugin
       store.plugins[name].version = plugin.version
       store.plugins[name].app.store = this.store
       store.plugins[name].app.libs = this.libs
-      store.plugins[name].app.create()
+      store.plugins[name].app.create(store.assets.locale, options)
       return store.plugins[name]
     },
     destroyPlugin () {
@@ -210,8 +216,11 @@ module.exports = {
     x.parentNode.insertBefore(s, x)
   },
   includePlugins () {
+    const chatSettings = store.assets.chat_settings
+    store.plugins.chat.enabled = chatSettings && chatSettings.common.enabled
+
     for (const k in store.plugins) {
-      this.includeScript(store.plugins[k].url)
+      if (store.plugins[k].enabled) this.includeScript(store.plugins[k].url)
     }
   },
   pageData (properties) {
@@ -258,27 +267,27 @@ module.exports = {
     const allowFirst = [
       'appKey', 'debug', 'webFormPreviewUrl', 'webFormPreview', 'updateStore'
     ]
-    // request to plugin
+    // Request to plugin
     if (!store.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {
       return this.pendingTasks.push(arguments)
     }
-    // apply task
+    // Apply task
     else {
       return this.send.apply(this, arguments)
     }
   },
   send () {
     let obj = arguments[0]
-    // function run when the client is ready
+    // Function run when the client is ready
     if (typeof obj == 'function') {
       return obj.apply(this)
     }
     else {
-      // request to plugin
+      // Request to plugin
       if (this.methods[ obj ]) {
         return this.methods[ obj ].apply(this, arguments)
       }
-      // custom event
+      // Custom event
       else if (arguments[0].indexOf('track') == 0) {
         return this.track(obj, arguments[1], arguments[2], arguments[3])
       }

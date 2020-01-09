@@ -3,6 +3,7 @@ const toSnakeCase = require('./libs/toSnakeCase')
 const log = require('./libs/log')
 const Request = require('./libs/request')
 const robotDetection = require('./libs/robot_detection.coffee')
+const AssetsLoader = require('./assetsLoader').default
 const store = require('./store')
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
       return false
     }
 
-    // basic data
+    // Basic data
     const data = {}
     data.app_key = store.appKey
     data.type = toSnakeCase.convert( eventName.replace(/^track/gi, '') )
@@ -22,11 +23,11 @@ module.exports = {
     data.performed_at = Math.floor(Date.now() / 1000)
     if (store.assetsVersion) data.assets_version = store.assetsVersion
 
-    // visitor
+    // Visitor
     data.visitor = visitor || Object.assign({}, store.visitor ? store.visitor : {})
     data.visitor.device_uid = store.uid
 
-    // event properties
+    // Event properties
     if (properties) data.properties = properties
 
     eEmit.emit('track.before', data);
@@ -34,9 +35,11 @@ module.exports = {
 
     if (store.trackEnabled) {
       (new Request).send(
-        `//${store.trackerEndpoint}/event`,
+        store.trackerCustomUrl || `//${store.trackerEndpoint}/event`,
         data,
         (response) => {
+          this.assets(data, response)
+
           eEmit.emit('track.after', {post: data, response: response})
           if (callback) callback(data, response)
         },
@@ -47,5 +50,13 @@ module.exports = {
       )
     }
 
+  },
+  assets (data, response) {
+    if (data.type !== 'page_view') return false
+
+    const assetsLoader = new AssetsLoader()
+    assetsLoader.load(response.assets)
+
+    if (store.assets) eEmit.emit('assets', store.assets)
   }
 }

@@ -7,6 +7,7 @@
       (function(w,d,c,h){w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments)};var s = d.createElement('script');s.type = 'text/javascript';s.async = true;s.charset = 'utf-8';s.src = h;var x = d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);})(window,document,'mkz','mkz.js');
 
         mkz('debug', true);
+        mkz('updateStore', {trackerCustomUrl: '/demo_data.html'})
 
         mkz(function() {
           this.eventSubscribe('track.before', function(data) {
@@ -16,14 +17,14 @@
           });
         });
 
-mkz('appKey', '2840ad505de48551@test');
+        mkz('appKey', '2840ad505de48551@test');
 
-mkz('trackPageView', {
-  page: {
-    url: 'http://eqsol.ru/',
-    title: 'Test page'
-  }
-});
+        mkz('trackPageView', {
+          page: {
+            url: 'http://eqsol.ru/',
+            title: 'Test page'
+          }
+        });
       </script>
       <!-- /Markeaze -->
   </head>

@@ -223,15 +223,15 @@ module.exports = {
     return properties
   },
   offerNormalizer (offer) {
-    if (offer.uid) offer.uid = String(offer.uid)
-    else this.requiredFieldThrow('offer.uid')
+    if (offer.variant_id) offer.variant_id = String(offer.variant_id)
+    else this.requiredFieldThrow('offer.variant_id')
     if (offer.price) offer.price = parseFloat(offer.price)
     else this.requiredFieldThrow('offer.price')
     return offer
   },
   itemNormalizer (item) {
-    if (item.offer_uid) item.offer_uid = String(item.offer_uid)
-    else this.requiredFieldThrow('item.offer_uid')
+    if (item.variant_id) item.variant_id = String(item.variant_id)
+    else this.requiredFieldThrow('item.variant_id')
     if (item.qnt) item.qnt = parseFloat(item.qnt)
     else this.requiredFieldThrow('item.qnt')
     if (item.price) item.price = parseFloat(item.price)

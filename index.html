@@ -116,7 +116,7 @@ mkz('subscribe', 'url.change', function(url) {
             Offer view<br />
             <pre>mkz('trackPageView', {
   offer: {
-    uid: 'bb1',
+    variant_id: 'bb1',
     price: 100.0,
     name: 'Product',
     main_image_url: 'http://site.com'
@@ -130,7 +130,7 @@ mkz('subscribe', 'url.change', function(url) {
 mkz('trackCartUpdate', {
   items: [
     {
-      offer_uid: 'bb1',
+      variant_id: 'bb1',
       qnt: 2.0,
       price: 100.0
     }
@@ -143,7 +143,7 @@ mkz('trackCartUpdate', {
             <pre>
 mkz('trackCartAddItem', {
   item: {
-    offer_uid: 'bb1',
+    variant_id: 'bb1',
     qnt: 2.0,
     price: 100.0
   }
@@ -155,7 +155,7 @@ mkz('trackCartAddItem', {
             <pre>
 mkz('trackCartRemoveItem', {
   item: {
-    offer_uid: 'bb1',
+    variant_id: 'bb1',
     qnt: 1.0
   }
 });</pre>
@@ -169,7 +169,7 @@ mkz('trackOrderCreate', {
   total: 200.0,
   items: [
     {
-      offer_uid: 'bb1',
+      variant_id: 'bb1',
       qnt: 2.0,
       price: 100.0
     }

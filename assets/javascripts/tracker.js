@@ -34,7 +34,7 @@ module.exports = {
 
     if (store.trackEnabled) {
       (new Request).send(
-        `//${store.trackerEndpoint}/event`,
+        store.trackerCustomUrl || `//${store.trackerEndpoint}/event`,
         data,
         (response) => {
           eEmit.emit('track.after', {post: data, response: response})

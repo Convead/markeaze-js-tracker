@@ -149,9 +149,6 @@ module.exports = {
     debug () {
       store.debugMode = arguments[1]
     },
-    demoResponse () {
-      store.demoResponse = arguments[1]
-    },
     setVisitorInfo () {
       let info = arguments[1]
       for (let key in info) store.visitor[key] = info[key]
@@ -171,18 +168,36 @@ module.exports = {
       store = Object.assign(store, arguments[1])
       return store
     },
-    addPlugin () {
+    initPlugin () {
       const name = arguments[1]
       const plugin = arguments[2]
       // plugin can be added only one time
       if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'object' || typeof plugin.create !== 'function') return
+
+      const options = name === 'chat' ? {
+          whitelabel: false,
+          copyright: 'Powered by Markeaze',
+          offline: 'Leave message',
+          placeholder: 'Type your message here...',
+          noticeIcon: '/assets/images/tooltip.png',
+          noticeText: 'Looking for<br />halloween gifts?',
+          margin: '20px',
+          iconColor: '#000',
+          iconBg: '#F28E24',
+          iconText: 'We’re here. Let’s chat!',
+          iconPosition: 'r-b', // l-t / r-t / l-b / r-b
+          iconType: 'bubble', // bar / bubble
+          soundUrl: 'https://dmyqxi5zjm55y.cloudfront.net/public/chat/sounds',
+          soundName: 'vk_1'
+        } : {}
+
       store.plugins[name].created = true
       // class in plugins cannot be used because link to store variables is lost
       store.plugins[name].app = plugin
       store.plugins[name].version = plugin.version
       store.plugins[name].app.store = this.store
       store.plugins[name].app.libs = this.libs
-      store.plugins[name].app.create()
+      store.plugins[name].app.create(options)
       return store.plugins[name]
     },
     destroyPlugin () {

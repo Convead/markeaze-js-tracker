@@ -16,14 +16,16 @@ module.exports = {
   init () {
     this.wrapper = new Wrapper()
 
+    eEmit.subscribe('assets', (data) => {
+      this.wrapper.render()
+    })
+
     // View webForms
     eEmit.subscribe('track.after', async (data) => {
       if (data.post.type !== 'page_view') return false
 
       // Support Single Page Application web sites
       this.destroyWebForms()
-
-      await this.wrapper.render(data.response)
 
       if (data.response.web_forms) for (const options of data.response.web_forms) {
         await this.preloadImages(options.body_html)

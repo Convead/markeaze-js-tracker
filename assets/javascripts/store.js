@@ -1,5 +1,5 @@
 module.exports = {
-  version: '0.4.0',
+  version: '1.0.0',
   plugins: {
     chat: {
       url: 'https://cdn.jsdelivr.net/gh/markeaze/markeaze-js-chat-client@latest/dist/mkz-chat-client.js',
@@ -12,7 +12,7 @@ module.exports = {
   appKey: undefined,
   visitor: {},
   uid: undefined,
-  assetsVersion: null,
+  assets: null,
   cookieUid: '_mkz_dvc_uid',
   region: null,
   trackerEndpoint: null,

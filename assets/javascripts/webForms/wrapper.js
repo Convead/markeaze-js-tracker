@@ -3,34 +3,26 @@ const liquid = new Liquid()
 const domEvent = require('../libs/domEvent')
 const helpers = require('../helpers')
 const eEmit = require('../libs/eEmit')
-const AssetsLoader = require('../webForms/assetsLoader').default
 const store = require('../store')
 
 export default class Wrapper {
   constructor (elContainer) {
-    this.assetsLoader = new AssetsLoader('mkz_assets', 'assetsVersion')
-
     this.elContainer = elContainer || document.body
     this.el = null
   }
-  async render (resource) {
-    // Update for the first time or if there are changes
-    if (this.assetsLoader.load(resource.assets) || !this.el) {
-      if (!this.assetsLoader.assets) return false
+  async render () {
+    if (this.el || !store.assets) return
 
-      this.assetsLoader.load(resource.accountAssets)
-
-      const css = this.assetsLoader.assets ? this.assetsLoader.assets.web_forms_css : ''
-      this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, this.assetsLoader.assets.web_forms_common_wrapper)
-      helpers.appendHTML(this.el, `<style type="text/css">${css}</style>`)
-      this.elRibbons = this.el.querySelector('.mkz-js-ribbons')
-      this.elWebForms = this.el.querySelector('.mkz-js-wfs')
-    }
+    const css = store.assets.web_forms_css || ''
+    this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, store.assets.web_forms_common_wrapper)
+    helpers.appendHTML(this.el, `<style type="text/css">${css}</style>`)
+    this.elRibbons = this.el.querySelector('.mkz-js-ribbons')
+    this.elWebForms = this.el.querySelector('.mkz-js-wfs')
   }
   async renderRibbons (webForms) {
-    if (!this.assetsLoader.assets) return false
+    if (!store.assets) return false
 
-    const html = await liquid.parseAndRender(this.assetsLoader.assets.web_forms_ribbons_wrapper, {
+    const html = await liquid.parseAndRender(store.assets.web_forms_ribbons_wrapper, {
       web_forms: Object.values(webForms),
       ribbon_types: ['aside', 'round']
     })

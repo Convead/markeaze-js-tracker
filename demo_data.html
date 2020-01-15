@@ -112,12 +112,27 @@ const ribbonsWrapper = `{% for ribbon_type in ribbon_types %}\n  <div class=\"mk
         "title_color": "#fff",
         "agent_avatar": true,
         "agent_msg_bg": "#E7FEEA",
-        "client_msg_bg": "#FFFFFF",
+        "agent_msg_color": "#000000",
+        "client_msg_bg": "#E7FEEA",
+        "client_msg_color": "#000000",
         "markeaze_link": true,
         "agent_sound_path": "https://markeaze-themes.s3.eu-central-1.amazonaws.com/default/livechat/sounds/new_message",
         "client_sound_path": "https://markeaze-themes.s3.eu-central-1.amazonaws.com/default/livechat/sounds/diversity"
       },
       "mobile": {
+        "bar_bg": "#FC4566",
+        "bar_type": "bar",
+        "bar_color": "#fff",
+        "notice_bg": "#7261FF",
+        "notice_text": "NEED HELP?",
+        "bar_position": "r-b",
+        "notice_color": "#fff",
+        "bar_padding_x": "20",
+        "bar_padding_y": "20",
+        "bar_text_online": "We’re here. Let’s chat!",
+        "bar_text_offline": "Leave message"
+      },
+      "desktop": {
         "bar_bg": "#F28E24",
         "bar_type": "bubble",
         "bar_color": "#000",
@@ -130,19 +145,6 @@ const ribbonsWrapper = `{% for ribbon_type in ribbon_types %}\n  <div class=\"mk
         "bar_text_online": "Leave message",
         "notice_icon_url": "https://markeaze-themes.s3.eu-central-1.amazonaws.com/default/livechat/icons/halloween.png",
         "bar_text_offline": "We’re here. Let’s chat!"
-      },
-      "desktop": {
-        "bar_bg": "#FC4566",
-        "bar_type": "bar",
-        "bar_color": "#fff",
-        "notice_bg": "#7261FF",
-        "notice_text": "NEED HELP?",
-        "bar_position": "r-b",
-        "notice_color": "#fff",
-        "bar_padding_x": "20",
-        "bar_padding_y": "20",
-        "bar_text_online": "We’re here. Let’s chat!",
-        "bar_text_offline": "Leave message"
       }
     }
   },

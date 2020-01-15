@@ -72,8 +72,14 @@ mkz(function() {
             <pre>
 mkz('setVisitorInfo', {
   first_name: 'Kong',
-  last_name: 'Qiu'
+  last_name: 'Qiu',
+  client_id: 123
 });</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Clear visitor info<br />
+            <pre>mkz('clearVisitorInfo');</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>

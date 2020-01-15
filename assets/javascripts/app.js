@@ -155,6 +155,10 @@ module.exports = {
       for (let key in info) store.visitor[key] = info[key]
       return store.visitor
     },
+    clearVisitorInfo () {
+      store.visitor = {}
+      return store.visitor
+    },
     getVisitorInfo () {
       return store.visitor
     },

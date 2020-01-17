@@ -21,7 +21,7 @@ module.exports = {
     data.tracker_ver = store.version
     data.tracker_name = store.trackerName
     data.performed_at = Math.floor(Date.now() / 1000)
-    if (store.assetsVersion) data.assets_version = store.assetsVersion
+    if (store.assets) data.assets_version = store.assets.version
 
     // Visitor
     data.visitor = visitor || Object.assign({}, store.visitor ? store.visitor : {})

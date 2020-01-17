@@ -3,8 +3,9 @@ const toSnakeCase = require('./libs/toSnakeCase')
 const log = require('./libs/log')
 const Request = require('./libs/request')
 const robotDetection = require('./libs/robot_detection.coffee')
-const AssetsLoader = require('./assetsLoader').default
 const store = require('./store')
+const AssetsLoader = require('./assetsLoader').default
+const assetsLoader = new AssetsLoader()
 
 module.exports = {
   send (eventName, properties, callback, visitor = null) {
@@ -53,10 +54,7 @@ module.exports = {
   },
   assets (data, response) {
     if (data.type !== 'page_view') return false
-
-    const assetsLoader = new AssetsLoader()
-    assetsLoader.load(response.assets)
-
+    assetsLoader.parse(response.assets)
     if (store.assets) eEmit.emit('assets', store.assets)
   }
 }

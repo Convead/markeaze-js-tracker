@@ -12,7 +12,7 @@ export default class AssetsLoader {
       catch {}
     }
   }
-  load (assets) {
+  parse (assets) {
     if (!assets) return false
 
     if (!store.assets || store.assets.version !== assets.version) {

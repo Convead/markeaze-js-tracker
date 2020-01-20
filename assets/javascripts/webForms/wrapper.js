@@ -11,7 +11,7 @@ export default class Wrapper {
     this.el = null
   }
   async render () {
-    if (this.el || !store.assets) return
+    if (this.el || !store.assets || !store.assets.web_forms_common_wrapper) return false
 
     const css = store.assets.web_forms_css || ''
     this.el = document.querySelector('.mkz-js-main') || helpers.appendHTML(this.elContainer, store.assets.web_forms_common_wrapper)
@@ -20,7 +20,7 @@ export default class Wrapper {
     this.elWebForms = this.el.querySelector('.mkz-js-wfs')
   }
   async renderRibbons (webForms) {
-    if (!store.assets) return false
+    if (!store.assets || !store.assets.web_forms_ribbons_wrapper) return false
 
     const html = await liquid.parseAndRender(store.assets.web_forms_ribbons_wrapper, {
       web_forms: Object.values(webForms),

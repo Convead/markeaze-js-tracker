@@ -1,5 +1,5 @@
 module.exports = {
-  version: '1.1.4',
+  version: '1.1.5',
   plugins: {
     chat: {
       url: 'https://cdn.jsdelivr.net/gh/markeaze/markeaze-js-chat-client@latest/dist/mkz-chat-client.js',

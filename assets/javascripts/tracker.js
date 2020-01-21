@@ -45,7 +45,8 @@ module.exports = {
           if (callback) callback(data, response)
         },
         (xhr) => {
-          if (xhr.status == 403 || xhr.status == 0) robotDetection.detect()
+          if (xhr.status === 200) return
+          if (xhr.status === 403 || xhr.status === 0) robotDetection.detect()
           log.push('tracker', 'fail', xhr)
         }
       )

@@ -1,5 +1,6 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin  = require('html-webpack-plugin')
+const WebpackAutoInject = require('webpack-auto-inject-version')
 
 module.exports = {
   entry: './app.js',
@@ -18,6 +19,12 @@ module.exports = {
       filename: 'demo_data.html',
       template: './demo_data.html',
       inject: false
+    }),
+    new WebpackAutoInject({
+      components: {
+        AutoIncreaseVersion: false,
+        InjectAsComment: false
+      }
     })
   ],
   module: {
@@ -59,7 +66,7 @@ module.exports = {
     }]
   },
   optimization: {
-    minimize: false,
+    minimize: true,
     sideEffects: false
   },
   devServer: {

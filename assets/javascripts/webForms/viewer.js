@@ -94,7 +94,7 @@ module.exports = {
     for (const uid in this.webForms) {
       const webForm = this.webForms[uid]
       if (webForm.lossDetection) webForm.lossDetection.abort()
-      webForm.api.destroy()
+      if (webForm.api) webForm.api.destroy()
     }
     this.webForms = {}
   },

@@ -232,6 +232,7 @@ module.exports = {
     properties.page = properties.page || {}
     properties.page.url = properties.page.url || window.location.href
     properties.page.title = properties.page.title || document.title
+    if (!properties.page.title) delete properties.page.title
     if (properties.page.referrer) properties.page.referrer = document.referrer
     return properties
   },

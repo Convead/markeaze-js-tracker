@@ -12,6 +12,7 @@
         mkz(function() {
           this.eventSubscribe('track.before', function(data) {
             var el = document.getElementById('log');
+            if (!el) return false;
             var html = (new Date()) + '<br />' + '<pre class="fade">' + JSON.stringify(data).replace(/([^\\]",|\{|\})/ig, '$1\n')+'</pre>';
             el.insertAdjacentHTML('afterbegin', html);
           });

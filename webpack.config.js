@@ -71,7 +71,7 @@ module.exports = {
   },
   devServer: {
     port: 8084,
-    setup(app) {
+    before(app) {
       app.post('*', (req, res) => {
         res.header('Access-Control-Allow-Origin', '*')
         res.redirect(req.originalUrl)

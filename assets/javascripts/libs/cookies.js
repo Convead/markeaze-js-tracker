@@ -13,12 +13,15 @@
             Cookies.get(key) : Cookies.set(key, value, options);
     };
 
+    var ssl = window.location.protocol.toLowerCase() === 'https:';
+
     // Allows for setter injection in unit tests
     Cookies._document = document;
     Cookies._navigator = navigator;
 
     Cookies.defaults = {
-        path: '/'
+        path: '/',
+        same_site: ssl ? 'None' : 'Lax'
     };
 
     Cookies.get = function (key) {
@@ -43,11 +46,15 @@
     };
 
     Cookies._getExtendedOptions = function (options) {
+        var same_site = options && options.same_site || Cookies.defaults.same_site;
+        var same_siteNone = same_site.toLowerCase() === 'none';
+        var defaultSecure = (same_siteNone && ssl) || undefined;
         return {
             path: options && options.path || Cookies.defaults.path,
             domain: options && options.domain || Cookies.defaults.domain,
             expires: options && options.expires || Cookies.defaults.expires,
-            secure: options && options.secure !== undefined ?  options.secure : Cookies.defaults.secure
+            secure: options && options.secure !== undefined ? options.secure : defaultSecure,
+            same_site: same_site
         };
     };
 
@@ -79,7 +86,8 @@
         cookieString += options.path ? ';path=' + options.path : '';
         cookieString += options.domain ? ';domain=' + options.domain : '';
         cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-        cookieString += options.secure ? ';secure' : '';
+        cookieString += options.secure ? ';Secure' : '';
+        cookieString += options.same_site ? ';SameSite=' + options.same_site : '';
 
         return cookieString;
     };

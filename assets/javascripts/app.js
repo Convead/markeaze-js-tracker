@@ -239,8 +239,6 @@ module.exports = {
   offerNormalizer (offer) {
     if (offer.variant_id) offer.variant_id = String(offer.variant_id)
     else this.requiredFieldThrow('offer.variant_id')
-    if (offer.price) offer.price = parseFloat(offer.price)
-    else this.requiredFieldThrow('offer.price')
     return offer
   },
   itemNormalizer (item) {

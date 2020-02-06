@@ -256,6 +256,7 @@ module.exports = {
     return category
   },
   orderNormalizer (order) {
+    if (order.external_id) order.external_id = parseInt(order.external_id)
     if (order.order_uid) order.order_uid = String(order.order_uid)
     else this.requiredFieldThrow('order.order_uid')
     if (order.total) order.total = parseFloat(order.total)

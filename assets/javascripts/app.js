@@ -179,11 +179,12 @@ module.exports = {
       // Plugin can be added only one time
       if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'object' || typeof plugin.create !== 'function') return
 
-      let options = {}
+      let settings = {}
+
       if (name === 'chat') {
-        const settings = store.assets.chat_settings
+        settings = store.assets.chat_settings
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        options = Object.assign({}, settings.common, settings[device])
+        settings.appearance = Object.assign({}, settings.appearance.common, settings.appearance[device])
       }
 
       store.plugins[name].created = true
@@ -192,7 +193,7 @@ module.exports = {
       store.plugins[name].version = plugin.version
       store.plugins[name].app.store = this.store
       store.plugins[name].app.libs = this.libs
-      store.plugins[name].app.create(store.assets.locale, options)
+      store.plugins[name].app.create(store.assets.locale, settings)
       return store.plugins[name]
     },
     destroyPlugin () {
@@ -221,7 +222,7 @@ module.exports = {
   },
   includePlugins () {
     const chatSettings = store.assets.chat_settings
-    store.plugins.chat.enabled = chatSettings && chatSettings.common.enabled
+    store.plugins.chat.enabled = chatSettings && chatSettings.appearance.common.enabled
 
     for (const k in store.plugins) {
       if (store.plugins[k].enabled) this.includeScript(store.plugins[k].url)

@@ -185,7 +185,8 @@ module.exports = {
       if (name === 'chat') {
         const chatSettings = store.assets.chat_settings
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        settings.appearance = Object.assign(chatSettings, chatSettings.appearance.common, chatSettings.appearance[device])
+        settings = Object.assign({}, chatSettings)
+        settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
       }
 
       if (plugin.created) this.methods.destroyPlugin.apply(this, [null, name])

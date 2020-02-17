@@ -45,7 +45,7 @@ module.exports = {
     }
   
     // Plugins can only be included during initialization
-    eEmit.subscribe('assets', () => { self.includePlugins() })
+    eEmit.subscribe('assets', () => self.includePlugins.apply(self))
 
     webFormsViewer.init()
 
@@ -175,33 +175,55 @@ module.exports = {
     },
     initPlugin () {
       const name = arguments[1]
-      const plugin = arguments[2]
-      // Plugin can be added only one time
-      if (!store.plugins[name] || store.plugins[name].created || typeof plugin !== 'object' || typeof plugin.create !== 'function') return
+      const app = arguments[2]
+      const plugin = store.plugins[name]
+
+      if (!app && !plugin) return
 
       let settings = {}
 
       if (name === 'chat') {
-        settings = store.assets.chat_settings
+        const chatSettings = store.assets.chat_settings
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        settings.appearance = Object.assign({}, settings.appearance.common, settings.appearance[device])
+        settings.appearance = Object.assign(chatSettings, chatSettings.appearance.common, chatSettings.appearance[device])
       }
 
-      store.plugins[name].created = true
-      // Class in plugins cannot be used because link to store variables is lost
-      store.plugins[name].app = plugin
-      store.plugins[name].version = plugin.version
-      store.plugins[name].app.store = this.store
-      store.plugins[name].app.libs = this.libs
-      store.plugins[name].app.create(store.assets.locale, settings)
-      return store.plugins[name]
+      if (plugin.created) this.methods.destroyPlugin.apply(this, [null, name])
+
+      if (app) {
+        plugin.app = app
+        plugin.version = app.version
+        plugin.app.store = this.store
+        plugin.app.libs = this.libs
+      }
+
+      plugin.created = true
+      plugin.app.create(store.assets.locale, settings)
+      return plugin
+    },
+    applyPlugin () {
+      const name = arguments[1]
+      const plugin = store.plugins[name]
+
+      if (name === 'chat') {
+        const chatSettings = store.assets.chat_settings
+        store.plugins.chat.enabled = chatSettings && chatSettings.appearance.common.enabled
+      }
+
+      if (!plugin.enabled) return this.methods.destroyPlugin.apply(this, [null, name])
+
+      if (plugin.created) this.methods.initPlugin.apply(this, [null, name])
+      else this.includeScript(plugin.url)
     },
     destroyPlugin () {
       const name = arguments[1]
-      if (!store.plugins[name] || !store.plugins[name].created) return
-      store.plugins[name].created = false
-      store.plugins[name].app.destroy()
-      return store.plugins[name]
+      const plugin = store.plugins[name]
+
+      if (!plugin || !plugin.created) return
+
+      plugin.created = false
+      plugin.app.destroy()
+      return plugin
     },
     versionPlugin () {
       const name = arguments[1]
@@ -221,12 +243,7 @@ module.exports = {
     x.parentNode.insertBefore(s, x)
   },
   includePlugins () {
-    const chatSettings = store.assets.chat_settings
-    store.plugins.chat.enabled = chatSettings && chatSettings.appearance.common.enabled
-
-    for (const k in store.plugins) {
-      if (store.plugins[k].enabled) this.includeScript(store.plugins[k].url)
-    }
+    for (const k in store.plugins) this.methods.applyPlugin.apply(this, [null, k])
   },
   pageData (properties) {
     properties = properties || {}

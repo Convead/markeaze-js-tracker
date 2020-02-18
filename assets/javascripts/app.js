@@ -122,10 +122,6 @@ module.exports = {
       const properties = this.orderNormalizer(arguments[1])
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
-    trackOrderUpdate () {
-      const properties = this.orderUpdateNormalizer(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
-    },
     trackVisitorUpdate () {
       this.methods.setVisitorInfo(null, arguments[1])
       return this.track(arguments[0], {})
@@ -285,16 +281,6 @@ module.exports = {
     if (order.total) order.total = parseFloat(order.total)
     else this.requiredFieldThrow('order.total')
     if (order.trigger_value) order.trigger_value = String(order.trigger_value)
-    if (order.tracking_number) order.tracking_number = String(order.tracking_number)
-    if (order.fulfillment_status) order.fulfillment_status = String(order.fulfillment_status)
-    if (order.financial_status) order.financial_status = String(order.financial_status)
-    return order
-  },
-  orderUpdateNormalizer (order) {
-    if (order.external_id) order.external_id = parseInt(order.external_id)
-    if (order.order_uid) order.order_uid = String(order.order_uid)
-    else this.requiredFieldThrow('order.order_uid')
-    if (order.total) order.total = parseFloat(order.total)
     if (order.tracking_number) order.tracking_number = String(order.tracking_number)
     if (order.fulfillment_status) order.fulfillment_status = String(order.fulfillment_status)
     if (order.financial_status) order.financial_status = String(order.financial_status)

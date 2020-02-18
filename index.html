@@ -182,7 +182,31 @@ mkz('trackOrderCreate', {
       qnt: 2.0,
       price: 100.0
     }
-  ]
+  ],
+  trigger_value: 'some-trigger',
+  tracking_number: '123',
+  fulfillment_status: 'delivered',
+  financial_status: 'paid'
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Order update<br />
+            <pre>
+mkz('trackOrderUpdate', {
+  order_uid: '123',
+  external_id: 1234,
+  total: 200.0,
+  items: [
+    {
+      variant_id: 'bb1',
+      qnt: 2.0,
+      price: 100.0
+    }
+  ],
+  tracking_number: '123',
+  fulfillment_status: 'delivered',
+  financial_status: 'paid'
 });</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>

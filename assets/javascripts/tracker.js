@@ -31,7 +31,7 @@ module.exports = {
     // Event properties
     if (properties) data.properties = properties
 
-    eEmit.emit('track.before', data);
+    eEmit.emit('track.before', data)
     log.push('tracker', data);
 
     if (store.trackEnabled) {

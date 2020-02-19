@@ -6,6 +6,7 @@ const parseUrlParams = require('./libs/parseUrlParams')
 const baseDomain = require('./libs/baseDomain.coffee')
 const tracker = require('./tracker')
 const webFormsViewer = require('./webForms/viewer')
+const autoMsg = require('./autoMsg')
 const Pinger = require('./libs/pinger.coffee')
 const robotDetection = require('./libs/robot_detection.coffee')
 const helpers = require('./helpers')
@@ -18,12 +19,13 @@ let store = require('./store')
 module.exports = {
   store: store,
   libs: {
-    log: log,
-    helpers: helpers,
-    airbrake: airbrake,
-    domEvent: domEvent,
-    Request: Request,
-    Liquid: Liquid
+    log,
+    helpers,
+    airbrake,
+    domEvent,
+    Request,
+    Liquid,
+    eEmit
   },
   eventSubscribe (key, fn) {
     eEmit.subscribe(key, fn)
@@ -48,6 +50,7 @@ module.exports = {
     eEmit.subscribe('assets', () => self.includePlugins.apply(self))
 
     webFormsViewer.init()
+    autoMsg.init()
 
     for (const fields of queue) {
       this.pendingSend.apply(this, fields)
@@ -147,6 +150,10 @@ module.exports = {
       const properties = this.pageData(arguments[1])
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
+    trackAutoMessageReply () {
+      const properties = this.pageData(arguments[1])
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
     debug () {
       store.debugMode = arguments[1]
     },
@@ -200,6 +207,9 @@ module.exports = {
 
       plugin.created = true
       plugin.app.create(store.assets.locale, settings)
+
+      eEmit.emit(`plugin.${name}.${app ? 'created' : 'updated'}`)
+
       return plugin
     },
     applyPlugin () {
@@ -224,6 +234,9 @@ module.exports = {
 
       plugin.created = false
       plugin.app.destroy()
+
+      eEmit.emit(`plugin.${name}.destroyed`)
+
       return plugin
     },
     versionPlugin () {

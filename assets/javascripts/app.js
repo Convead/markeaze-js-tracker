@@ -293,10 +293,9 @@ module.exports = {
     else this.requiredFieldThrow('order.order_uid')
     if (order.total) order.total = parseFloat(order.total)
     else this.requiredFieldThrow('order.total')
-    if (order.trigger_value) order.trigger_value = String(order.trigger_value)
-    if (order.tracking_number) order.tracking_number = String(order.tracking_number)
-    if (order.fulfillment_status) order.fulfillment_status = String(order.fulfillment_status)
-    if (order.financial_status) order.financial_status = String(order.financial_status)
+    for (const field of ['trigger_value', 'tracking_number', 'fulfillment_status', 'financial_status', 'payment_method', 'shipping_method']) {
+      if (order[field]) order[field] = String(order[field])
+    }
     return order
   },
   requiredFieldThrow (field) {

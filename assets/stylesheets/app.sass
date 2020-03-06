@@ -227,15 +227,16 @@ $response_width: 800px
       background-color: #eee
       z-index: 10001
 
-  .mkz-wf__invalid:not(.mkz__select-input)
-    outline: 1px solid red
-
   .mkz-wf__invalid
     &, &::placeholder
       color: red !important
+      box-shadow: 0 0 1px 1px red !important
+
+    &.mkz__select-input
+      box-shadow: none !important
 
   .mkz__select.mkz-wf__invalid-wrap
-    outline: 1px solid red
+    box-shadow: 0 0 1px 1px red !important
 
   .mkz-wf__brand
     display: block

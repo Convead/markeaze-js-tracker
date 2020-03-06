@@ -14,6 +14,8 @@ const airbrake = require('./libs/airbrake')
 const domEvent = require('./libs/domEvent')
 const Request = require('./libs/request')
 const Liquid = require('./libs/liquid.min')
+const Validation = require('./libs/simpleValidation.coffee')
+const FormToObject = require('./libs/formToObject')
 let store = require('./store')
 
 module.exports = {
@@ -25,7 +27,9 @@ module.exports = {
     domEvent,
     Request,
     Liquid,
-    eEmit
+    eEmit,
+    Validation,
+    FormToObject
   },
   eventSubscribe (key, fn) {
     eEmit.subscribe(key, fn)

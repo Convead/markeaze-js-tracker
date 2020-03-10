@@ -1,8 +1,8 @@
 module.exports = class SimpleValidation
   constructor: (form, options = {}) ->
     @form = form
-    @invalidClassName = 'mkz-wf__invalid'
-    @invalidParentClassName = options.requiredParentClassName || 'mkz-wf__invalid-wrap'
+    @invalidClassName = options.invalidClassName || 'mkz-wf__invalid'
+    @invalidParentClassName = options.invalidParentClassName || 'mkz-wf__invalid-wrap'
 
   valid: ->
     controls = @form.querySelectorAll('input, select, textarea')

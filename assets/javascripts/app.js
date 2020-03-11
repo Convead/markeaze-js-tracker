@@ -154,6 +154,10 @@ module.exports = {
       const properties = this.pageData(arguments[1])
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
+    trackAutoMessageShow () {
+      const properties = this.pageData(arguments[1])
+      return this.track(arguments[0], properties, arguments[2], arguments[3])
+    },
     trackAutoMessageReply () {
       const properties = this.pageData(arguments[1])
       return this.track(arguments[0], properties, arguments[2], arguments[3])

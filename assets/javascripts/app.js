@@ -247,7 +247,7 @@ module.exports = {
 
       return plugin
     },
-    versionPlugin () {
+    pluginVersion () {
       const name = arguments[1]
       if (!store.plugins[name] || !store.plugins[name].created) return
       return store.plugins[name].version

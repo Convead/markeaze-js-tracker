@@ -10,37 +10,36 @@ module.exports = class SimpleValidation
       valid = true
 
       for control in controls
-        
-        if typeof control.value != 'undefined'
 
+        validItem = true
+
+        if typeof control.value != 'undefined'
           is_required = control.hasAttribute('required')
-          
-          if control.type == 'checkbox' && is_required
-            if control.checked
-              @_removeInvalidClass(control, @invalidClassName)
-              @_removeInvalidClass(control, @invalidParentClassName)
-            else
-              @_addInvalidClass(control, @invalidClassName)
-              @_addInvalidClass(control.parentNode, @invalidParentClassName)
-              valid = false
+
+          if control.type.toLocaleLowerCase() == 'checkbox' && is_required
+            validItem = control.checked
           else
             if control.tagName.toLocaleLowerCase() == 'select' && is_required
-              if is_required && !control.value.trim()
-                @_addInvalidClass(control, @invalidClassName)
-                @_addInvalidClass(control.parentNode, @invalidParentClassName)
-                valid = false
-              else
-                @_removeInvalidClass(control, @invalidClassName)
-                @_removeInvalidClass(control, @invalidParentClassName)
+              validItem = control.value
             else
-              r = /^[^ @]+@[^ @]+\.[^ @]+$/i
-              if (is_required && !control.value.trim()) || (control.type == 'email' && control.value != '' && !r.test(control.value))
-                @_addInvalidClass(control, @invalidClassName)
-                @_addInvalidClass(control.parentNode, @invalidParentClassName)
-                valid = false
+              if !control.value.trim() && is_required
+                console.log(control, 'input')
+                validItem = control.value.trim()
               else
-                @_removeInvalidClass(control, @invalidClassName)
-                @_removeInvalidClass(control, @invalidParentClassName)
+                if control.type.toLocaleLowerCase() == 'email'
+                  r = /^[^ @]+@[^ @]+\.[^ @]+$/i
+                  validItem = r.test(control.value || '')
+                if control.type == 'date'
+                  r = /^(19|20|21)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/i
+                  validItem = r.test(control.value || '')
+
+        if validItem
+          @_removeInvalidClass(control, @invalidClassName)
+          @_removeInvalidClass(control, @invalidParentClassName)
+        else
+          @_addInvalidClass(control, @invalidClassName)
+          @_addInvalidClass(control.parentNode, @invalidParentClassName)
+          valid = false
 
       valid
     else

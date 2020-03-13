@@ -1,6 +1,7 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin  = require('html-webpack-plugin')
 const WebpackAutoInject = require('webpack-auto-inject-version')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
   entry: './app.js',
@@ -14,6 +15,18 @@ module.exports = {
           comments: false
         }
       }
+    }),
+    new Dotenv({
+      path: './.env',
+      safe: true,
+      systemvars: true,
+      silent: true,
+      defaults: false
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: './index.html',
+      inject: false
     }),
     new HtmlWebpackPlugin({
       filename: 'demo_data.html',

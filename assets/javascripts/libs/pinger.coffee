@@ -40,7 +40,7 @@ module.exports = class Pinger
     @blured()
 
     (new Request).send(
-      '//' + store.trackerEndpoint + '/ping'
+      'https://' + store.trackerEndpoint + '/ping'
       {
         app_key: store.appKey
         device_uid: store.uid

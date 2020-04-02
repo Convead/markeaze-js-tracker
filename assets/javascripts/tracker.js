@@ -36,7 +36,7 @@ module.exports = {
 
     if (store.trackEnabled) {
       (new Request).send(
-        store.trackerCustomUrl || `//${store.trackerEndpoint}/event`,
+        store.trackerCustomUrl || `https://${store.trackerEndpoint}/event`,
         data,
         (response) => {
           this.assets(data, response)

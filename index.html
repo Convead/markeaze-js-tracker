@@ -96,6 +96,33 @@ mkz('subscribe', 'url.change', function(url) {
 
         </ul>
 
+        <h2>Plugins</h2>
+
+        <ul>
+
+          <li>
+            Set plugins settings
+            <pre>
+mkz('setPluginSettings', 'chat', {
+  beaconState: 'disabled' // Values: hidden/disabled/enabled
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Emit plugin method
+            <pre>
+mkz('emitPlugin', 'chat', 'show');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+          <li>
+            Get plugin version
+            <pre>
+mkz('chat', 'pluginVersion');</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+
+        </ul>
+
       </div>
       <div class="coll">
 

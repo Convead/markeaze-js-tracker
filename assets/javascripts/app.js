@@ -10,7 +10,7 @@ const autoMsg = require('./autoMsg')
 const Pinger = require('./libs/pinger.coffee')
 const robotDetection = require('./libs/robot_detection.coffee')
 const helpers = require('./helpers')
-const airbrake = require('./libs/airbrake')
+const notify = require('./libs/notify')
 const domEvent = require('./libs/domEvent')
 const Request = require('./libs/request')
 const Liquid = require('./libs/liquid.min')
@@ -23,7 +23,7 @@ module.exports = {
   libs: {
     log,
     helpers,
-    airbrake,
+    notify,
     domEvent,
     Request,
     Liquid,
@@ -49,7 +49,7 @@ module.exports = {
     window[nameVariable] = function() {
       return self.pendingSend.apply(self, arguments)
     }
-  
+
     // Plugins can only be included during initialization
     eEmit.subscribe('assets', () => self.includePlugins.apply(self))
 
@@ -64,26 +64,30 @@ module.exports = {
   methods: {
     appKey () {
       const value = arguments[1]
-      if (value && value.indexOf('@') > 0 && value.indexOf('@') < value.length - 1) {
-        store.appKey = value
-        store.region = value.split('@').pop()
-        if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
-        if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
-        // Set uid cookie
-        const domain = (new baseDomain())
-        store.uid = store.uid || cookies.get(store.cookieUid) || uuid.get(16)
-        cookies.set(store.cookieUid, store.uid, { expires: 31536000, domain: domain.get() })
-        // Call pending task
-        for (let fields of this.pendingTasks) {
-          this.send.apply(this, fields)
-        }
-        this.pendingTasks = []
+      if (!value || value.indexOf('@') === -1) return
+
+      store.appKey = value
+      store.region = value.split('@').pop()
+      if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
+      if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
+      // Set uid cookie
+      const domain = (new baseDomain())
+      store.uid = store.uid || cookies.get(store.cookieUid) || uuid.get(16)
+      cookies.set(store.cookieUid, store.uid, { expires: 31536000, domain: domain.get() })
+      // Call pending task
+      for (let fields of this.pendingTasks) {
+        this.send.apply(this, fields)
+      }
+      this.pendingTasks = []
+
+      // Delay to start the callback last in the event loop
+      setTimeout(() => {
         // Track change url
         this.changeUrl()
         domEvent.add(window, 'pushState', () => { this.changeUrl() })
         domEvent.add(window, 'replaceState', () => { this.changeUrl() })
         domEvent.add(window, 'hashchange', () => { this.changeUrl() })
-      }
+      }, 0)
     },
     webFormPreviewUrl () {
       if (arguments[1]) store.webFormPreview = arguments[1]
@@ -195,12 +199,12 @@ module.exports = {
 
       if (!app && !plugin) return
 
-      let settings = {}
+      let settings = plugin.settings || {}
 
       if (name === 'chat') {
         const chatSettings = store.assets.chat_settings
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        settings = Object.assign({}, chatSettings)
+        settings = Object.assign({}, settings, chatSettings)
         settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
       }
 
@@ -226,7 +230,7 @@ module.exports = {
 
       if (name === 'chat') {
         const chatSettings = store.assets.chat_settings
-        store.plugins.chat.enabled = chatSettings && chatSettings.appearance.common.enabled
+        plugin.enabled = chatSettings && chatSettings.appearance.common.enabled
       }
 
       if (!plugin.enabled) return this.methods.destroyPlugin.apply(this, [null, name])
@@ -246,6 +250,22 @@ module.exports = {
       eEmit.emit(`plugin.${name}.destroyed`)
 
       return plugin
+    },
+    setPluginSettings () {
+      const name = arguments[1]
+      const plugin = store.plugins[name]
+
+      if (!plugin) return
+
+      plugin.settings = arguments[2]
+    },
+    emitPlugin () {
+      const name = arguments[1]
+      const plugin = store.plugins[name]
+
+      if (!plugin) return
+
+      eEmit.emit(`plugin.${name}.${arguments[2]}`, arguments[3])
     },
     pluginVersion () {
       const name = arguments[1]

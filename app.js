@@ -1,3 +1,5 @@
 import '@babel/polyfill'
 import app from './assets/javascripts/app'
-app.ready('mkz')
+import notify from './assets/javascripts/libs/notify'
+
+notify.call(() => app.ready('mkz'))

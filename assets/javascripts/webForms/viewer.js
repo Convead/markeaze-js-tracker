@@ -2,7 +2,7 @@ const eEmit = require('../libs/eEmit')
 const ImagesPreloader = require('../libs/imagesPreloader.coffee')
 const VisitorLossDetection = require('../libs/visitorLossDetection.coffee')
 const WebForm = require('./webForm').default
-const airbrake = require('../libs/airbrake')
+const notify = require('../libs/notify')
 const Wrapper = require('./wrapper').default
 const Request = require('../libs/request')
 const store = require('../store')
@@ -104,13 +104,7 @@ module.exports = {
     if (this.exist(options)) {
       if (options.can_be_hidden) options.is_hidden = true
       else {
-        airbrake.send(
-            'Error! Invalid webForm display script.',
-            'viewer.js',
-            82,
-            'add',
-            {web_form_uid: options.uid}
-          )
+        notify.fetchError(new Error(`Error! Invalid webForm display script with uid=${options.uid}`))
         return false
       }
     }

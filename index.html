@@ -4,28 +4,30 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <!-- Markeaze -->
       <script>
-      (function(w,d,c,h){w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments)};var s = d.createElement('script');s.type = 'text/javascript';s.async = true;s.charset = 'utf-8';s.src = h;var x = d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);})(window,document,'mkz','mkz.js');
 
-        mkz('debug', true);
-        mkz('updateStore', {trackerCustomUrl: '/demo_data.html'})
+(function(w,d,c,h){w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments)};var s = d.createElement('script');s.type = 'text/javascript';s.async = true;s.charset = 'utf-8';s.src = h;var x = d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);})(window,document,'mkz','mkz.js');
 
-        mkz(function() {
-          this.eventSubscribe('track.before', function(data) {
-            var el = document.getElementById('log');
-            if (!el) return false;
-            var html = (new Date()) + '<br />' + '<pre class="fade">' + JSON.stringify(data).replace(/([^\\]",|\{|\})/ig, '$1\n')+'</pre>';
-            el.insertAdjacentHTML('afterbegin', html);
-          });
-        });
+mkz('debug', true);
+mkz('updateStore', {trackerCustomUrl: '/demo_data.html'})
 
-        mkz('appKey', '<%= process.env.APP_KEY %>');
+mkz('watch', 'track.before', function(data) {
+  var el = document.getElementById('log');
+  if (!el) return false;
+  var html = (new Date()) + '<br />' + '<pre class="fade">' + JSON.stringify(data).replace(/([^\\]",|\{|\})/ig, '$1\n')+'</pre>';
+  el.insertAdjacentHTML('afterbegin', html);
+});
 
-        mkz('trackPageView', {
-          page: {
-            url: 'http://eqsol.ru/',
-            title: 'Test page'
-          }
-        });
+mkz('appKey', '<%= process.env.APP_KEY %>');
+
+mkz('watch', 'url.change', function(url) {
+  mkz('trackPageView', {
+    page: {
+      url: 'http://eqsol.ru/',
+      title: 'Test page'
+    }
+  });
+});
+
       </script>
       <!-- /Markeaze -->
   </head>
@@ -83,17 +85,6 @@ mkz('setVisitorInfo', {
             <pre>mkz('clearVisitorInfo');</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
-          <li>
-            Subscribe to mkz-js callbacks<br />
-            Avaliable callbacks: <i>url.change</i>, <i>track.before</i>, <i>track.after</i><br />
-            <pre>
-mkz('subscribe', 'url.change', function(url) {
-  mkz('trackPageView');
-  console.log('Change url', url);
-});</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
-
         </ul>
 
         <h2>Plugins</h2>
@@ -123,6 +114,30 @@ mkz('chat', 'pluginVersion');</pre>
 
         </ul>
 
+        <h2>Other</h2>
+
+        <ul>
+          <li>
+            Callbacks watch:
+            <i>url.change</i>,
+            <i>track.before</i>,
+            <i>track.after</i>,
+            <i>plugin.chat.created</i>,
+            <i>plugin.chat.updated</i>,
+            <i>plugin.chat.destroyed</i>,
+            <i>plugin.chat.show</i>,
+            <i>plugin.chat.hide</i>,
+            ...<br />
+            <pre>
+mkz('watch', 'url.change', function(url) {
+  mkz('trackPageView');
+  console.log('Change url', url);
+});</pre>
+            <button onclick="bindScript(this);">Send</button>
+          </li>
+
+        </ul>
+
       </div>
       <div class="coll">
 
@@ -140,23 +155,21 @@ mkz('chat', 'pluginVersion');</pre>
           </li>
           <li>
             Category view<br />
-            <pre>mkz('trackPageView', {
-  category: {
-    uid: 1
-  }
-});</pre>
+            <pre>mkz('setCategoryView', {
+  uid: 1
+});
+mkz('trackPageView');</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>
             Offer view<br />
-            <pre>mkz('trackPageView', {
-  offer: {
-    variant_id: 'bb1',
-    price: 100.0,
-    name: 'Product',
-    main_image_url: 'http://site.com'
-  }
-});</pre>
+            <pre>mkz('setOfferView', {
+  variant_id: 'bb1',
+  price: 100.0,
+  name: 'Product',
+  main_image_url: 'http://site.com'
+});
+mkz('trackPageView');</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>
           <li>

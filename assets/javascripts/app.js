@@ -31,10 +31,8 @@ module.exports = {
     Validation,
     FormToObject
   },
-  eventSubscribe (key, fn) {
-    eEmit.subscribe(key, fn)
-  },
   pendingTasks: [],
+  pageViewProperties: {},
   ready (nameVariable) {
     // Abort if object is undefined
     if (!window[nameVariable]) return false
@@ -96,9 +94,10 @@ module.exports = {
       if (arguments[1]) webFormsViewer.preview(arguments[1])
     },
     trackPageView () {
-      const properties = this.pageData(arguments[1])
+      const properties = Object.assign({}, this.pageViewProperties, this.pageData(arguments[1]))
       if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
       if (properties.category) properties.category = this.categoryNormalizer(properties.category)
+      this.pageViewProperties = {}
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
     trackCartUpdate () {
@@ -166,6 +165,12 @@ module.exports = {
       const properties = this.pageData(arguments[1])
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
+    setCategoryView () {
+      this.pageViewProperties.category = this.categoryNormalizer(arguments[1])
+    },
+    setOfferView () {
+      this.pageViewProperties.offer = this.offerNormalizer(arguments[1])
+    },
     debug () {
       store.debugMode = arguments[1]
     },
@@ -181,7 +186,7 @@ module.exports = {
     getVisitorInfo () {
       return store.visitor
     },
-    subscribe () {
+    watch () {
       eEmit.subscribe(arguments[1], arguments[2])
     },
     version () {

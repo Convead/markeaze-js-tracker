@@ -227,13 +227,11 @@ $response_width: 800px
       background-color: #eee
       z-index: 10001
 
-  .mkz-wf__invalid
-    &, &::placeholder
-      color: red !important
-      box-shadow: 0 0 1px 1px red !important
+  .mkz-wf__invalid, .mkz-wf__invalid::placeholder
+    color: red !important
 
-    &.mkz__select-input
-      box-shadow: none !important
+  .mkz-wf__invalid-wrap
+    box-shadow: 0 0 1px 1px red !important
 
   .mkz__select.mkz-wf__invalid-wrap
     box-shadow: 0 0 1px 1px red !important

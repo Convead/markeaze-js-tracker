@@ -1,7 +1,7 @@
-Request = require('../libs/request')
-robotDetection = require('../libs/robot_detection.coffee')
-visibility = require('../libs/visibility.coffee')
-store = require('../store')
+import Request from '../libs/request'
+import store from '../store'
+import robotDetection from '../libs/robot_detection.coffee'
+import visibility from '../libs/visibility.coffee'
 
 module.exports = class Pinger
   constructor: (period) ->

@@ -1,6 +1,6 @@
-const store = require('../store')
+import store from '../store'
 
-module.exports = {
+export default {
   push () {
     // debug mode
     if (store.debugMode == true) {

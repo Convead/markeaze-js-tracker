@@ -1,24 +1,24 @@
-const eEmit = require('./libs/eEmit')
-const cookies = require('./libs/cookies')
-const uuid = require('./libs/uuid')
-const log = require('./libs/log')
-const parseUrlParams = require('./libs/parseUrlParams')
-const baseDomain = require('./libs/baseDomain.coffee')
-const tracker = require('./tracker')
-const webFormsViewer = require('./webForms/viewer')
-const autoMsg = require('./autoMsg')
-const Pinger = require('./libs/pinger.coffee')
-const robotDetection = require('./libs/robot_detection.coffee')
-const helpers = require('./helpers')
-const notify = require('./libs/notify')
-const domEvent = require('./libs/domEvent')
-const Request = require('./libs/request')
-const Liquid = require('./libs/liquid.min')
-const Validation = require('./libs/simpleValidation.coffee')
-const FormToObject = require('./libs/formToObject')
-let store = require('./store')
+import eEmit from './libs/eEmit'
+import cookies from './libs/cookies'
+import uuid from './libs/uuid'
+import log from './libs/log'
+import parseUrlParams from './libs/parseUrlParams'
+import baseDomain from './libs/baseDomain.coffee'
+import tracker from './tracker'
+import webFormsViewer from './webForms/viewer'
+import autoMsg from './autoMsg'
+import Pinger from './libs/pinger.coffee'
+import robotDetection from './libs/robot_detection.coffee'
+import helpers from './helpers'
+import notify from './libs/notify'
+import domEvent from './libs/domEvent'
+import Request from './libs/request'
+import Liquid from './libs/liquid.min'
+import Validation from './libs/simpleValidation.coffee'
+import FormToObject from './libs/formToObject'
+import {default as store, commit as storeCommit} from './store'
 
-module.exports = {
+export default {
   store: store,
   libs: {
     log,
@@ -194,7 +194,9 @@ module.exports = {
     },
     updateStore () {
       if (typeof arguments[1] !== 'object') return
-      store = Object.assign(store, arguments[1])
+
+      const data = arguments[1]
+      for (const key in data) storeCommit(key, data[key])
       return store
     },
     initPlugin () {

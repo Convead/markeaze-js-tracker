@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   CHARS: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
   get (len, radix) {
     let chars = this.CHARS.split('')

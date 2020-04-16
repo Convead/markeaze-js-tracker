@@ -1,7 +1,6 @@
-const eEmit = require('./libs/eEmit')
-const store = require('./store')
+import eEmit from './libs/eEmit'
 
-module.exports = {
+export default {
   items: [],
   chatCreated: false,
   init () {

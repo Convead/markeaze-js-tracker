@@ -1,6 +1,6 @@
-const Animation = require('./libs/animation.coffee')
+import Animation from './libs/animation.coffee'
 
-module.exports = {
+export default {
   removeClass (el, className) {
     if (el.classList) el.classList.remove(className)
     else {

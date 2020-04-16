@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   convert (str) {
     let upperChars = str.match(/([A-Z])/g)
     if (! upperChars) {

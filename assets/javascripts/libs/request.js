@@ -1,6 +1,6 @@
-const store = require('../store')
+import store from '../store'
 
-module.exports = class Request {
+export default class Request {
   constructor () {
   }
   send (url, post, success, fail) {

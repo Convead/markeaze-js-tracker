@@ -1,6 +1,6 @@
 // http://javascript.ru/tutorial/events/crossbrowser
 
-module.exports = {
+const domEvent = {
   guid: 0,
   fixEvent (event) {
     event = event || window.event
@@ -17,9 +17,11 @@ module.exports = {
         event.target = event.srcElement
     }
 
+    /*
     if (!event.relatedTarget && event.fromElement) {
         event.relatedTarget = event.fromElement == event.target ? event.toElement : event.fromElement;
     }
+    */
 
     if ( event.pageX == null && event.clientX != null ) {
         var html = document.documentElement, body = document.body;
@@ -107,3 +109,5 @@ module.exports = {
     }
   }
 }
+
+export default domEvent

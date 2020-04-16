@@ -1,4 +1,4 @@
-domEvent = require('./domEvent')
+import domEvent from './domEvent'
 
 module.exports = class VisitorLossDetection
   status: 'initial'

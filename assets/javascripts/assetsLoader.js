@@ -1,4 +1,4 @@
-const store = require('./store')
+import store from './store'
 
 export default class AssetsLoader {
   constructor () {

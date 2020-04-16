@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   events: {},
   subscribe (eventName, fn) {
     if (!this.events[eventName]) this.events[eventName] = []

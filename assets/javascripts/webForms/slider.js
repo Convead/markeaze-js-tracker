@@ -1,5 +1,5 @@
-const domEvent = require('../libs/domEvent')
-const helpers = require('../helpers')
+import domEvent from '../libs/domEvent'
+import helpers from '../helpers'
 
 export default class Slider {
   constructor () {

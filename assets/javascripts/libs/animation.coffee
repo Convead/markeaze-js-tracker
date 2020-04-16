@@ -1,4 +1,5 @@
 module.exports = class Animation
+
   constructor: (options) ->
     start = new Date; delta = options.delta || 'linear'; delay = options.delay || 10
 

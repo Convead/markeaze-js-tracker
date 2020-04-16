@@ -1,13 +1,14 @@
-const eEmit = require('./libs/eEmit')
-const toSnakeCase = require('./libs/toSnakeCase')
-const log = require('./libs/log')
-const Request = require('./libs/request')
-const robotDetection = require('./libs/robot_detection.coffee')
-const store = require('./store')
-const AssetsLoader = require('./assetsLoader').default
+import eEmit from './libs/eEmit'
+import toSnakeCase from './libs/toSnakeCase'
+import log from './libs/log'
+import Request from './libs/request'
+import robotDetection from './libs/robot_detection.coffee'
+import store from './store'
+import AssetsLoader from './assetsLoader'
+
 const assetsLoader = new AssetsLoader()
 
-module.exports = {
+export default {
   send (eventName, properties, callback, visitor = null) {
 
     if (robotDetection.is_bot() || !store.appKey) {

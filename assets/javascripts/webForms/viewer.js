@@ -1,14 +1,14 @@
-const eEmit = require('../libs/eEmit')
-const ImagesPreloader = require('../libs/imagesPreloader.coffee')
-const VisitorLossDetection = require('../libs/visitorLossDetection.coffee')
-const WebForm = require('./webForm').default
-const notify = require('../libs/notify')
-const Wrapper = require('./wrapper').default
-const Request = require('../libs/request')
-const store = require('../store')
-const helpers = require('../helpers')
+import eEmit from '../libs/eEmit'
+import ImagesPreloader from '../libs/imagesPreloader.coffee'
+import VisitorLossDetection from '../libs/visitorLossDetection.coffee'
+import WebForm from './webForm'
+import notify from '../libs/notify'
+import Wrapper from './wrapper'
+import Request from '../libs/request'
+import {default as store, commit as storeCommit} from '../store'
+import helpers from '../helpers'
 
-module.exports = {
+export default {
   webForms: {},
   sessionListName: 'mkz_hidden_web_forms',
   wrapper: null,
@@ -68,7 +68,7 @@ module.exports = {
     })
   },
   preview (webFormUid) {
-    store.trackEnabled = false
+    storeCommit('trackEnabled', false)
     const xhr = new XMLHttpRequest()
     const url = typeof store.webFormPreview === 'function' ? store.webFormPreview.apply(this, [webFormUid]) : store.webFormPreview
 

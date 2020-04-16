@@ -1,9 +1,10 @@
-const Liquid = require('../libs/liquid.min')
+import Liquid from '../libs/liquid.min'
+import domEvent from '../libs/domEvent'
+import helpers from '../helpers'
+import eEmit from '../libs/eEmit'
+import store from '../store'
+
 const liquid = new Liquid()
-const domEvent = require('../libs/domEvent')
-const helpers = require('../helpers')
-const eEmit = require('../libs/eEmit')
-const store = require('../store')
 
 export default class Wrapper {
   constructor (elContainer) {

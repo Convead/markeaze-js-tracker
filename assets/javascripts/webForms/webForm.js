@@ -1,11 +1,12 @@
-const Liquid = require('../libs/liquid.min')
+import Liquid from '../libs/liquid.min'
+import domEvent from '../libs/domEvent'
+import SimpleValidation from '../libs/simpleValidation.coffee'
+import FormToObject from '../libs/formToObject'
+import helpers from '../helpers'
+import eEmit from '../libs/eEmit'
+import Slider from './slider'
+
 const liquid = new Liquid()
-const domEvent = require('../libs/domEvent')
-const SimpleValidation = require('../libs/simpleValidation.coffee')
-const FormToObject = require('../libs/formToObject')
-const helpers = require('../helpers')
-const eEmit = require('../libs/eEmit')
-const Slider = require('./slider').default
 
 export default class WebForm {
   constructor (options, elContainer) {

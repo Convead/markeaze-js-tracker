@@ -1,5 +1,7 @@
-const store = require('../store')
-const { Notifier } = require('@airbrake/browser')
+import { Notifier } from '@airbrake/browser'
+import store from '../store'
+
+let notify
 
 if (process.env && process.env.NODE_ENV === 'production') {
 
@@ -14,12 +16,14 @@ if (process.env && process.env.NODE_ENV === 'production') {
   })
   // airbrake-js automatically setups window.onerror
   // https://github.com/airbrake/airbrake-js/tree/master/packages/browser#integration
-  module.exports = airbrake
+  notify = airbrake
 
 } else {
 
-  module.exports = {
+  notify = {
     call: (app) => app.apply(window)
   }
 
 }
+
+export default notify

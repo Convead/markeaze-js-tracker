@@ -17,8 +17,6 @@ mkz('watch', 'track.before', function(data) {
   el.insertAdjacentHTML('afterbegin', html);
 });
 
-mkz('appKey', '<%= process.env.APP_KEY %>');
-
 mkz('watch', 'url.change', function(url) {
   mkz('trackPageView', {
     page: {
@@ -28,11 +26,17 @@ mkz('watch', 'url.change', function(url) {
   });
 });
 
+mkz(function() {
+  document.getElementById('version').innerHTML = mkz('version');
+});
+
+mkz('appKey', '<%= process.env.APP_KEY %>');
+
       </script>
       <!-- /Markeaze -->
   </head>
   <body>
-    <h1>Markeaze js tracker</h1>
+    <h1>Markeaze js tracker <span id="version"></span></h1>
 
     <a href="https://github.com/Convead/markeaze-wiki/wiki/Web-Forms" target="_blank">Wiki</a>
     

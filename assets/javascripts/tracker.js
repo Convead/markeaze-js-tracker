@@ -26,7 +26,7 @@ export default {
     if (store.assets) data.assets_version = store.assets.version
 
     // Visitor
-    data.visitor = visitor || Object.assign({}, store.visitor ? store.visitor : {})
+    data.visitor = Object.fromEntries(Object.entries({ ...store.visitor, ...(visitor || {}) }).filter((i) => i[1] !== ''))
     data.visitor.device_uid = store.uid
 
     // Event properties

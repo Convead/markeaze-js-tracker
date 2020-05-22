@@ -15,6 +15,7 @@ module.exports = class SimpleValidation
 
         if typeof control.value != 'undefined'
           is_required = control.hasAttribute('required')
+          is_numeric = control.hasAttribute('numeric')
 
           if control.type.toLocaleLowerCase() == 'checkbox' && is_required
             validItem = control.checked
@@ -23,7 +24,6 @@ module.exports = class SimpleValidation
               validItem = control.value
             else
               if !control.value.trim() && is_required
-                console.log(control, 'input')
                 validItem = control.value.trim()
               else
                 if control.type.toLocaleLowerCase() == 'email'
@@ -32,6 +32,10 @@ module.exports = class SimpleValidation
                 if control.type == 'date'
                   r = /^(19|20|21)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/i
                   validItem = r.test(control.value || '')
+
+              if validItem && is_numeric
+                r = /^\d+\.?\d?$/i
+                validItem = r.test(control.value || '')
 
         if validItem
           @_removeInvalidClass(control, @invalidClassName)

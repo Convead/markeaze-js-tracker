@@ -175,8 +175,8 @@ export default {
       store.debugMode = arguments[1]
     },
     setVisitorInfo () {
-      let info = arguments[1]
-      for (let key in info) store.visitor[key] = info[key]
+      const info = arguments[1]
+      for (const key in info) store.visitor[key] = info[key]
       return store.visitor
     },
     clearVisitorInfo () {

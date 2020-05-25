@@ -22,7 +22,8 @@ module.exports = class SimpleValidation
             if control.tagName.toLocaleLowerCase() == 'select' && is_required
               validItem = control.value
             else
-              if control.value.trim()
+
+              if control.value
 
                 if control.type.toLocaleLowerCase() == 'email'
                   r = /^[^ @]+@[^ @]+\.[^ @]+$/i
@@ -32,8 +33,12 @@ module.exports = class SimpleValidation
                   r = /^(19|20|21)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/i
                   validItem = r.test(control.value)
 
+                if control.hasAttribute('integer')
+                  r = /^\-?\d+$/i
+                  validItem = r.test(control.value)
+
                 if control.hasAttribute('numeric')
-                  r = /^\d+\.?\d*$/i
+                  r = /^\-?\d+\.?\d*$/i
                   validItem = r.test(control.value)
 
               else

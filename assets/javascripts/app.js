@@ -227,7 +227,7 @@ export default {
       plugin.created = true
       plugin.app.create(store.assets.locale, settings)
 
-      eEmit.emit(`plugin.${name}.${app ? 'created' : 'updated'}`)
+      eEmit.emit(`plugin.${name}.${app ? 'created' : 'updated'}`, plugin)
 
       return plugin
     },
@@ -243,7 +243,10 @@ export default {
       if (!plugin.enabled) return this.methods.destroyPlugin.apply(this, [null, name])
 
       if (plugin.created) this.methods.initPlugin.apply(this, [null, name])
-      else this.includeScript(plugin.url)
+      else {
+        const version = cookies.get(`mkz_${name}_version`) || 'latest'
+        this.includeScript(plugin.url.replace('@latest', `@${version}`))
+      }
     },
     destroyPlugin () {
       const name = arguments[1]

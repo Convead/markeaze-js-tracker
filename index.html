@@ -2,6 +2,102 @@
   <head>
       <title>Markeaze js tracker</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <style type="text/css">
+body {
+  padding: 20px;
+  margin: 0;
+  font-size: 14px;
+  font-family: Arial;
+}
+a {
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+}
+h2 {
+  margin-top: 25px 0 15px 0;
+}
+button {
+  padding: 5 20px;
+  cursor: pointer;
+  background-color: #eee;
+  border-color: #aaa;
+  color: #333;
+  border-radius: 3px;
+  margin: 5px 0;
+  outline-style: none;
+  transition: all linear 0.2s;
+}
+button:hover {
+  background-color: #1cc2ff;
+  border-color: #10a1d7;
+  color: #fff;
+}
+button:active {
+  background-color: #10a1d7;
+  border-color: #10a1d7;
+  color: #fff;
+}
+ul {
+  margin: 15px 0;
+  padding: 0;
+}
+li {
+  margin: 0;
+  padding: 15px 0;
+  list-style: none;
+  border-bottom: 1px solid #bbb;
+  position: relative;
+}
+li:last-child {
+  border-style: none;
+}
+pre {
+  color: #777;
+  font-size: 12px;
+  border: 1px solid #aaa;
+  background-color: #fafafa;
+  display: block;
+  padding: 7px;
+  overflow: auto;
+}
+fieldset {
+  background-color: #f0f0f0;
+  border-style: none;
+  padding: 10px 15px;
+}
+.columns {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  min-height: 100%;
+  margin: 0 -10px;
+}
+.coll {
+  width: 33.33%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-right: 1px solid #bbb;
+}
+.coll:last-child {
+  border-style: none;
+}
+.fade {
+  animation-name: anumaciyoAppear;
+  animation-duration: 200ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+@keyframes anumaciyoAppear {                
+  0% {
+    opacity: 0;
+    background-color: #1cc2ff;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+      </style>
       <!-- Markeaze -->
       <script>
 
@@ -26,6 +122,10 @@ mkz('watch', 'url.change', function(url) {
   });
 });
 
+mkz('watch', 'plugin.chat.created', function() {
+  document.getElementById('chatVersion').innerHTML = mkz('pluginVersion', 'chat');
+});
+
 mkz(function() {
   document.getElementById('version').innerHTML = mkz('version');
 });
@@ -36,7 +136,13 @@ mkz('appKey', '<%= process.env.APP_KEY %>');
       <!-- /Markeaze -->
   </head>
   <body>
-    <h1>Markeaze js tracker <span id="version"></span></h1>
+    <h1>Markeaze Js Tracker</h1>
+    <p>
+      Js Trakcer v<b id="version">###</b>
+    </p>
+    <p>
+      Js Chat Client v<b id="chatVersion">###</b>
+    </p>
 
     <a href="https://github.com/Convead/markeaze-wiki/wiki/Web-Forms" target="_blank">Wiki</a>
     
@@ -288,103 +394,6 @@ mkz('trackVisitorUpdate', {
 
       </div>
     </div>
-
-    <style type="text/css">
-body {
-  padding: 20px;
-  margin: 0;
-  font-size: 14px;
-  font-family: Arial;
-}
-h2 {
-  margin-top: 25px 0 15px 0;
-}
-button {
-  padding: 5 20px;
-  cursor: pointer;
-  background-color: #eee;
-  border-color: #aaa;
-  color: #333;
-  border-radius: 3px;
-  margin: 5px 0;
-  outline-style: none;
-  transition: all linear 0.2s;
-}
-button:hover {
-  background-color: #1cc2ff;
-  border-color: #10a1d7;
-  color: #fff;
-}
-button:active {
-  background-color: #10a1d7;
-  border-color: #10a1d7;
-  color: #fff;
-}
-ul {
-  margin: 15px 0;
-  padding: 0;
-}
-li {
-  margin: 0;
-  padding: 15px 0;
-  list-style: none;
-  border-bottom: 1px solid #bbb;
-  position: relative;
-}
-li:last-child {
-  border-style: none;
-}
-pre {
-  color: #777;
-  font-size: 12px;
-  border: 1px solid #aaa;
-  background-color: #fafafa;
-  display: block;
-  padding: 7px;
-  overflow: auto;
-}
-fieldset {
-  background-color: #f0f0f0;
-  border-style: none;
-  padding: 10px 15px;
-}
-a {
-  color: red;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.columns {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  min-height: 100%;
-  margin: 0 -10px;
-}
-.coll {
-  width: 33.33%;
-  box-sizing: border-box;
-  padding: 0 10px;
-  border-right: 1px solid #bbb;
-}
-.coll:last-child {
-  border-style: none;
-}
-.fade {
-  animation-name: anumaciyoAppear;
-  animation-duration: 200ms;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-in-out;
-}
-@keyframes anumaciyoAppear {                
-  0% {
-    opacity: 0;
-    background-color: #1cc2ff;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-    </style>
     <script type="text/javascript">
 var bindScript = function(el) {
   var code = el.parentNode.querySelector('pre').innerHTML;

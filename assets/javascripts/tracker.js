@@ -29,6 +29,9 @@ export default {
     data.visitor = Object.fromEntries(Object.entries({ ...store.visitor, ...(visitor || {}) }).filter((i) => i[1] !== ''))
     data.visitor.device_uid = store.uid
 
+    if (data.visitor.client_id) data.visitor.client_id = String(data.visitor.client_id)
+    else delete data.visitor.client_id
+
     // Event properties
     if (properties) data.properties = properties
 

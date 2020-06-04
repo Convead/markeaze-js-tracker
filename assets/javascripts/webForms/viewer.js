@@ -4,7 +4,6 @@ import VisitorLossDetection from '../libs/visitorLossDetection.coffee'
 import WebForm from './webForm'
 import notify from '../libs/notify'
 import Wrapper from './wrapper'
-import Request from '../libs/request'
 import {default as store, commit as storeCommit} from '../store'
 import helpers from '../helpers'
 
@@ -56,7 +55,7 @@ export default {
       for (const uid in this.webForms) {
         const webForm = this.webForms[uid]
         if (
-          webForm.uid !== webFormCurrent.uid && 
+          webForm.uid !== webFormCurrent.uid &&
           !webForm.api.isHidden
         ) webForm.api.hide()
       }

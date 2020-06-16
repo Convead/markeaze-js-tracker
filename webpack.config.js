@@ -16,7 +16,7 @@ module.exports = {
           return `${file}.LICENSE`;
         },
         banner(licenseFile) {
-          return `License information can be found in https://raw.githubusercontent.com/markeaze/markeaze-js-chat-client/master/dist/${licenseFile}`;
+          return `License information can be found in https://raw.githubusercontent.com/markeaze/markeaze-js-tracker/master/dist/${licenseFile}`;
         }
       },
       uglifyOptions: {

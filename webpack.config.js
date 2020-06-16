@@ -10,6 +10,15 @@ module.exports = {
   },
   plugins: [
     new UglifyJsPlugin({
+      extractComments: {
+        condition: /^\**!|@preserve|@license|@cc_on|Copyright|License|LICENSE/i,
+        filename(file) {
+          return `${file}.LICENSE`;
+        },
+        banner(licenseFile) {
+          return `License information can be found in https://raw.githubusercontent.com/markeaze/markeaze-js-chat-client/master/dist/${licenseFile}`;
+        }
+      },
       uglifyOptions: {
         output: {
           comments: false

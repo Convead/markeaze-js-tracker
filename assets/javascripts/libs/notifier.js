@@ -1,14 +1,16 @@
 import { Notifier } from '@airbrake/browser'
 import store from '../store'
 
-let notify
+let airbrake
 
 if (process.env && process.env.NODE_ENV === 'production') {
-
-  const airbrake = new Notifier({
+  airbrake = new Notifier({
     projectId: store.airbrakeProject,
     projectKey: store.airbrakeApiKey,
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    instrumentation: {
+      onerror: false
+    }
   })
   airbrake.addFilter(function(notice) {
     notice.context.version = store.version
@@ -16,14 +18,15 @@ if (process.env && process.env.NODE_ENV === 'production') {
   })
   // airbrake-js automatically setups window.onerror
   // https://github.com/airbrake/airbrake-js/tree/master/packages/browser#integration
-  notify = airbrake
 
 } else {
 
-  notify = {
-    call: (app) => app.apply(window)
+  airbrake = {
+    wrap: (app) => app,
+    call: function (app) { app.call(this, arguments) },
+    notify: () => {}
   }
 
 }
 
-export default notify
+export default airbrake

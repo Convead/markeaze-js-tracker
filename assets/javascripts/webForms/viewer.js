@@ -2,7 +2,7 @@ import eEmit from '../libs/eEmit'
 import ImagesPreloader from '../libs/imagesPreloader.coffee'
 import VisitorLossDetection from '../libs/visitorLossDetection.coffee'
 import WebForm from './webForm'
-import notify from '../libs/notify'
+import notifier from '../libs/notifier'
 import Wrapper from './wrapper'
 import {default as store, commit as storeCommit} from '../store'
 import helpers from '../helpers'
@@ -15,56 +15,61 @@ export default {
   init () {
     this.wrapper = new Wrapper()
 
-    eEmit.subscribe('assets', (data) => {
-      this.wrapper.render()
-    })
+    eEmit.subscribe('assets', notifier.wrap(this.assetsHandler.bind(this)))
 
     // View webForms
-    eEmit.subscribe('track.after', async (data) => {
-      if (data.post.type !== 'page_view') return false
-
-      // Support Single Page Application web sites
-      this.destroyWebForms()
-
-      if (data.response.web_forms) for (const options of data.response.web_forms) {
-        await this.preloadImages(options.body_html)
-        this.add(options)
-      }
-      // Restoration of wefForms from the session is performed after receiving a list of new wefForms.
-      // This is necessary to maintain priority of displaying more important wefForms.
-      this.restoreHiddenList()
-      this.archiveHiddenList()
-
-      await this.wrapper.renderRibbons(this.webForms)
-    })
+    eEmit.subscribe('track.after', notifier.wrap(this.afterTrackHandler.bind(this)))
 
     // The list of webForms should always be up to date
-    eEmit.subscribe('WebForm.before_destroy', async (data) => {
-      const wefForm = this.webForms[data.uid]
-      if (wefForm && wefForm.lossDetection) wefForm.lossDetection.abort()
-      delete this.webForms[data.uid]
-      this.archiveHiddenList()
-
-      this.wrapper.renderRibbons(this.webForms)
-    })
+    eEmit.subscribe('WebForm.before_destroy', notifier.wrap(this.beforeDestroyHandler.bind(this)))
 
     // Blocking the display of two webForms of the same type.
     // The first is hiding.
-    eEmit.subscribe('WebForm.after_show', async (data) => {
-      const webFormCurrent = this.webForms[data.uid]
-      for (const uid in this.webForms) {
-        const webForm = this.webForms[uid]
-        if (
-          webForm.uid !== webFormCurrent.uid &&
-          !webForm.api.isHidden
-        ) webForm.api.hide()
-      }
+    eEmit.subscribe('WebForm.after_show', notifier.wrap(this.afterShowHandler.bind(this)))
+    eEmit.subscribe('WebForm.after_close', notifier.wrap(this.afterCloseHandler.bind(this)))
+  },
+  async afterTrackHandler (data) {
+    if (data.post.type !== 'page_view') return false
 
-      this.wrapper.renderRibbons(this.webForms)
-    })
-    eEmit.subscribe('WebForm.after_close', async (data) => {
-      this.wrapper.renderRibbons(this.webForms)
-    })
+    // Support Single Page Application web sites
+    this.destroyWebForms()
+
+    if (data.response.web_forms) for (const options of data.response.web_forms) {
+      await this.preloadImages(options.body_html)
+      this.add(options)
+    }
+    // Restoration of wefForms from the session is performed after receiving a list of new wefForms.
+    // This is necessary to maintain priority of displaying more important wefForms.
+    this.restoreHiddenList()
+    this.archiveHiddenList()
+
+    await this.wrapper.renderRibbons(this.webForms)
+  },
+  assetsHandler (data) {
+    this.wrapper.render()
+  },
+  async beforeDestroyHandler (data) {
+    const wefForm = this.webForms[data.uid]
+    if (wefForm && wefForm.lossDetection) wefForm.lossDetection.abort()
+    delete this.webForms[data.uid]
+    this.archiveHiddenList()
+
+    this.wrapper.renderRibbons(this.webForms)
+  },
+  async afterShowHandler (data) {
+    const webFormCurrent = this.webForms[data.uid]
+    for (const uid in this.webForms) {
+      const webForm = this.webForms[uid]
+      if (
+        webForm.uid !== webFormCurrent.uid &&
+        !webForm.api.isHidden
+      ) webForm.api.hide()
+    }
+
+    this.wrapper.renderRibbons(this.webForms)
+  },
+  async afterCloseHandler (data) {
+    this.wrapper.renderRibbons(this.webForms)
   },
   preview (webFormUid) {
     storeCommit('trackEnabled', false)
@@ -103,7 +108,7 @@ export default {
     if (this.exist(options)) {
       if (options.can_be_hidden) options.is_hidden = true
       else {
-        notify.fetchError(new Error(`Error! Invalid webForm display script with uid=${options.uid}`))
+        notifier.notify(new Error(`Error! Invalid webForm display script with uid=${options.uid}`))
         return false
       }
     }

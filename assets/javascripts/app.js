@@ -10,7 +10,7 @@ import autoMsg from './autoMsg'
 import Pinger from './libs/pinger.coffee'
 import robotDetection from './libs/robot_detection.coffee'
 import helpers from './helpers'
-import notify from './libs/notify'
+import notifier from './libs/notifier'
 import domEvent from './libs/domEvent'
 import Request from './libs/request'
 import Liquid from './libs/liquid.min'
@@ -23,7 +23,7 @@ export default {
   libs: {
     log,
     helpers,
-    notify,
+    notifier,
     domEvent,
     Request,
     Liquid,
@@ -45,11 +45,11 @@ export default {
     const queue = window[nameVariable].q || []
     const self = this
     window[nameVariable] = function() {
-      return self.pendingSend.apply(self, arguments)
+      return notifier.wrap(self.pendingSend).apply(self, arguments)
     }
 
     // Plugins can only be included during initialization
-    eEmit.subscribe('assets', () => self.includePlugins.apply(self))
+    eEmit.subscribe('assets', () => notifier.wrap(self.includePlugins).apply(self) )
 
     webFormsViewer.init()
     autoMsg.init()

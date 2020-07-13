@@ -1,5 +1,5 @@
 import 'regenerator-runtime'
 import app from './assets/javascripts/app'
-import notify from './assets/javascripts/libs/notify'
+import notifier from './assets/javascripts/libs/notifier'
 
-notify.call(() => app.ready('mkz'))
+notifier.wrap(app).ready('mkz')

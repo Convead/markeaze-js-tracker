@@ -5,6 +5,7 @@ import Request from './libs/request'
 import robotDetection from './libs/robot_detection.coffee'
 import store from './store'
 import AssetsLoader from './assetsLoader'
+import helpers from './helpers'
 
 const assetsLoader = new AssetsLoader()
 
@@ -26,7 +27,7 @@ export default {
     if (store.assets) data.assets_version = store.assets.version
 
     // Visitor
-    data.visitor = Object.fromEntries(Object.entries({ ...store.visitor, ...(visitor || {}) }).filter((i) => i[1] !== ''))
+    data.visitor = helpers.fromEntries(Object.entries({ ...store.visitor, ...(visitor || {}) }).filter((i) => i[1] !== ''))
     data.visitor.device_uid = store.uid
 
     if (data.visitor.client_id) data.visitor.client_id = String(data.visitor.client_id)

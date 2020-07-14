@@ -14,6 +14,7 @@ if (process.env && process.env.NODE_ENV === 'production') {
   })
   airbrake.addFilter(function(notice) {
     notice.context.version = store.version
+    notice.context.chatVersion = store.plugins.chat && store.plugins.chat.version
     return notice
   })
   // airbrake-js automatically setups window.onerror

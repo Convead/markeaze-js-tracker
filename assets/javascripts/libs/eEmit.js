@@ -1,3 +1,5 @@
+import notifier from './notifier'
+
 export default {
   events: {},
   subscribe (eventName, fn) {
@@ -7,8 +9,10 @@ export default {
   emit (eventName, data) {
     const event = this.events[eventName]
     if (event) {
-      event.forEach((fn) => {
-        fn.call(null, data)
+      notifier.call(() =>{
+        event.forEach((fn) => {
+          fn.call(null, data)
+        })
       })
     }
   }

@@ -1,33 +1,34 @@
 import { Notifier } from '@airbrake/browser'
 import store from '../store'
 
-let airbrake
+export const notifierInstance = (version, projectId, projectKey, environment) => {
 
-if (process.env && process.env.NODE_ENV === 'production') {
-  airbrake = new Notifier({
-    projectId: store.airbrakeProject,
-    projectKey: store.airbrakeApiKey,
-    environment: process.env.NODE_ENV,
-    instrumentation: {
-      onerror: false
+  if (environment === 'production') {
+    const airbrake = new Notifier({
+      projectId,
+      projectKey,
+      environment,
+      instrumentation: {
+        onerror: false
+      }
+    })
+    airbrake.addFilter(function(notice) {
+      notice.context.version = version
+      return notice
+    })
+    // airbrake-js automatically setups window.onerror
+    // https://github.com/airbrake/airbrake-js/tree/master/packages/browser#integration
+    return airbrake
+
+  } else {
+
+    return {
+      wrap: (app) => app,
+      call: function (app) { app.call(this, arguments) },
+      notify: (e) => { throw e }
     }
-  })
-  airbrake.addFilter(function(notice) {
-    notice.context.version = store.version
-    notice.context.chatVersion = store.plugins.chat && store.plugins.chat.version
-    return notice
-  })
-  // airbrake-js automatically setups window.onerror
-  // https://github.com/airbrake/airbrake-js/tree/master/packages/browser#integration
 
-} else {
-
-  airbrake = {
-    wrap: (app) => app,
-    call: function (app) { app.call(this, arguments) },
-    notify: () => {}
   }
-
 }
 
-export default airbrake
+export default notifierInstance(store.version, store.airbrakeProject, store.airbrakeApiKey, process.env.NODE_ENV)

@@ -3,7 +3,6 @@ const store = {
   plugins: {
     chat: {
       url: 'https://cdn.jsdelivr.net/gh/markeaze/markeaze-js-chat-client@latest/dist/mkz-chat-client.js',
-      enabled: false,
       settings: {}
     }
   },

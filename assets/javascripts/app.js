@@ -10,7 +10,7 @@ import autoMsg from './autoMsg'
 import Pinger from './libs/pinger.coffee'
 import robotDetection from './libs/robot_detection.coffee'
 import helpers from './helpers'
-import notifier from './libs/notifier'
+import { notifierInstance, default as notifier } from './libs/notifier'
 import domEvent from './libs/domEvent'
 import Request from './libs/request'
 import Liquid from './libs/liquid.min'
@@ -23,6 +23,7 @@ export default {
   libs: {
     log,
     helpers,
+    notifierInstance,
     notifier,
     domEvent,
     Request,
@@ -44,12 +45,14 @@ export default {
 
     const queue = window[nameVariable].q || []
     const self = this
-    window[nameVariable] = function() {
-      return notifier.wrap(self.pendingSend).apply(self, arguments)
+    window[nameVariable] = function () {
+      return self.pendingSend.apply(self, arguments)
     }
 
     // Plugins can only be included during initialization
-    eEmit.subscribe('assets', () => notifier.wrap(self.includePlugins).apply(self) )
+    eEmit.subscribe('assets', () => {
+      notifier.call(() => self.includePlugins.apply(self))
+    })
 
     webFormsViewer.init()
     autoMsg.init()
@@ -217,8 +220,9 @@ export default {
 
       if (plugin.created) this.methods.destroyPlugin.apply(this, [null, name])
 
-      if (app) {
+      if (app && !plugin.loaded) {
         plugin.app = app
+        plugin.loaded = true
         plugin.version = app.version
         plugin.app.store = this.store
         plugin.app.libs = this.libs
@@ -243,7 +247,8 @@ export default {
       if (!plugin.enabled) return this.methods.destroyPlugin.apply(this, [null, name])
 
       if (plugin.created) this.methods.initPlugin.apply(this, [null, name])
-      else {
+
+      if (!plugin.loaded) {
         const version = cookies.get(`mkz_${name}_version`) || 'latest'
         this.includeScript(plugin.url.replace('@latest', `@${version}`))
       }

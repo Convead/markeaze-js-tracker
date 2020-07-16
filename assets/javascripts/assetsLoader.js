@@ -1,4 +1,5 @@
 import store from './store'
+import notifier from './libs/notifier'
 
 export default class AssetsLoader {
   constructor () {
@@ -10,7 +11,9 @@ export default class AssetsLoader {
       try {
         store.assets = JSON.parse(str)
       }
-      catch {}
+      catch (e) {
+        notifier.notify(e)
+      }
     }
   }
   // Should return true when assets is first loaded or updated

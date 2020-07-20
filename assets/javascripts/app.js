@@ -35,6 +35,8 @@ export default {
   pendingTasks: [],
   pageViewProperties: {},
   ready (nameVariable) {
+    if (typeof window.localStorage === 'undefined') return false
+
     // Abort if object is undefined
     if (!window[nameVariable]) return false
 

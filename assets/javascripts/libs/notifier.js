@@ -4,6 +4,10 @@ import store from '../store'
 export const notifierInstance = (version, projectId, projectKey, environment) => {
 
   if (environment === 'production') {
+
+    // Disable watching unhandledrejection
+    Notifier.prototype.onUnhandledrejection = () => {}
+
     const airbrake = new Notifier({
       projectId,
       projectKey,

@@ -211,14 +211,7 @@ export default {
 
       if (!app && !plugin) return
 
-      let settings = plugin.settings || {}
-
-      if (name === 'chat') {
-        const chatSettings = store.assets.chat_settings
-        const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        settings = Object.assign({}, settings, chatSettings)
-        settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
-      }
+      const settings = plugin.settings || {}
 
       if (plugin.created) this.methods.destroyPlugin.apply(this, [null, name])
 
@@ -241,9 +234,12 @@ export default {
       const name = arguments[1]
       const plugin = store.plugins[name]
 
-      if (name === 'chat') {
+      if (name === 'chat' && store.assets) {
         const chatSettings = store.assets.chat_settings
         plugin.enabled = chatSettings && chatSettings.appearance.common.enabled
+        const device = helpers.isMobile() ? 'mobile' : 'desktop'
+        plugin.settings = Object.assign({}, plugin.settings, chatSettings)
+        plugin.settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
       }
 
       if (!plugin.enabled) return this.methods.destroyPlugin.apply(this, [null, name])

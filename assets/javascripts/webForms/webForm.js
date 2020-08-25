@@ -53,7 +53,7 @@ export default class WebForm {
     this.fire('before_submit')
     if (!this.valid()) return false
     this.canBeHidden = false
-    this.sendEvent('WebFormSubmit', Object.assign(payload, {web_form_uid: this.uid, web_form_data: visitor}))
+    this.sendEvent('WebFormSubmit', { ...payload, ...{ web_form_uid: this.uid, web_form_data: visitor } })
     this.fire('after_submit')
   }
   close (disableCloseEvent = false) {
@@ -122,9 +122,7 @@ export default class WebForm {
     })
   }
   async render () {
-    const data = Object.assign(this.options, {
-      state: this.currentState
-    })
+    const data = { ...this.options, state: this.currentState }
     const html = await liquid.parseAndRender(this.options.body_html, data)
     if (this.el) this.el.parentNode.removeChild(this.el)
     this.el = helpers.appendHTML(this.elContainer, html)

@@ -1,4 +1,5 @@
 import Animation from './libs/animation.coffee'
+import domEvent from './libs/domEvent'
 
 export default {
   removeClass (el, className) {
@@ -53,5 +54,16 @@ export default {
       res[item[0]] = item[1]
       return res
     }, {})
+  },
+  entries (obj) {
+    const ownProps = Object.keys( obj )
+    let i = ownProps.length
+    const resArray = new Array(i)
+    while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]]
+    return resArray
+  },
+  ready (callback) {
+    if (document.readyState != 'loading') callback(event)
+    else domEvent.add(document, 'DOMContentLoaded', callback)
   }
 }

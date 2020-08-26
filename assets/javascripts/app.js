@@ -16,7 +16,7 @@ import Request from './libs/request'
 import Liquid from './libs/liquid.min'
 import Validation from './libs/simpleValidation.coffee'
 import FormToObject from './libs/formToObject'
-import {default as store, commit as storeCommit} from './store'
+import { default as store, commit as storeCommit } from './store'
 
 export default {
   store: store,
@@ -56,12 +56,15 @@ export default {
       notifier.call(() => self.includePlugins.apply(self))
     })
 
-    webFormsViewer.init()
-    autoMsg.init()
+    helpers.ready(() => {
+      webFormsViewer.init()
+      autoMsg.init()
 
-    for (const fields of queue) {
-      this.pendingSend.apply(this, fields)
-    }
+      for (const fields of queue) {
+        this.pendingSend.apply(this, fields)
+      }
+    })
+
   },
   // These are public methods used in api
   methods: {
@@ -99,7 +102,7 @@ export default {
       if (arguments[1]) webFormsViewer.preview(arguments[1])
     },
     trackPageView () {
-      const properties = { ...this.pageViewProperties, ...this.pageData(arguments[1]) }
+      const properties = Object.assign({}, this.pageViewProperties, this.pageData(arguments[1]))
       if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
       if (properties.category) properties.category = this.categoryNormalizer(properties.category)
       this.pageViewProperties = {}
@@ -238,8 +241,8 @@ export default {
         const chatSettings = store.assets.chat_settings
         plugin.enabled = chatSettings && chatSettings.appearance.common.enabled
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        plugin.settings = { ...plugin.settings, ...chatSettings }
-        plugin.settings.appearance = { ...chatSettings.appearance.common, ...chatSettings.appearance[device] }
+        plugin.settings = Object.assign({}, plugin.settings, chatSettings)
+        plugin.settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
       }
 
       if (!plugin.enabled) return this.methods.destroyPlugin.apply(this, [null, name])
@@ -301,14 +304,12 @@ export default {
     for (const k in store.plugins) this.methods.applyPlugin.apply(this, [null, k])
   },
   pageData (properties) {
-    const wnd = window.top || window
-    const doc = wnd.document
     properties = properties || {}
     properties.page = properties.page || {}
-    properties.page.url = properties.page.url || wnd.location.href
-    properties.page.title = properties.page.title || doc.title
+    properties.page.url = properties.page.url || window.location.href
+    properties.page.title = properties.page.title || document.title
     if (!properties.page.title) delete properties.page.title
-    if (properties.page.referrer) properties.page.referrer = doc.referrer
+    if (properties.page.referrer) properties.page.referrer = document.referrer
     return properties
   },
   offerNormalizer (offer) {

@@ -241,7 +241,7 @@ export default {
         const chatSettings = store.assets.chat_settings
         plugin.enabled = chatSettings && chatSettings.appearance.common.enabled
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
-        plugin.settings = Object.assign({}, plugin.settings, chatSettings)
+        plugin.settings = { ...plugin.settings, ...chatSettings }
         plugin.settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
       }
 
@@ -273,7 +273,9 @@ export default {
 
       if (!plugin) return
 
-      plugin.settings = arguments[2]
+      const newSettings = arguments[2] || {}
+      plugin.settings = { ...plugin.settings, ...newSettings }
+      eEmit.emit(`plugin.${name}.update`, plugin.settings)
     },
     emitPlugin () {
       const name = arguments[1]

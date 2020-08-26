@@ -63,7 +63,7 @@ export default {
     return resArray
   },
   ready (callback) {
-    if (document.readyState != 'loading') callback(event)
+    if (document.readyState !== 'loading') callback()
     else domEvent.add(document, 'DOMContentLoaded', callback)
   }
 }

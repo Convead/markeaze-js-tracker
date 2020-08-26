@@ -306,11 +306,14 @@ export default {
   pageData (properties) {
     properties = properties || {}
     properties.page = properties.page || {}
-    properties.page.url = properties.page.url || window.location.href
+    properties.page.url = this.fixUrl(properties.page.url || window.location.href)
     properties.page.title = properties.page.title || document.title
     if (!properties.page.title) delete properties.page.title
     if (properties.page.referrer) properties.page.referrer = document.referrer
     return properties
+  },
+  fixUrl (url) {
+    return encodeURI(decodeURI(url))
   },
   offerNormalizer (offer) {
     if (offer.variant_id) offer.variant_id = String(offer.variant_id)

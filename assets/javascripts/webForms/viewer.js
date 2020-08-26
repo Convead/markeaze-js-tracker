@@ -127,7 +127,7 @@ export default {
   archiveHiddenList () {
     const webFormsHidden = {}
     for (const uid in this.webForms) {
-      const webForm = { ...this.webForms[uid] }
+      const webForm = Object.assign({}, this.webForms[uid])
       if (webForm.can_be_hidden) {
         webForm.is_hidden = true
         webForm.session_loss_desktop = false

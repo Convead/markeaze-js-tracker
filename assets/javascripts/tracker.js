@@ -27,7 +27,7 @@ export default {
     if (store.assets) data.assets_version = store.assets.version
 
     // Visitor
-    data.visitor = helpers.fromEntries(Object.entries({ ...store.visitor, ...(visitor || {}) }).filter((i) => i[1] !== ''))
+    data.visitor = helpers.fromEntries(helpers.entries({ ...store.visitor, ...(visitor || {}) }).filter((i) => i[1] !== ''))
     data.visitor.device_uid = store.uid
 
     if (data.visitor.client_id) data.visitor.client_id = String(data.visitor.client_id)

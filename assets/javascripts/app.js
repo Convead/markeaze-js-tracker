@@ -35,7 +35,9 @@ export default {
   pendingTasks: [],
   pageViewProperties: {},
   ready (nameVariable) {
-    if (typeof window.localStorage === 'undefined') return false
+    if (typeof window.localStorage === 'undefined') return console.warn('"localStorage" method is not supported')
+    // It use in liquid parser
+    if (typeof window.Symbol !== 'function') return console.warn('"Symbol" method is not supported')
 
     // Abort if object is undefined
     if (!window[nameVariable]) return false

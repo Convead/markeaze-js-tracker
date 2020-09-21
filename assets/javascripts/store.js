@@ -4,6 +4,10 @@ const store = {
     chat: {
       url: 'https://cdn.jsdelivr.net/gh/markeaze/markeaze-js-chat-client@latest/dist/mkz-chat-client.js',
       settings: {}
+    },
+    chatAttachment: {
+      url: 'https://raw.githubusercontent.com/markeaze/markeaze-js-chat-client@latest/dist/mkz-chat-client-attachment.js',
+      enabled: true
     }
   },
   trackerName: 'markeaze-js',

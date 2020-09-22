@@ -317,7 +317,12 @@ export default {
     return properties
   },
   fixUrl (url) {
-    return encodeURI(decodeURI(url))
+    try {
+      return encodeURI(decodeURI(url))
+    }
+    catch (e) {
+      console.warn(e)
+    }
   },
   offerNormalizer (offer) {
     if (offer.variant_id) offer.variant_id = String(offer.variant_id)

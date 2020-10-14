@@ -77,25 +77,23 @@ export default {
       store.appKey = value
       store.region = value.split('@').pop()
 
-      setTimeout(() => {
-        if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
-        if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
-        // Set uid cookie
-        this.methods.setDeviceUid.apply(this)
-        // Call pending task
-        for (let fields of this.pendingTasks) {
-          this.send.apply(this, fields)
-        }
-        this.pendingTasks = []
+      if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
+      if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
+      // Set uid cookie
+      this.methods.setDeviceUid.apply(this)
+      // Call pending task
+      for (let fields of this.pendingTasks) {
+        this.send.apply(this, fields)
+      }
+      this.pendingTasks = []
 
-        // Delay to start the callback last in the event loop
-        setTimeout(() => {
-          // Track change url
-          this.changeUrl()
-          domEvent.add(window, 'pushState', () => { this.changeUrl() })
-          domEvent.add(window, 'replaceState', () => { this.changeUrl() })
-          domEvent.add(window, 'hashchange', () => { this.changeUrl() })
-        }, 0)
+      // Delay to start the callback last in the event loop
+      setTimeout(() => {
+        // Track change url
+        this.changeUrl()
+        domEvent.add(window, 'pushState', () => { this.changeUrl() })
+        domEvent.add(window, 'replaceState', () => { this.changeUrl() })
+        domEvent.add(window, 'hashchange', () => { this.changeUrl() })
       }, 0)
     },
     setDeviceUid () {

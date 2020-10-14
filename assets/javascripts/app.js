@@ -79,6 +79,7 @@ export default {
 
       if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
       if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
+
       // Set uid cookie
       this.methods.setDeviceUid.apply(this)
       // Call pending task
@@ -365,15 +366,22 @@ export default {
   },
   pendingSend () {
     log.push('action', arguments)
+    const argument = arguments[0]
     const allowFirst = [
-      'appKey', 'debug', 'webFormPreviewUrl', 'webFormPreview', 'updateStore'
+      'appKey',
+      'debug',
+      'webFormPreviewUrl',
+      'webFormPreview',
+      'updateStore',
+      'setDeviceUid',
+      'setVisitorInfo',
+      'clearVisitorInfo',
+      'watch',
+      'updateStore'
     ]
-    // Request to plugin
-    if (!store.appKey && typeof arguments[0] != 'function' && arguments[0].indexOf(allowFirst) > -1) {
+    if (!store.appKey && typeof argument !== 'function' && allowFirst.indexOf(argument) === -1) {
       return this.pendingTasks.push(arguments)
-    }
-    // Apply task
-    else {
+    } else {
       return this.send.apply(this, arguments)
     }
   },
@@ -384,12 +392,9 @@ export default {
       return obj.apply(this)
     }
     else {
-      // Request to plugin
       if (this.methods[ obj ]) {
         return this.methods[ obj ].apply(this, arguments)
-      }
-      // Custom event
-      else if (arguments[0].indexOf('track') == 0) {
+      } else if (arguments[0].indexOf('track') == 0) {
         return this.track(obj, arguments[1], arguments[2], arguments[3])
       }
     }

@@ -16,7 +16,10 @@ import Request from './libs/request'
 import Liquid from './libs/liquid.min'
 import Validation from './libs/simpleValidation.coffee'
 import FormToObject from './libs/formToObject'
+import initHistoryState from './libs/historyState'
 import { default as store, commit as storeCommit } from './store'
+
+initHistoryState()
 
 export default {
   store: store,

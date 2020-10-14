@@ -93,7 +93,7 @@ fieldset {
   animation-iteration-count: 1;
   animation-timing-function: ease-in-out;
 }
-@keyframes anumaciyoAppear {                
+@keyframes anumaciyoAppear {
   0% {
     opacity: 0;
     background-color: #1cc2ff;
@@ -149,7 +149,13 @@ mkz('appKey', '<%= process.env.APP_KEY %>');
     </p>
 
     <a href="https://github.com/Convead/markeaze-wiki/wiki/Web-Forms" target="_blank">Wiki</a>
-    
+
+    <p>
+      <button onclick="history.pushState({page: Math.random()}, Math.random(), '?page='+Math.random())">Page pushState</button>
+      <button onclick="history.replaceState({page: Math.random()}, Math.random(), '?page='+Math.random())">Page replaceState</button>
+      <button onclick="window.location.hash = Math.random()">Window.location.hash</button>
+    </p>
+
     <div class="columns">
       <div class="coll">
 
@@ -160,7 +166,7 @@ mkz('appKey', '<%= process.env.APP_KEY %>');
         </p>
 
         <ul>
-          
+
           <li>
             Set tracker endpoint<br />
             <pre>mkz('endpoint', 'tracker.markeaze.com');</pre>
@@ -265,7 +271,7 @@ mkz('watch', 'url.change', function(url) {
         <p>
           Format: mkz('track' + <b>[eventName]</b>, <b>[properties]</b>, <b>[callbackFunction]</b>, <b>[visitor]</b>);
         </p>
-        
+
         <ul>
           <li>
             Page view<br />

@@ -68,7 +68,7 @@ export default {
     })
 
   },
-  // These are public methods used in api
+  // These are public methods used in the api
   methods: {
     appKey () {
       const value = arguments[1]
@@ -76,26 +76,34 @@ export default {
 
       store.appKey = value
       store.region = value.split('@').pop()
-      if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
-      if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
-      // Set uid cookie
-      const domain = (new baseDomain())
-      store.uid = store.uid || cookies.get(store.cookieUid) || uuid.get(16)
-      cookies.set(store.cookieUid, store.uid, { expires: 31536000, domain: domain.get() })
-      // Call pending task
-      for (let fields of this.pendingTasks) {
-        this.send.apply(this, fields)
-      }
-      this.pendingTasks = []
 
-      // Delay to start the callback last in the event loop
       setTimeout(() => {
-        // Track change url
-        this.changeUrl()
-        domEvent.add(window, 'pushState', () => { this.changeUrl() })
-        domEvent.add(window, 'replaceState', () => { this.changeUrl() })
-        domEvent.add(window, 'hashchange', () => { this.changeUrl() })
+        if (!store.trackerEndpoint) store.trackerEndpoint = `tracker-${store.region}.markeaze.com`
+        if (!store.chatEndpoint) store.chatEndpoint = `chat-${store.region}.markeaze.com`
+        // Set uid cookie
+        this.methods.setDeviceUid.apply(this)
+        // Call pending task
+        for (let fields of this.pendingTasks) {
+          this.send.apply(this, fields)
+        }
+        this.pendingTasks = []
+
+        // Delay to start the callback last in the event loop
+        setTimeout(() => {
+          // Track change url
+          this.changeUrl()
+          domEvent.add(window, 'pushState', () => { this.changeUrl() })
+          domEvent.add(window, 'replaceState', () => { this.changeUrl() })
+          domEvent.add(window, 'hashchange', () => { this.changeUrl() })
+        }, 0)
       }, 0)
+    },
+    setDeviceUid () {
+      const newUid = arguments[1] || null
+      const force = arguments[2] || false
+      const domain = (new baseDomain())
+      store.uid = (force && newUid) || store.uid || cookies.get(store.cookieUid) || newUid || uuid.get(16)
+      cookies.set(store.cookieUid, store.uid, { expires: 31536000, domain: domain.get() })
     },
     webFormPreviewUrl () {
       if (arguments[1]) store.webFormPreview = arguments[1]

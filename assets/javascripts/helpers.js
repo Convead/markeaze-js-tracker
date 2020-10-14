@@ -65,5 +65,8 @@ export default {
   ready (callback) {
     if (document.readyState !== 'loading') callback()
     else domEvent.add(document, 'DOMContentLoaded', callback)
+  },
+  getQueryStringValue (key) {  
+    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"))  
   }
 }

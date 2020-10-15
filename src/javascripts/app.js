@@ -380,7 +380,8 @@ export default {
       'setVisitorInfo',
       'clearVisitorInfo',
       'watch',
-      'updateStore'
+      'updateStore',
+      'version'
     ]
     if (!store.appKey && typeof argument !== 'function' && allowFirst.indexOf(argument) === -1) {
       return this.pendingTasks.push(arguments)

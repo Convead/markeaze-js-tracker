@@ -93,7 +93,7 @@ String.prototype.wrapper = function () {
 }
 
 const commonWrapper = `<div mkz class=\"mkz mkz-js-main\">\n<style type=\"text/css\">
-${require('raw-loader!sass-loader!./assets/stylesheets/app.sass').sanitaze()}
+${require('raw-loader!sass-loader!./src/stylesheets/app.sass').sanitaze()}
 </style>\n  <div class=\"mkz-js-ribbons\"></div>\n  <div class=\"mkz-js-wfs\"></div>\n</div>`
 const ribbonsWrapper = `{% for ribbon_type in ribbon_types %}\n  <div class=\"mkz-ribbon mkz-ribbon_type_{{ ribbon_type }}\">\n\n    {% for options in web_forms %}\n      {% if options.ribbon_type == ribbon_type %}\n        <div class=\"mkz-js-ribbon-{{ options.id }} mkz-ribbon__item{% if options.is_hidden != true %} mkz-ribbon__item_state_hidden{% endif %}\">\n          <div class=\"mkz-ribbon__label\">\n            {{ options.ribbon_label }}\n          </div>\n          {% if options.ribbon_picture %}\n            <img class=\"mkz-ribbon__picture\" src=\"{{ options.ribbon_picture }}\" alt=\"\" />\n          {% endif %}\n        </div>\n      {% endif %}\n    {% endfor %}\n\n  </div>\n{% endfor %}`
 %>

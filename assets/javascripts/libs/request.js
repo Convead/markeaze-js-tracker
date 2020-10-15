@@ -1,3 +1,5 @@
+import domEvent from './domEvent'
+
 export default class Request {
   constructor () {
   }
@@ -8,11 +10,11 @@ export default class Request {
     xhr.open('POST', url, true)
     xhr.setRequestHeader('Accept', 'application/json, text/javascript')
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-    xhr.onreadystatechange = () => {
+    domEvent.add(xhr, 'readystatechange', () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         success(JSON.parse(xhr.responseText))
       } else if (xhr.status !== 0) fail(xhr)
-    }
+    })
     xhr.send(this.toQueryString({data: JSON.stringify(post)}))
   }
   isArray () {

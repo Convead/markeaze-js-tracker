@@ -334,8 +334,8 @@ export default {
   },
   offerNormalizer (offer) {
     if (offer.variant_id) offer.variant_id = String(offer.variant_id)
-    if (offer.url) offer.url = this.fixUrl(offer.url)
     else this.requiredFieldThrow('offer.variant_id')
+    if (offer.url) offer.url = this.fixUrl(offer.url)
     return offer
   },
   itemNormalizer (item) {

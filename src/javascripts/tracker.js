@@ -41,7 +41,7 @@ export default {
 
     if (store.trackEnabled) {
       (new Request).send(
-        store.trackerCustomUrl || `https://${store.trackerEndpoint}/event`,
+        store.trackerUrl || `https://${store.trackerEndpoint}/event`,
         data,
         (response) => {
           this.assets(data, response)

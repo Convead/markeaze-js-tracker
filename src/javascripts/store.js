@@ -20,8 +20,9 @@ const store = {
   cookieUid: '_mkz_dvc_uid',
   region: null,
   trackerEndpoint: null,
-  trackerCustomUrl: null,
+  trackerUrl: null,
   chatEndpoint: null,
+  chatUrl: null,
   airbrakeProject: 229028,
   airbrakeApiKey: '3927498a0d17867a76acf5aa97eba72d',
   webFormPreview: null

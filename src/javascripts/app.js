@@ -123,9 +123,7 @@ export default {
     trackCartUpdate () {
       const properties = arguments[1]
       if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map((item) => {
-        return this.itemNormalizer(item)
-      })
+      properties.items = properties.items.map(this.itemNormalizer)
       return this.track(arguments[0], properties, arguments[2], arguments[3])
     },
     trackCartUpdate () {
@@ -336,6 +334,7 @@ export default {
   },
   offerNormalizer (offer) {
     if (offer.variant_id) offer.variant_id = String(offer.variant_id)
+    if (offer.url) offer.url = this.fixUrl(offer.url)
     else this.requiredFieldThrow('offer.variant_id')
     return offer
   },
@@ -345,6 +344,7 @@ export default {
     if (item.qnt) item.qnt = parseFloat(item.qnt)
     else this.requiredFieldThrow('item.qnt')
     if (item.price) item.price = parseFloat(item.price)
+    if (item.url) item.url = this.fixUrl(item.url)
     return item
   },
   categoryNormalizer (category) {
@@ -359,6 +359,8 @@ export default {
     else this.requiredFieldThrow('order.order_uid')
     if (order.total) order.total = parseFloat(order.total)
     else this.requiredFieldThrow('order.total')
+    if (!order.items) this.requiredFieldThrow('order.items')
+    order.items = order.items.map(this.itemNormalizer)
     for (const field of ['trigger_value', 'tracking_number', 'fulfillment_status', 'financial_status', 'payment_method', 'shipping_method']) {
       if (order[field]) order[field] = String(order[field])
     }

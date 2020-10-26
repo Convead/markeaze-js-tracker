@@ -2,6 +2,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin  = require('html-webpack-plugin')
 const WebpackAutoInject = require('webpack-auto-inject-version')
 const Dotenv = require('dotenv-webpack')
+const bodyParser = require('body-parser')
 
 module.exports = {
   entry: './app.js',
@@ -94,9 +95,16 @@ module.exports = {
   devServer: {
     port: 8084,
     before(app) {
+      app.use(bodyParser.json())
+      app.use(bodyParser.urlencoded({
+        extended: true
+      }))
       app.post('*', (req, res) => {
         res.header('Access-Control-Allow-Origin', '*')
-        res.redirect(req.originalUrl)
+
+        const data = req.body && req.body.data && JSON.parse(req.body.data)
+        if (data.type === 'page_view') res.redirect(req.originalUrl)
+        else res.json({ status: 'OK' })
       })
     },
     headers: {

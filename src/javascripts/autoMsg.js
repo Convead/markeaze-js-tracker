@@ -5,7 +5,7 @@ export default {
   chatCreated: false,
   init () {
     eEmit.subscribe('track.after', ({post, response}) => {
-      if (post.type !== 'page_view' || !response.auto_message) return
+      if (!response.auto_message) return
 
       this.items.push(response.auto_message)
       if (this.chatCreated) this.emitChat()

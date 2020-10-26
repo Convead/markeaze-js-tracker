@@ -59,7 +59,6 @@ export default {
 
   },
   assets (data, response) {
-    if (data.type !== 'page_view') return
     // Should run when assets is first loaded or updated
     if (!assetsLoader.parse(response.assets)) return
     eEmit.emit('assets', store.assets)

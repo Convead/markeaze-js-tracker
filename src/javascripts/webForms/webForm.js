@@ -1,6 +1,6 @@
 import Liquid from '../libs/liquid.min'
 import domEvent from '../libs/domEvent'
-import SimpleValidation from '../libs/simpleValidation.coffee'
+import SimpleValidation from '../libs/simpleValidation'
 import FormToObject from '../libs/formToObject'
 import helpers from '../helpers'
 import eEmit from '../libs/eEmit'

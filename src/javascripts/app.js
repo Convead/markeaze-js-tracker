@@ -3,23 +3,21 @@ import cookies from './libs/cookies'
 import uuid from './libs/uuid'
 import log from './libs/log'
 import parseUrlParams from './libs/parseUrlParams'
-import baseDomain from './libs/baseDomain.coffee'
+import baseDomain from './libs/baseDomain'
 import tracker from './tracker'
 import webFormsViewer from './webForms/viewer'
 import autoMsg from './autoMsg'
-import Pinger from './libs/pinger.coffee'
-import robotDetection from './libs/robot_detection.coffee'
+import Pinger from './libs/pinger'
+import robotDetection from './libs/robot_detection'
 import helpers from './helpers'
 import { notifierInstance, default as notifier } from './libs/notifier'
 import domEvent from './libs/domEvent'
 import Request from './libs/request'
 import Liquid from './libs/liquid.min'
-import Validation from './libs/simpleValidation.coffee'
+import Validation from './libs/simpleValidation'
 import FormToObject from './libs/formToObject'
 import initHistoryState from './libs/historyState'
 import { default as store, commit as storeCommit } from './store'
-
-initHistoryState()
 
 export default {
   store: store,
@@ -44,6 +42,8 @@ export default {
 
     // Abort if object is undefined
     if (!window[nameVariable]) return false
+
+    initHistoryState()
 
     // Abort if bot detected
     if (robotDetection.is_bot()) return false

@@ -21,6 +21,7 @@ const store = {
   region: null,
   trackerEndpoint: null,
   trackerUrl: null,
+  pingerUrl: null,
   chatEndpoint: null,
   chatUrl: null,
   airbrakeProject: 229028,

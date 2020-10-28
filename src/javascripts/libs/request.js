@@ -1,8 +1,7 @@
 import domEvent from './domEvent'
 
 export default class Request {
-  constructor () {
-  }
+  constructor () {}
   send (url, post, success, fail) {
     success = success || (() => {})
     fail = fail || (() => {})

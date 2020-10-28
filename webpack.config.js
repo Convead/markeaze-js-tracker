@@ -64,20 +64,6 @@ module.exports = {
       use: 'raw-loader'
     },
     {
-      test: /\.coffee$/,
-      use: [
-        {
-          loader: 'coffee-loader',
-          options: {
-            literate: false,
-            transpile: {
-              presets: ['@babel/preset-env']
-            }
-          }
-        }
-      ]
-    },
-    {
       test: /\.m?js$/,
       exclude: /(node_modules|bower_components)/,
       use: {

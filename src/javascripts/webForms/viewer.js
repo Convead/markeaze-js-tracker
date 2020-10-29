@@ -182,7 +182,7 @@ export default {
     this.timeoutCallback(
         options.close_timeout,
         () => {
-          if (this.webForms[options.uid]) this.webForms[options.uid].api.close(true)
+          if (this.webForms[options.uid] && this.webForms[options.uid].api) this.webForms[options.uid].api.close(true)
         },
         () => {}
       )

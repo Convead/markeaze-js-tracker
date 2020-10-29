@@ -5,7 +5,7 @@ import { default as mock } from './../../test/store.mock'
 import tracker from './tracker'
 import eEmit from './libs/eEmit'
 
-describe('mkz api plugins', () => {
+describe('mkz plugin api', () => {
 
   beforeEach(() => {
     delete window.mkz

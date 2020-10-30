@@ -123,15 +123,7 @@ export default {
     async trackCartUpdate () {
       const properties = arguments[1] || {}
       if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map(this.itemNormalizer)
-      return this.track(arguments[0], properties, arguments[2])
-    },
-    async trackCartUpdate () {
-      const properties = arguments[1] || {}
-      if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map((item) => {
-        return this.itemNormalizer(item)
-      })
+      properties.items = properties.items.map((item) => this.itemNormalizer(item))
       return this.track(arguments[0], properties, arguments[2])
     },
     async trackCartAddItem () {

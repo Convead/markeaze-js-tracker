@@ -6,7 +6,7 @@ global.asyncImmediate = () => {
 
 jest.mock('./../src/javascripts/tracker', () => {
   return {
-    send: jest.fn()
+    send: jest.fn().mockImplementation(() => Promise.resolve({post: {}, response: {}}))
   }
 })
 

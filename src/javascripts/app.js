@@ -113,75 +113,75 @@ export default {
     webFormPreview () {
       if (arguments[1]) webFormsViewer.preview(arguments[1])
     },
-    trackPageView () {
+    async trackPageView () {
       const properties = Object.assign({}, this.pageViewProperties, this.pageData(arguments[1]))
       if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
       if (properties.category) properties.category = this.categoryNormalizer(properties.category)
       this.pageViewProperties = {}
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartUpdate () {
-      const properties = arguments[1]
+    async trackCartUpdate () {
+      const properties = arguments[1] || {}
       if (!properties.items) this.requiredFieldThrow('items')
       properties.items = properties.items.map(this.itemNormalizer)
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartUpdate () {
-      const properties = arguments[1]
+    async trackCartUpdate () {
+      const properties = arguments[1] || {}
       if (!properties.items) this.requiredFieldThrow('items')
       properties.items = properties.items.map((item) => {
         return this.itemNormalizer(item)
       })
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartAddItem () {
-      const properties = arguments[1]
+    async trackCartAddItem () {
+      const properties = arguments[1] || {}
       if (!properties.item) this.requiredFieldThrow('item')
       properties.item = this.itemNormalizer(properties.item)
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartRemoveItem () {
-      const properties = arguments[1]
+    async trackCartRemoveItem () {
+      const properties = arguments[1] || {}
       if (!properties.item) this.requiredFieldThrow('item')
       properties.item = this.itemNormalizer(properties.item)
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackOrderCreate () {
+    async trackOrderCreate () {
       const properties = this.orderNormalizer(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackVisitorUpdate () {
+    async trackVisitorUpdate () {
       this.methods.setVisitorInfo(null, arguments[1])
       return this.track(arguments[0], {})
     },
-    trackCustom () {
+    async trackCustom () {
       if (typeof arguments[1] === 'string') {
-        return this.track(arguments[1], {}, arguments[2], arguments[3])
+        return this.track(arguments[1], {}, arguments[2])
       }
     },
-    trackWebFormShow () {
+    async trackWebFormShow () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackWebFormClick () {
+    async trackWebFormClick () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackWebFormSubmit () {
+    async trackWebFormSubmit () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackWebFormClose () {
+    async trackWebFormClose () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackAutoMessageShow () {
+    async trackAutoMessageShow () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackAutoMessageReply () {
+    async trackAutoMessageReply () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
     setCategoryView () {
       this.pageViewProperties.category = this.categoryNormalizer(arguments[1])
@@ -392,7 +392,7 @@ export default {
     }
   },
   send () {
-    let obj = arguments[0]
+    const obj = arguments[0]
     // Function run when the client is ready
     if (typeof obj == 'function') {
       return obj.apply(this)
@@ -401,12 +401,12 @@ export default {
       if (this.methods[ obj ]) {
         return this.methods[ obj ].apply(this, arguments)
       } else if (arguments[0].indexOf('track') == 0) {
-        return this.track(obj, arguments[1], arguments[2], arguments[3])
+        return this.track(obj, arguments[1], arguments[2])
       }
     }
   },
-  track (eventName, properies, callback, visitor) {
-    return tracker.send(eventName, properies, callback, visitor)
+  track (eventName, properies, visitor) {
+    return tracker.send(eventName, properies, visitor)
   },
   changeUrl () {
     eEmit.emit('url.change', window.location.href)

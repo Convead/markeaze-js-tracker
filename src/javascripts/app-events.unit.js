@@ -227,6 +227,43 @@ describe('mkz events api', () => {
 
   })
 
+  describe('"trackVisitorUpdate" event', () => {
+
+    it('should call tracker', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackVisitorUpdate', {
+        first_name: 'FirstName',
+        last_name: 'LastName'
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackVisitorUpdate', {}, undefined)
+    })
+
+  })
+
+  describe('"trackWebFormShow" event', () => {
+
+    testTrackWebForm('trackWebFormShow')
+
+  })
+
+  describe('"trackWebFormClick" event', () => {
+
+    testTrackWebForm('trackWebFormClick')
+
+  })
+
+  describe('"trackWebFormSubmit" event', () => {
+
+    testTrackWebForm('trackWebFormSubmit')
+
+  })
+
+  describe('"trackWebFormClose" event', () => {
+
+    testTrackWebForm('trackWebFormClose')
+
+  })
+
 })
 
 function testTrackCartChanges(name) {
@@ -269,4 +306,41 @@ function testTrackCartChanges(name) {
     })
     expect(tracker.send).toHaveBeenCalledWith(name, {'item': {'variant_id': 'bb1', 'qnt': 2, 'url': 'http://example.net?test=%2526'}}, undefined)
   })
+}
+
+function testTrackWebForm(name) {
+  it('should call tracker', () => {
+    window.document.title = 'test title'
+    window.mkz('appKey', mock.appKey)
+    window.mkz(name, {
+      web_form_id: 1,
+      action_type: 'open_link',
+      link_url: 'http://site.com',
+      web_form_data: {
+        email: 'mail@example.net'
+      }
+    })
+    expect(tracker.send).toHaveBeenCalledWith(name, {'web_form_id': 1, 'action_type': 'open_link', 'link_url': 'http://site.com', 'web_form_data': {'email': 'mail@example.net'}, 'page': {'title': 'test title', 'url': 'http://localhost/'}}, undefined)
+  })
+
+  it('should return promise', () => {
+    window.mkz('appKey', mock.appKey)
+    expect(window.mkz(name)).resolve
+  })
+
+  it('should get initial properties', () => {
+    window.document.title = 'test title'
+    window.mkz('appKey', mock.appKey)
+    window.mkz(name)
+    expect(tracker.send).toHaveBeenCalledWith(name, {'page': {'url': 'http://localhost/', 'title': 'test title'}}, undefined)
+  })
+
+  it('should fix invalid url', () => {
+    window.mkz('appKey', mock.appKey)
+    window.mkz(name, {
+      page: { url: 'http://example.net?test=%26' }
+    })
+    expect(tracker.send).toHaveBeenCalledWith(name, {'page': {'url': 'http://example.net?test=%2526', 'title': 'test title'}}, undefined)
+  })
+
 }

@@ -197,6 +197,36 @@ describe('mkz events api', () => {
 
   })
 
+  describe('"trackOrderCreate" event', () => {
+
+    it('should call tracker', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackOrderCreate', {order_uid: '123', total: 1, items: []})
+      expect(tracker.send).toHaveBeenCalledWith('trackOrderCreate', {'order_uid': '123', 'total': 1, 'items': []}, undefined)
+    })
+
+    it('should return promise', () => {
+      window.mkz('appKey', mock.appKey)
+      expect(window.mkz('trackOrderCreate', {order_uid: '123', total: 1, items: []})).resolve
+    })
+
+    it('should require property "order_uid"', () => {
+      window.mkz('appKey', mock.appKey)
+      expect(window.mkz('trackOrderCreate')).rejects.toThrow(Error('"order.order_uid" property is required'))
+    })
+
+    it('should require property "total"', () => {
+      window.mkz('appKey', mock.appKey)
+      expect(window.mkz('trackOrderCreate', {order_uid: '123'})).rejects.toThrow(Error('"order.total" property is required'))
+    })
+
+    it('should require property "items"', () => {
+      window.mkz('appKey', mock.appKey)
+      expect(window.mkz('trackOrderCreate', {order_uid: '123', total: 1})).rejects.toThrow(Error('"order.items" property is required'))
+    })
+
+  })
+
 })
 
 function testTrackCartChanges(name) {

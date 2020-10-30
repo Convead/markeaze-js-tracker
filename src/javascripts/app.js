@@ -333,7 +333,7 @@ export default {
     }
   },
   offerNormalizer (offer) {
-    if (offer.variant_id) offer.variant_id = String(offer.variant_id)
+    if (offer?.variant_id) offer.variant_id = String(offer.variant_id)
     else this.requiredFieldThrow('offer.variant_id')
     if (offer.url) offer.url = this.fixUrl(offer.url)
     return offer
@@ -348,7 +348,7 @@ export default {
     return item
   },
   categoryNormalizer (category) {
-    if (category.uid) category.uid = String(category.uid)
+    if (category?.uid) category.uid = String(category.uid)
     else this.requiredFieldThrow('category.uid')
     if (category.name) category.name = String(category.name)
     return category

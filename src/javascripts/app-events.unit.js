@@ -40,6 +40,99 @@ describe('mkz events api', () => {
       expect(window.mkz('trackPageView')).toEqual(3)
     })
 
+    it('should\'t send without call "appKey"', () => {
+      window.mkz('trackPageView')
+      expect(tracker.send).not.toHaveBeenCalled()
+    })
+
+    it('should send with call "appKey"', () => {
+      window.mkz('trackPageView')
+      window.mkz('appKey', mock.appKey)
+      expect(tracker.send).toHaveBeenCalled()
+    })
+
+    it('should get location href', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackPageView')
+      expect(tracker.send).toHaveBeenCalledWith('trackPageView', {'page': {'url': 'http://localhost/'}}, undefined)
+    })
+
+    it('should send with arguments', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackPageView', {
+        page: { url: 'http://test.com' }
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackPageView', {'page': {'url': 'http://test.com'}}, undefined)
+    })
+
+    it('should fix invalid url', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackPageView', {
+        page: { url: 'http://example.net?test=%26' }
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackPageView', {'page': {'url': 'http://example.net?test=%2526'}}, undefined)
+    })
+
+    // TODO:
+    // it('should return promise', () => {
+    //   expect(true).toEqual(false)
+    // })
+
+  })
+
+  describe('"setCategoryView" event', () => {
+
+    it('should set category in "trackPageView"', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('setCategoryView', {
+        uid: 12
+      });
+      window.mkz('trackPageView', {
+        page: { url: 'http://set-category-view.com' }
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackPageView', {'category': {'uid': '12'}, 'page': {'url': 'http://set-category-view.com'}}, undefined)
+    })
+
+    it('should\'t send without "uid"', () => {
+      window.mkz('appKey', mock.appKey)
+      expect(() => { window.mkz('setCategoryView') }).toThrow(Error('"category.uid" property is required'))
+    })
+
+  })
+
+  describe('"setOfferView" event', () => {
+
+    it('should set offer in "trackPageView"', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('setOfferView', {
+        variant_id: 'id999',
+        price: 99.00,
+        name: 'Product test',
+        main_image_url: 'http://site-test.com/image.jpg'
+      });
+      window.mkz('trackPageView', {
+        page: { url: 'http://set-offer-view.com' }
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackPageView', {'offer': {'variant_id': 'id999', 'price': 99, 'name': 'Product test', 'main_image_url': 'http://site-test.com/image.jpg'}, 'page': {'url': 'http://set-offer-view.com'}}, undefined)
+    })
+
+    it('should\'t send without "variant_id"', () => {
+      window.mkz('appKey', mock.appKey)
+      expect(() => {
+        window.mkz('setOfferView');
+      }).toThrow(Error('"offer.variant_id" property is required'))
+    })
+
+    it('should fix invalid url', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('setOfferView', {
+        variant_id: 'id999',
+        url: 'http://example.net?test=%26'
+      });
+      window.mkz('trackPageView')
+      expect(tracker.send).toHaveBeenCalledWith('trackPageView', {'offer': {'variant_id': 'id999', 'url': 'http://example.net?test=%2526'}, 'page': {'url': 'http://localhost/'}}, undefined)
+    })
+
   })
 
 })

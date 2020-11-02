@@ -123,15 +123,7 @@ export default {
     async trackCartUpdate () {
       const properties = arguments[1] || {}
       if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map(this.itemNormalizer)
-      return this.track(arguments[0], properties, arguments[2])
-    },
-    async trackCartUpdate () {
-      const properties = arguments[1] || {}
-      if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map((item) => {
-        return this.itemNormalizer(item)
-      })
+      properties.items = properties.items.map((item) => this.itemNormalizer(item))
       return this.track(arguments[0], properties, arguments[2])
     },
     async trackCartAddItem () {
@@ -333,7 +325,7 @@ export default {
     }
   },
   offerNormalizer (offer) {
-    if (offer.variant_id) offer.variant_id = String(offer.variant_id)
+    if (offer?.variant_id) offer.variant_id = String(offer.variant_id)
     else this.requiredFieldThrow('offer.variant_id')
     if (offer.url) offer.url = this.fixUrl(offer.url)
     return offer
@@ -348,14 +340,14 @@ export default {
     return item
   },
   categoryNormalizer (category) {
-    if (category.uid) category.uid = String(category.uid)
+    if (category?.uid) category.uid = String(category.uid)
     else this.requiredFieldThrow('category.uid')
     if (category.name) category.name = String(category.name)
     return category
   },
   orderNormalizer (order) {
-    if (order.external_id) order.external_id = parseInt(order.external_id)
-    if (order.order_uid) order.order_uid = String(order.order_uid)
+    if (order?.external_id) order.external_id = parseInt(order.external_id)
+    if (order?.order_uid) order.order_uid = String(order.order_uid)
     else this.requiredFieldThrow('order.order_uid')
     if (order.total) order.total = parseFloat(order.total)
     else this.requiredFieldThrow('order.total')

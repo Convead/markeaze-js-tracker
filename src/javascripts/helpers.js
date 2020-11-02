@@ -21,7 +21,7 @@ export default {
   },
   getFirstChild (el) {
     let firstChild = el.firstChild
-    while(firstChild != null && firstChild.nodeType == 3) firstChild = firstChild.nextSibling
+    while (firstChild?.nodeType == 3) firstChild = firstChild.nextSibling
     return firstChild
   },
   objectToStyles (objects) {

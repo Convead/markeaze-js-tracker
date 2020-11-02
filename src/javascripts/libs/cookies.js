@@ -44,14 +44,14 @@ Cookies.expire = function (key, options) {
 };
 
 Cookies._getExtendedOptions = function (options) {
-    var same_site = options && options.same_site || Cookies.defaults.same_site;
+    var same_site = options?.same_site || Cookies.defaults.same_site;
     var same_siteNone = same_site.toLowerCase() === 'none';
     var defaultSecure = (same_siteNone && ssl) || undefined;
     return {
-        path: options && options.path || Cookies.defaults.path,
-        domain: options && options.domain || Cookies.defaults.domain,
-        expires: options && options.expires || Cookies.defaults.expires,
-        secure: options && options.secure !== undefined ? options.secure : defaultSecure,
+        path: options?.path || Cookies.defaults.path,
+        domain: options?.domain || Cookies.defaults.domain,
+        expires: options?.expires || Cookies.defaults.expires,
+        secure: options?.secure !== undefined ? options.secure : defaultSecure,
         same_site: same_site
     };
 };

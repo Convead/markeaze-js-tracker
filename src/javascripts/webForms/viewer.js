@@ -50,7 +50,7 @@ export default {
   },
   async beforeDestroyHandler (data) {
     const wefForm = this.webForms[data.uid]
-    if (wefForm && wefForm.lossDetection) wefForm.lossDetection.abort()
+    if (wefForm?.lossDetection) wefForm.lossDetection.abort()
     delete this.webForms[data.uid]
     this.archiveHiddenList()
 
@@ -182,7 +182,7 @@ export default {
     this.timeoutCallback(
         options.close_timeout,
         () => {
-          if (this.webForms[options.uid] && this.webForms[options.uid].api) this.webForms[options.uid].api.close(true)
+          if (this.webForms[options.uid]?.api) this.webForms[options.uid].api.close(true)
         },
         () => {}
       )

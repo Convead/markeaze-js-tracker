@@ -47,7 +47,7 @@ export default class Request {
           this.buildParams(prefix + '[' + (typeof v === 'object' ? i : '') + ']', v, traditional, add)
         }
       }
-    } else if (obj && obj.toString() === '[object Object]') {
+    } else if (obj?.toString() === '[object Object]') {
       for (name in obj) {
         this.buildParams(prefix + '[' + name + ']', obj[name], traditional, add)
       }

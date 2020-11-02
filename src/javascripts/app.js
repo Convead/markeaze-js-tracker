@@ -241,7 +241,7 @@ export default {
 
       if (name === 'chat' && store.assets) {
         const chatSettings = store.assets.chat_settings
-        plugin.enabled = chatSettings && chatSettings.appearance.common.enabled
+        plugin.enabled = chatSettings?.appearance.common.enabled
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
         plugin.settings = { ...plugin.settings, ...chatSettings }
         plugin.settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])

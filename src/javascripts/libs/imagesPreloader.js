@@ -21,7 +21,7 @@ export default class ImagesPreloader {
     const eachChilds = (items) => {
       if (typeof items != 'object' && items.length > 0) return
       items.forEach((item) => {
-        if (item && item.style && item.style.backgroundImage) {
+        if (item?.style?.backgroundImage) {
           const bg = item.style.backgroundImage
           if (new RegExp('^url\\([^\)]*\\)$', 'ig').test(bg)) {
             images.push( bg.replace(new RegExp('^url\\(|[\\)\\"\']+', 'ig'), '') )

@@ -167,7 +167,7 @@ export default class WebForm {
     this.slider.setContainer(this.el)
   }
   sendEvent (eventName, payload, visitor) {
-    mkz(`track${eventName}`, payload, undefined, visitor)
+    mkz(`track${eventName}`, payload, visitor)
   }
   on (callbackName, callback) {
     this.callbacks[callbackName] = callback

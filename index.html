@@ -110,6 +110,7 @@ fieldset {
 mkz('debug', true);
 mkz('updateStore', {
   trackerUrl: '<%= process.env.TRACKER_URL %>',
+  pingerUrl: '<%= process.env.PINGER_URL %>',
   chatUrl: '<%= process.env.CHAT_URL %>',
 })
 
@@ -170,11 +171,6 @@ mkz('appKey', '<%= process.env.APP_KEY %>');
 
         <ul>
 
-          <li>
-            Set tracker endpoint<br />
-            <pre>mkz('endpoint', 'tracker.markeaze.com');</pre>
-            <button onclick="bindScript(this);">Send</button>
-          </li>
           <li>
             Set app key<br />
             <pre>mkz('appKey', 'yyyyyyyyyyyyyyyyyyyyyyy@dev');</pre>
@@ -272,7 +268,7 @@ mkz('watch', 'url.change', function(url) {
         <h2>Events</h2>
 
         <p>
-          Format: mkz('track' + <b>[eventName]</b>, <b>[properties]</b>, <b>[callbackFunction]</b>, <b>[visitor]</b>);
+          Format: mkz('track' + <b>[eventName]</b>, <b>[properties]</b>, <b>[visitor]</b>);
         </p>
 
         <ul>
@@ -403,7 +399,8 @@ mkz('trackVisitorUpdate', {
           <li>
             Search<br />
             <pre>mkz('trackSearch', {
-  term: 'abc'
+  term: 'abc',
+  result: 'empty'
 });</pre>
             <button onclick="bindScript(this);">Send</button>
           </li>

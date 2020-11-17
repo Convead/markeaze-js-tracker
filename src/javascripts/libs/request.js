@@ -1,8 +1,7 @@
 import domEvent from './domEvent'
 
 export default class Request {
-  constructor () {
-  }
+  constructor () {}
   send (url, post, success, fail) {
     success = success || (() => {})
     fail = fail || (() => {})
@@ -13,8 +12,9 @@ export default class Request {
     domEvent.add(xhr, 'readystatechange', () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         success(JSON.parse(xhr.responseText))
-      } else if (xhr.status !== 0) fail(xhr)
+      }
     })
+    domEvent.add(xhr, 'error', () => fail(xhr))
     xhr.send(this.toQueryString({data: JSON.stringify(post)}))
   }
   isArray () {
@@ -47,7 +47,7 @@ export default class Request {
           this.buildParams(prefix + '[' + (typeof v === 'object' ? i : '') + ']', v, traditional, add)
         }
       }
-    } else if (obj && obj.toString() === '[object Object]') {
+    } else if (obj?.toString() === '[object Object]') {
       for (name in obj) {
         this.buildParams(prefix + '[' + name + ']', obj[name], traditional, add)
       }

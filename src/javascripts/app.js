@@ -3,23 +3,21 @@ import cookies from './libs/cookies'
 import uuid from './libs/uuid'
 import log from './libs/log'
 import parseUrlParams from './libs/parseUrlParams'
-import baseDomain from './libs/baseDomain.coffee'
+import baseDomain from './libs/baseDomain'
 import tracker from './tracker'
 import webFormsViewer from './webForms/viewer'
 import autoMsg from './autoMsg'
-import Pinger from './libs/pinger.coffee'
-import robotDetection from './libs/robot_detection.coffee'
+import Pinger from './libs/pinger'
+import robotDetection from './libs/robot_detection'
 import helpers from './helpers'
 import { notifierInstance, default as notifier } from './libs/notifier'
 import domEvent from './libs/domEvent'
 import Request from './libs/request'
 import Liquid from './libs/liquid.min'
-import Validation from './libs/simpleValidation.coffee'
+import Validation from './libs/simpleValidation'
 import FormToObject from './libs/formToObject'
 import initHistoryState from './libs/historyState'
 import { default as store, commit as storeCommit } from './store'
-
-initHistoryState()
 
 export default {
   store: store,
@@ -44,6 +42,8 @@ export default {
 
     // Abort if object is undefined
     if (!window[nameVariable]) return false
+
+    initHistoryState()
 
     // Abort if bot detected
     if (robotDetection.is_bot()) return false
@@ -113,75 +113,67 @@ export default {
     webFormPreview () {
       if (arguments[1]) webFormsViewer.preview(arguments[1])
     },
-    trackPageView () {
+    async trackPageView () {
       const properties = Object.assign({}, this.pageViewProperties, this.pageData(arguments[1]))
       if (properties.offer) properties.offer = this.offerNormalizer(properties.offer)
       if (properties.category) properties.category = this.categoryNormalizer(properties.category)
       this.pageViewProperties = {}
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartUpdate () {
-      const properties = arguments[1]
+    async trackCartUpdate () {
+      const properties = arguments[1] || {}
       if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map(this.itemNormalizer)
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      properties.items = properties.items.map((item) => this.itemNormalizer(item))
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartUpdate () {
-      const properties = arguments[1]
-      if (!properties.items) this.requiredFieldThrow('items')
-      properties.items = properties.items.map((item) => {
-        return this.itemNormalizer(item)
-      })
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
-    },
-    trackCartAddItem () {
-      const properties = arguments[1]
+    async trackCartAddItem () {
+      const properties = arguments[1] || {}
       if (!properties.item) this.requiredFieldThrow('item')
       properties.item = this.itemNormalizer(properties.item)
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackCartRemoveItem () {
-      const properties = arguments[1]
+    async trackCartRemoveItem () {
+      const properties = arguments[1] || {}
       if (!properties.item) this.requiredFieldThrow('item')
       properties.item = this.itemNormalizer(properties.item)
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackOrderCreate () {
+    async trackOrderCreate () {
       const properties = this.orderNormalizer(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackVisitorUpdate () {
+    async trackVisitorUpdate () {
       this.methods.setVisitorInfo(null, arguments[1])
       return this.track(arguments[0], {})
     },
-    trackCustom () {
+    async trackCustom () {
       if (typeof arguments[1] === 'string') {
-        return this.track(arguments[1], {}, arguments[2], arguments[3])
+        return this.track(arguments[1], {}, arguments[2])
       }
     },
-    trackWebFormShow () {
+    async trackWebFormShow () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackWebFormClick () {
+    async trackWebFormClick () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackWebFormSubmit () {
+    async trackWebFormSubmit () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackWebFormClose () {
+    async trackWebFormClose () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackAutoMessageShow () {
+    async trackAutoMessageShow () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
-    trackAutoMessageReply () {
+    async trackAutoMessageReply () {
       const properties = this.pageData(arguments[1])
-      return this.track(arguments[0], properties, arguments[2], arguments[3])
+      return this.track(arguments[0], properties, arguments[2])
     },
     setCategoryView () {
       this.pageViewProperties.category = this.categoryNormalizer(arguments[1])
@@ -249,7 +241,7 @@ export default {
 
       if (name === 'chat' && store.assets) {
         const chatSettings = store.assets.chat_settings
-        plugin.enabled = chatSettings && chatSettings.appearance.common.enabled
+        plugin.enabled = chatSettings?.appearance.common.enabled
         const device = helpers.isMobile() ? 'mobile' : 'desktop'
         plugin.settings = { ...plugin.settings, ...chatSettings }
         plugin.settings.appearance = Object.assign({}, chatSettings.appearance.common, chatSettings.appearance[device])
@@ -333,7 +325,7 @@ export default {
     }
   },
   offerNormalizer (offer) {
-    if (offer.variant_id) offer.variant_id = String(offer.variant_id)
+    if (offer?.variant_id) offer.variant_id = String(offer.variant_id)
     else this.requiredFieldThrow('offer.variant_id')
     if (offer.url) offer.url = this.fixUrl(offer.url)
     return offer
@@ -348,14 +340,14 @@ export default {
     return item
   },
   categoryNormalizer (category) {
-    if (category.uid) category.uid = String(category.uid)
+    if (category?.uid) category.uid = String(category.uid)
     else this.requiredFieldThrow('category.uid')
     if (category.name) category.name = String(category.name)
     return category
   },
   orderNormalizer (order) {
-    if (order.external_id) order.external_id = parseInt(order.external_id)
-    if (order.order_uid) order.order_uid = String(order.order_uid)
+    if (order?.external_id) order.external_id = parseInt(order.external_id)
+    if (order?.order_uid) order.order_uid = String(order.order_uid)
     else this.requiredFieldThrow('order.order_uid')
     if (order.total) order.total = parseFloat(order.total)
     else this.requiredFieldThrow('order.total')
@@ -392,12 +384,11 @@ export default {
     }
   },
   send () {
-    let obj = arguments[0]
+    const obj = arguments[0]
     // Function run when the client is ready
     if (typeof obj == 'function') {
       return obj.apply(this)
-    }
-    else {
+    } else {
       if (this.methods[ obj ]) {
         return this.methods[ obj ].apply(this, arguments)
       } else if (arguments[0].indexOf('track') == 0) {
@@ -405,8 +396,10 @@ export default {
       }
     }
   },
-  track (eventName, properies, callback, visitor) {
-    return tracker.send(eventName, properies, callback, visitor)
+  track (eventName, properies, visitor, deprecatedVisitor) {
+    // Fix deprecated api arguments
+    visitor = visitor && typeof visitor !== 'function' && visitor || deprecatedVisitor
+    return tracker.send(eventName, properies, visitor)
   },
   changeUrl () {
     eEmit.emit('url.change', window.location.href)

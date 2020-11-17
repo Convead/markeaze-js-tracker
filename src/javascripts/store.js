@@ -1,4 +1,6 @@
-const store = {
+import helpers from './helpers'
+
+const defaultStore = {
   version: '[AIV]{version}[/AIV]',
   plugins: {
     chat: {
@@ -21,15 +23,25 @@ const store = {
   region: null,
   trackerEndpoint: null,
   trackerUrl: null,
+  pingerUrl: null,
   chatEndpoint: null,
   chatUrl: null,
   airbrakeProject: 229028,
   airbrakeApiKey: '3927498a0d17867a76acf5aa97eba72d',
   webFormPreview: null
 }
-
-export default store
+const store = {}
 
 export const commit = (key, value) => {
   store[key] = value
 }
+
+export const reset = () => {
+  helpers.entries(defaultStore).forEach(([key, value]) => {
+    store[key] = value
+  })
+}
+
+reset()
+
+export default store

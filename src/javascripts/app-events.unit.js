@@ -264,6 +264,30 @@ describe('mkz events api', () => {
 
   })
 
+  describe('"trackCustomEvent" event', () => {
+
+    it('should call tracker', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackCustomEvent', {
+        key: 'SomeKey'
+      }, {
+        first_name: 'FirstName'
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackCustomEvent', {key: 'SomeKey'}, {first_name: 'FirstName'})
+    })
+
+    it('should call tracker with deprecated api arguments', () => {
+      window.mkz('appKey', mock.appKey)
+      window.mkz('trackCustomEvent', {
+        key: 'SomeKey'
+      }, function() {}, {
+        first_name: 'FirstName'
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackCustomEvent', {key: 'SomeKey'}, {first_name: 'FirstName'})
+    })
+
+  })
+
 })
 
 function testTrackCartChanges(name) {

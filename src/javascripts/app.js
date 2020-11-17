@@ -388,16 +388,17 @@ export default {
     // Function run when the client is ready
     if (typeof obj == 'function') {
       return obj.apply(this)
-    }
-    else {
+    } else {
       if (this.methods[ obj ]) {
         return this.methods[ obj ].apply(this, arguments)
       } else if (arguments[0].indexOf('track') == 0) {
-        return this.track(obj, arguments[1], arguments[2])
+        return this.track(obj, arguments[1], arguments[2], arguments[3])
       }
     }
   },
-  track (eventName, properies, visitor) {
+  track (eventName, properies, visitor, deprecatedVisitor) {
+    // Fix deprecated api arguments
+    visitor = visitor && typeof visitor !== 'function' && visitor || deprecatedVisitor
     return tracker.send(eventName, properies, visitor)
   },
   changeUrl () {

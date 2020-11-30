@@ -330,9 +330,15 @@ export default {
     if (offer.url) offer.url = this.fixUrl(offer.url)
     return offer
   },
-  itemNormalizer (item) {
-    if (item.variant_id) item.variant_id = String(item.variant_id)
-    else this.requiredFieldThrow('item.variant_id')
+  itemNormalizer (item, isOrder = false) {
+    if (isOrder) {
+      if (item.name) item.name = String(item.name)
+      if (item.variant_id) item.variant_id = String(item.variant_id)
+      if (!item.name && !item.variant_id) this.requiredFieldThrow('item.variant_id')
+    } else {
+      if (item.variant_id) item.variant_id = String(item.variant_id)
+      else this.requiredFieldThrow('item.variant_id')
+    }
     if (item.qnt) item.qnt = parseFloat(item.qnt)
     else this.requiredFieldThrow('item.qnt')
     if (item.price) item.price = parseFloat(item.price)
@@ -352,7 +358,7 @@ export default {
     if (order.total) order.total = parseFloat(order.total)
     else this.requiredFieldThrow('order.total')
     if (!order.items) this.requiredFieldThrow('order.items')
-    order.items = order.items.map(this.itemNormalizer)
+    order.items = order.items.map((item) => this.itemNormalizer(item, true))
     for (const field of ['trigger_value', 'tracking_number', 'fulfillment_status', 'financial_status', 'payment_method', 'shipping_method']) {
       if (order[field]) order[field] = String(order[field])
     }

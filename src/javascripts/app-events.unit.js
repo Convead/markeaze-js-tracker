@@ -225,6 +225,34 @@ describe('mkz events api', () => {
       expect(window.mkz('trackOrderCreate', {order_uid: '123', total: 1})).rejects.toThrow(Error('"order.items" property is required'))
     })
 
+    it('should require property "item.variant_id"', () => {
+      window.mkz('appKey', mock.appKey)
+      const payload = {
+        order_uid: '123',
+        total: 1,
+        items: [{ qnt: 2.0, price: 100 }]
+      }
+      expect(window.mkz('trackOrderCreate', payload)).rejects.toThrow(Error('"item.variant_id" property is required'))
+    })
+
+    it('should call with property "item.name"', async () => {
+      window.mkz('appKey', mock.appKey)
+      await window.mkz('trackOrderCreate', {
+        order_uid: '123',
+        total: 1,
+        items: [
+          { name: 'My order', qnt: 2.0, price: 100 }
+        ]
+      })
+      expect(tracker.send).toHaveBeenCalledWith('trackOrderCreate', {
+        order_uid: '123',
+        total: 1,
+        items: [
+          { name: 'My order', qnt: 2.0, price: 100 }
+        ]
+      }, undefined)
+    })
+
   })
 
   describe('"trackVisitorUpdate" event', () => {
